@@ -3,14 +3,11 @@ package contest.lab.gala;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 
-import project.graduation.cs.ewha.R;
-
-import contest.lab.gala.callback.LoginCallback;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import contest.lab.gala.callback.LoginCallback;
 
 public class BattlerDogActivity extends Activity implements LoginCallback {
 	//** 공격 정보를 받았을 때, SkillGageLayer.getDamaged(int kindOfAttack);

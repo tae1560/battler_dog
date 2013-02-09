@@ -6,7 +6,7 @@ public class Redbull extends Item{
 	
 	public Redbull()
 	{
-		image = new CCSprite("nagasakki.png");
+		image = new CCSprite("item_redbull.png");
 	}
 	public void acquireGage()
 	{

@@ -6,7 +6,7 @@ public class Gum extends Item{
 
 	public Gum()
 	{
-		image = new CCSprite("kokomyen.png");
+		image = new CCSprite("item_gum.png");
 	}
 	public void acquireGage()
 	{
