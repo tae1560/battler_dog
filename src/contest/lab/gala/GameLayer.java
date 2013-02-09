@@ -24,12 +24,12 @@ public class GameLayer extends CCLayer{
 	CCMenuItemSprite btn_gum;
 	CCMenuItemSprite btn_redbull;
 	CCMenu buttons;
-	CCSprite btn_bone_unclick = CCSprite.sprite("btn_bone_unclick.png");
-	CCSprite btn_bone_click = CCSprite.sprite("btn_bone_click.png");
-	CCSprite btn_gum_unclick = CCSprite.sprite("btn_gum_unclick.png");
-	CCSprite btn_gum_click = CCSprite.sprite("btn_gum_click.png");
-	CCSprite btn_redbull_unclick = CCSprite.sprite("btn_redbull_unclick.png");
-	CCSprite btn_redbull_click = CCSprite.sprite("btn_redbull_click.png");
+	CCSprite btn_bone_unclick;
+	CCSprite btn_bone_click;
+	CCSprite btn_gum_unclick;
+	CCSprite btn_gum_click;
+	CCSprite btn_redbull_unclick;
+	CCSprite btn_redbull_click;
 	
 	static CCScene makeScene()
 	{
@@ -115,8 +115,14 @@ public class GameLayer extends CCLayer{
 	public GameLayer()
 	{
 		this.setIsTouchEnabled(true);
-		init();
+		btn_bone_unclick = CCSprite.sprite("btn_bone_unclick.png");
+		btn_bone_click = CCSprite.sprite("btn_bone_click.png");
+		btn_gum_unclick = CCSprite.sprite("btn_gum_unclick.png");
+		btn_gum_click = CCSprite.sprite("btn_gum_click.png");
+		btn_redbull_unclick = CCSprite.sprite("btn_redbull_unclick.png");
+		btn_redbull_click = CCSprite.sprite("btn_redbull_click.png");
 		
+		init();
 	}
 	Item createNewItem()
 	{
