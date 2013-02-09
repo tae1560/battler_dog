@@ -37,23 +37,39 @@ public class GameLayer extends CCLayer{
 	CCSprite btn_redbull_unclick;
 	CCSprite btn_redbull_click;
 	
+	CCSprite bg_battlelayer;
+	CCSprite bg_gamelayer;
+	
 	static CCScene makeScene()
 	{
 		CCScene scene = CCScene.node();
-		CCLayer layer = new GameLayer();
-		scene.
-		addChild(layer);
+		CCLayer layer1 = new GameLayer();
+		CCLayer layer2 = new SkillGageLayer();
+		scene.addChild(layer1);
+		scene.addChild(layer2);
+		
 		return scene;
 	}
 	void init()
 	{
 		m = new Manager();
 		
+		bg_gamelayer = CCSprite.sprite("bg_gamelayer.png");
+		bg_gamelayer.setPosition(360 * m.ratio_width, 640 * m.ratio_height);
+		this.addChild(bg_gamelayer);
+		
+		bg_battlelayer = CCSprite.sprite("bg_battlelayer.png");
+		bg_battlelayer.setPosition(360 * m.ratio_width, 1057 * m.ratio_height);
+		bg_battlelayer.setScaleX(m.ratio_width);
+		bg_battlelayer.setScaleY(m.ratio_height);
+		this.addChild(bg_battlelayer);
+		
+		
 		// item들의 position들을 리스트로 저장
 		itemPositions = new ArrayList<CGPoint>();
 		for(int i = 0; i < numOfItems; i++)
 		{
-			CGPoint cgpoint = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(360 * m.ratio_width, (780 - i * 120) * m.ratio_height));	//* 재조정 필요
+			CGPoint cgpoint = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(360 * m.ratio_width, (920 - i * 130) * m.ratio_height));	//* 재조정 필요
 			itemPositions.add(cgpoint);
 		}
 		
@@ -83,7 +99,7 @@ public class GameLayer extends CCLayer{
 		
 		buttons = CCMenu.menu(btn_bone, btn_gum, btn_redbull);
 		buttons.alignItemsHorizontally(32 * m.ratio_width);
-		buttons.setPosition(360 * m.ratio_width, 160 * m.ratio_height);
+		buttons.setPosition(360 * m.ratio_width, 100 * m.ratio_height);
 		this.addChild(buttons);
 	}
 	public void clickedBone(Object sender)

@@ -11,6 +11,9 @@ public class Gum extends Item{
 	public void acquireGage()
 	{
 		SkillGageLayer.gage += Manager.acquired_gage_per_gum;
+		if(SkillGageLayer.gage > 100)
+			SkillGageLayer.gage = 100;
 		SkillGageLayer.updateGageBar();
+		SkillGageLayer.updateSkillBtns();
 	}
 }
