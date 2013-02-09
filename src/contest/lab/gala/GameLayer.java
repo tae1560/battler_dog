@@ -7,6 +7,7 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItemSprite;
+import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
@@ -16,6 +17,11 @@ public class GameLayer extends CCLayer{
 	// item의 position들을 저장
 	ArrayList<CGPoint> itemPositions;	
 	
+	// 가로 세로 비율 지정을 위한 매니저 객체 
+	// Manager.ratio_x; , Manager.ratio_y;
+	Manager m;
+	
+	
 	// 한 화면에 보이는 아이템의 개수
 	int numOfItems = 4;
 	
@@ -24,27 +30,30 @@ public class GameLayer extends CCLayer{
 	CCMenuItemSprite btn_gum;
 	CCMenuItemSprite btn_redbull;
 	CCMenu buttons;
-	CCSprite btn_bone_unclick = CCSprite.sprite("btn_bone_unclick.png");
-	CCSprite btn_bone_click = CCSprite.sprite("btn_bone_click.png");
-	CCSprite btn_gum_unclick = CCSprite.sprite("btn_gum_unclick.png");
-	CCSprite btn_gum_click = CCSprite.sprite("btn_gum_click.png");
-	CCSprite btn_redbull_unclick = CCSprite.sprite("btn_redbull_unclick.png");
-	CCSprite btn_redbull_click = CCSprite.sprite("btn_redbull_click.png");
+	CCSprite btn_bone_unclick;
+	CCSprite btn_bone_click;
+	CCSprite btn_gum_unclick;
+	CCSprite btn_gum_click;
+	CCSprite btn_redbull_unclick;
+	CCSprite btn_redbull_click;
 	
 	static CCScene makeScene()
 	{
 		CCScene scene = CCScene.node();
 		CCLayer layer = new GameLayer();
-		layer.addChild(layer);
+		scene.
+		addChild(layer);
 		return scene;
 	}
 	void init()
 	{
+		m = new Manager();
+		
 		// item들의 position들을 리스트로 저장
 		itemPositions = new ArrayList<CGPoint>();
 		for(int i = 0; i < numOfItems; i++)
 		{
-			CGPoint cgpoint = CGPoint.ccp(480, 600 - i * 50);	//* 재조정 필요
+			CGPoint cgpoint = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(360 * m.ratio_width, (780 - i * 120) * m.ratio_height));	//* 재조정 필요
 			itemPositions.add(cgpoint);
 		}
 		
@@ -54,6 +63,9 @@ public class GameLayer extends CCLayer{
 		{
 			Item newItem = createNewItem();
 			newItem.image.setPosition(itemPositions.get(i));
+			newItem.image.setScaleX(m.ratio_width);
+			newItem.image.setScaleY(m.ratio_height);
+			itemList.add(newItem);
 			this.addChild(newItem.image);
 		}
 		
@@ -62,28 +74,38 @@ public class GameLayer extends CCLayer{
 		btn_gum = CCMenuItemSprite.item(btn_gum_unclick, btn_gum_click, this, "clickedGum");
 		btn_redbull = CCMenuItemSprite.item(btn_redbull_unclick, btn_redbull_click, this, "clickedRedbull");
 		
+		btn_bone.setScaleX(m.ratio_width);
+		btn_bone.setScaleY(m.ratio_height);
+		btn_gum.setScaleX(m.ratio_width);
+		btn_gum.setScaleY(m.ratio_height);
+		btn_redbull.setScaleX(m.ratio_width);
+		btn_redbull.setScaleY(m.ratio_height);
+		
 		buttons = CCMenu.menu(btn_bone, btn_gum, btn_redbull);
-		buttons.alignItemsHorizontally(20);
-		buttons.setPosition(240, 100);
+		buttons.alignItemsHorizontally(32 * m.ratio_width);
+		buttons.setPosition(360 * m.ratio_width, 160 * m.ratio_height);
 		this.addChild(buttons);
 	}
-	void clickedBone(Object Sender)
+	public void clickedBone(Object sender)
 	{
-		if(itemList.get(0) instanceof Bone)
+		Item i = itemList.get(0);
+		if(i instanceof Bone)
 			clickedCorrectOne();
 		else
 			clickedWrongOne();
 	}
-	void clickedGum(Object Sender)
+	public void clickedGum(Object sender)
 	{
-		if(itemList.get(0) instanceof Gum)
+		Item i = itemList.get(0);
+		if(i instanceof Gum)
 			clickedCorrectOne();
 		else
 			clickedWrongOne();
 	}
-	void clickedRedbull(Object Sender)
+	public void clickedRedbull(Object sender)
 	{
-		if(itemList.get(0) instanceof Redbull)
+		Item i = itemList.get(0);
+		if(i instanceof Redbull)
 			clickedCorrectOne();
 		else
 			clickedWrongOne();
@@ -99,6 +121,9 @@ public class GameLayer extends CCLayer{
 		itemList.remove(0);
 		// 새로운 아이템을 리스트에 추가
 		Item newItem = createNewItem();
+		newItem.image.setScaleX(m.ratio_width);
+		newItem.image.setScaleY(m.ratio_height);
+		
 		itemList.add(newItem);
 		// 아이템들의 포지션 재조정
 		for(int i = 0; i < numOfItems; i++)
@@ -115,8 +140,14 @@ public class GameLayer extends CCLayer{
 	public GameLayer()
 	{
 		this.setIsTouchEnabled(true);
+		btn_bone_unclick = CCSprite.sprite("btn_bone_unclick.png");
+		btn_bone_click = CCSprite.sprite("btn_bone_click.png");
+		btn_gum_unclick = CCSprite.sprite("btn_gum_unclick.png");
+		btn_gum_click = CCSprite.sprite("btn_gum_click.png");
+		btn_redbull_unclick = CCSprite.sprite("btn_redbull_unclick.png");
+		btn_redbull_click = CCSprite.sprite("btn_redbull_click.png");
+
 		init();
-		
 	}
 	Item createNewItem()
 	{
