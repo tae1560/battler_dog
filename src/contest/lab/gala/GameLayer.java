@@ -31,7 +31,6 @@ public class GameLayer extends CCLayer{
 	CCSprite btn_redbull_unclick = CCSprite.sprite("btn_redbull_unclick.png");
 	CCSprite btn_redbull_click = CCSprite.sprite("btn_redbull_click.png");
 	
-	
 	static CCScene makeScene()
 	{
 		CCScene scene = CCScene.node();
@@ -117,6 +116,7 @@ public class GameLayer extends CCLayer{
 	{
 		this.setIsTouchEnabled(true);
 		init();
+		
 	}
 	Item createNewItem()
 	{
