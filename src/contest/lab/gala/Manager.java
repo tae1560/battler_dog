@@ -21,6 +21,15 @@ public class Manager {
 	
 	static float full_gage = 100;
 	
+	static float position_of_btn_bone_x = 135;
+	static float position_of_btn_bone_y = 136;
+	
+	static float position_of_btn_gum_x = 360;
+	static float position_of_btn_gum_y = 136;
+	
+	static float position_of_btn_redbull_x = 585;
+	static float position_of_btn_redbull_y = 136;
+	
 	public Manager()
 	{
 		ratio_width = CCDirector.sharedDirector().displaySize().width / 720;
