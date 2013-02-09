@@ -14,36 +14,59 @@ public class SkillGageLayer extends CCLayer{
 	static CCSprite btn_skill_bone_normal = CCSprite.sprite("btn_skill_bone_normal.png");
 	static CCSprite btn_skill_punch_activated = CCSprite.sprite("btn_skill_punch_activated.png");
 	static CCSprite btn_skill_punch_normal = CCSprite.sprite("btn_skill_punch_normal.png");
+	
 	static CCSprite gage_bar = CCSprite.sprite("gage_bar.png");
+	static CCSprite gage_bar_black = CCSprite.sprite("bg_gage_bar.png");
 	
 	static float gage;
+	
+	static Manager m;
 	
 	public SkillGageLayer()
 	{
 		this.setIsTouchEnabled(true);
 		
+		m = new Manager();
+		
 		gage = 0;
-		gage_bar.setPosition(100, 300);
-		gage_bar.setScaleY(gage / Manager.full_gage);
+		gage_bar.setPosition(75 * m.ratio_width, 600 * m.ratio_height);
+		gage_bar.setScaleX(m.ratio_width);
+		gage_bar.setScaleY(m.ratio_height);
 		this.addChild(gage_bar);
 		
+		gage_bar_black.setPosition(74 * m.ratio_width, 780 * m.ratio_height);
+		gage_bar_black.setAnchorPoint(0.5f, 1f);
+		gage_bar_black.setScaleX(m.ratio_width);
+		gage_bar_black.setScaleY(1 - gage / m.full_gage);
+		gage_bar_black.setScaleY(m.ratio_height);
+		this.addChild(gage_bar_black);
+		
 		// 스킬 버튼 위치 설정, 레이어에 추가
-		btn_skill_bark_activated.setPosition(400, 500);
-//		btn_skill_bark_activated.setVisible(false);	//* 확인 필요
+		btn_skill_bark_activated.setPosition(631 * m.ratio_width, 733 * m.ratio_height);
+		btn_skill_bark_activated.setScaleX(m.ratio_width);	//* 확인 필요
+		btn_skill_bark_activated.setScaleY(m.ratio_height);
 		this.addChild(btn_skill_bark_activated);
-		btn_skill_bark_normal.setPosition(400, 500);
+		btn_skill_bark_normal.setPosition(631 * m.ratio_width, 733 * m.ratio_height);
+		btn_skill_bark_normal.setScaleX(m.ratio_width);	//* 확인 필요
+		btn_skill_bark_normal.setScaleY(m.ratio_height);
 		this.addChild(btn_skill_bark_normal);
 		
-		btn_skill_bone_activated.setPosition(400, 560);
-//		btn_skill_bone_activated.setVisible(false);
+		btn_skill_bone_activated.setPosition(631 * m.ratio_width, 589 * m.ratio_height);
+		btn_skill_bone_activated.setScaleX(m.ratio_width);
+		btn_skill_bone_activated.setScaleY(m.ratio_height);
 		this.addChild(btn_skill_bone_activated);
-		btn_skill_bone_normal.setPosition(400, 560);
+		btn_skill_bone_normal.setPosition(631 * m.ratio_width, 589 * m.ratio_height);
+		btn_skill_bone_normal.setScaleX(m.ratio_width);
+		btn_skill_bone_normal.setScaleY(m.ratio_height);
 		this.addChild(btn_skill_bone_normal);
 		
-		btn_skill_punch_activated.setPosition(400, 620);
-//		btn_skill_punch_activated.setVisible(false);
+		btn_skill_punch_activated.setPosition(631 * m.ratio_width, 439 * m.ratio_height);
+		btn_skill_punch_activated.setScaleX(m.ratio_width);
+		btn_skill_punch_activated.setScaleY(m.ratio_height);
 		this.addChild(btn_skill_punch_activated);
-		btn_skill_punch_normal.setPosition(400, 620);
+		btn_skill_punch_normal.setPosition(631 * m.ratio_width, 439 * m.ratio_height);
+		btn_skill_punch_normal.setScaleX(m.ratio_width);
+		btn_skill_punch_normal.setScaleY(m.ratio_height);
 		this.addChild(btn_skill_punch_normal);
 	}
 	
@@ -52,7 +75,7 @@ public class SkillGageLayer extends CCLayer{
 	 */
 	static void updateGageBar()
 	{
-		gage_bar.setScaleY(gage / Manager.full_gage);
+		gage_bar_black.setScaleY((1 - gage / Manager.full_gage) * m.ratio_height);
 	}
 	
 	/*
