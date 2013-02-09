@@ -6,7 +6,7 @@
     <uses-sdk android:minSdkVersion="10" />
 
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name="contest.lab.gala.BatterDogActivity"
+        <activity android:name="contest.lab.gala.BattlerDogActivity"
         		  android:screenOrientation="portrait"
                   android:label="@string/app_name">
             <intent-filter>
