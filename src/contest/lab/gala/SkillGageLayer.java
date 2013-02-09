@@ -8,15 +8,15 @@ import org.cocos2d.types.CGPoint;
 import android.view.MotionEvent;
 
 public class SkillGageLayer extends CCLayer{
-	static CCSprite btn_skill_bark_activated = CCSprite.sprite("btn_skill_bark_activated.png");
-	static CCSprite btn_skill_bark_normal = CCSprite.sprite("btn_skill_bark_normal.png");
-	static CCSprite btn_skill_bone_activated = CCSprite.sprite("btn_skill_bone_activated.png");
-	static CCSprite btn_skill_bone_normal = CCSprite.sprite("btn_skill_bone_normal.png");
-	static CCSprite btn_skill_punch_activated = CCSprite.sprite("btn_skill_punch_activated.png");
-	static CCSprite btn_skill_punch_normal = CCSprite.sprite("btn_skill_punch_normal.png");
+	static CCSprite btn_skill_bark_activated = CCSprite.sprite("minigame/btn_skill_bark_activated.png");
+	static CCSprite btn_skill_bark_normal = CCSprite.sprite("minigame/btn_skill_bark_normal.png");
+	static CCSprite btn_skill_bone_activated = CCSprite.sprite("minigame/btn_skill_bone_activated.png");
+	static CCSprite btn_skill_bone_normal = CCSprite.sprite("minigame/btn_skill_bone_normal.png");
+	static CCSprite btn_skill_punch_activated = CCSprite.sprite("minigame/btn_skill_punch_activated.png");
+	static CCSprite btn_skill_punch_normal = CCSprite.sprite("minigame/btn_skill_punch_normal.png");
 	
-	static CCSprite gage_bar = CCSprite.sprite("gage_bar.png");
-	static CCSprite gage_bar_black = CCSprite.sprite("bg_gage_bar.png");
+	static CCSprite gage_bar = CCSprite.sprite("minigame/gage_bar.png");
+	static CCSprite gage_bar_black = CCSprite.sprite("minigame/bg_gage_bar.png");
 	
 	static float gage;
 	
@@ -29,12 +29,12 @@ public class SkillGageLayer extends CCLayer{
 		m = new Manager();
 		
 		gage = 0;
-		gage_bar.setPosition(75 * m.ratio_width, 600 * m.ratio_height);
+		gage_bar.setPosition(86 * m.ratio_width, 570 * m.ratio_height);
 		gage_bar.setScaleX(m.ratio_width);
 		gage_bar.setScaleY(m.ratio_height);
 		this.addChild(gage_bar);
 		
-		gage_bar_black.setPosition(74 * m.ratio_width, 780 * m.ratio_height);
+		gage_bar_black.setPosition(85 * m.ratio_width, 765 * m.ratio_height);
 		gage_bar_black.setAnchorPoint(0.5f, 1f);
 		gage_bar_black.setScaleX(m.ratio_width);
 		gage_bar_black.setScaleY(1 - gage / m.full_gage);
@@ -75,7 +75,7 @@ public class SkillGageLayer extends CCLayer{
 	 */
 	static void updateGageBar()
 	{
-		gage_bar_black.setScaleY((1 - gage / Manager.full_gage) * m.ratio_height);
+		gage_bar_black.setScaleY((1 - (gage / Manager.full_gage)) * m.ratio_height);
 	}
 	
 	/*

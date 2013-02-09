@@ -6,7 +6,7 @@ public class Bone extends Item {
 
 	public Bone()
 	{
-		image = new CCSprite("item_bone.png");
+		image = new CCSprite("minigame/item_bone.png");
 	}
 	public void acquireGage()
 	{

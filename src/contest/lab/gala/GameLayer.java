@@ -45,8 +45,11 @@ public class GameLayer extends CCLayer{
 		CCScene scene = CCScene.node();
 		CCLayer layer1 = new GameLayer();
 		CCLayer layer2 = new SkillGageLayer();
+		CCLayer layer3 = new BattleLayer();
+		
 		scene.addChild(layer1);
 		scene.addChild(layer2);
+		scene.addChild(layer3);
 		
 		return scene;
 	}
@@ -54,15 +57,10 @@ public class GameLayer extends CCLayer{
 	{
 		m = new Manager();
 		
-		bg_gamelayer = CCSprite.sprite("bg_gamelayer.png");
+		bg_gamelayer = CCSprite.sprite("minigame/bg_gamelayer.png");
 		bg_gamelayer.setPosition(360 * m.ratio_width, 640 * m.ratio_height);
 		this.addChild(bg_gamelayer);
 		
-		bg_battlelayer = CCSprite.sprite("bg_battlelayer.png");
-		bg_battlelayer.setPosition(360 * m.ratio_width, 1057 * m.ratio_height);
-		bg_battlelayer.setScaleX(m.ratio_width);
-		bg_battlelayer.setScaleY(m.ratio_height);
-		this.addChild(bg_battlelayer);
 		
 		
 		// item들의 position들을 리스트로 저장
@@ -156,12 +154,12 @@ public class GameLayer extends CCLayer{
 	public GameLayer()
 	{
 		this.setIsTouchEnabled(true);
-		btn_bone_unclick = CCSprite.sprite("btn_bone_unclick.png");
-		btn_bone_click = CCSprite.sprite("btn_bone_click.png");
-		btn_gum_unclick = CCSprite.sprite("btn_gum_unclick.png");
-		btn_gum_click = CCSprite.sprite("btn_gum_click.png");
-		btn_redbull_unclick = CCSprite.sprite("btn_redbull_unclick.png");
-		btn_redbull_click = CCSprite.sprite("btn_redbull_click.png");
+		btn_bone_unclick = CCSprite.sprite("minigame/btn_bone_unclick.png");
+		btn_bone_click = CCSprite.sprite("minigame/btn_bone_click.png");
+		btn_gum_unclick = CCSprite.sprite("minigame/btn_gum_unclick.png");
+		btn_gum_click = CCSprite.sprite("minigame/btn_gum_click.png");
+		btn_redbull_unclick = CCSprite.sprite("minigame/btn_redbull_unclick.png");
+		btn_redbull_click = CCSprite.sprite("minigame/btn_redbull_click.png");
 
 		init();
 	}

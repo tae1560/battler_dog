@@ -5,7 +5,7 @@ import org.cocos2d.nodes.CCSprite;
 public class Redbull extends Item{
 	public Redbull()
 	{
-		image = new CCSprite("item_redbull.png");
+		image = new CCSprite("minigame/item_redbull.png");
 	}
 	public void acquireGage()
 	{
