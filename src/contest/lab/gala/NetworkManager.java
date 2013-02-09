@@ -1,10 +1,21 @@
 package contest.lab.gala;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import contest.lab.gala.callback.JoinCallback;
 import contest.lab.gala.callback.LoginCallback;
@@ -20,13 +31,6 @@ public class NetworkManager {
 	public static int messageMatching = 11;
 	public static int messageAttack = 12;
 	
-	protected static String domainString = "http://soma2.vps.phps.kr:4000";
-	protected static String loginPath = domainString + "/login";
-	protected static String joinPath = domainString + "/join";
-	protected static String getRankingPath = domainString + "/get_ranking";
-	
-	
-	private static NetworkManager _instance = null;
 	public static NetworkManager getInstance() {
 		if (_instance == null) {
 			_instance = new NetworkManager();
@@ -36,10 +40,10 @@ public class NetworkManager {
 	
 	public String sendRequest(String message, int kindOfRequest, Object callback) {
 		/*
-		 * Áï°¢ÀûÀÎ ÀÀ´äÀÌ ÇÊ¿ä (HTTP)
-		 * ·Î±×ÀÎ ¿äÃ»
-		 * È¸¿ø °¡ÀÔ
-		 * ¼øÀ§
+		 * ï¿½ï°¢ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ (HTTP)
+		 * ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»
+		 * È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		 * ï¿½ï¿½ï¿½ï¿½
 		 * 
 		 */
 		
@@ -56,7 +60,7 @@ public class NetworkManager {
 				
 				String result = sendHttpRequest(loginPath + "?id=" + id + "&password=" + password);
 				if (result.equalsIgnoreCase("success")) {
-					// ·Î±×ÀÎ ¼º°ø½Ã
+					// ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 					if (callback instanceof LoginCallback) {
 						LoginCallback newCallback = (LoginCallback)callback;
 						newCallback.didSuccessLogin();
@@ -74,7 +78,7 @@ public class NetworkManager {
 				
 				String result = sendHttpRequest(joinPath + "?id=" + id + "&password=" + password);
 				if (result.equalsIgnoreCase("success")) {
-					// ·Î±×ÀÎ ¼º°ø½Ã
+					// ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 					if (callback instanceof JoinCallback) {
 						JoinCallback newCallback = (JoinCallback)callback;
 						newCallback.didSuccessJoin();
@@ -88,7 +92,6 @@ public class NetworkManager {
 				
 				String result = sendHttpRequest(getRankingPath + "?id=" + id);
 				if (result != null) {
-					// TODO : parse result
 					ArrayList<RankingData> array = null;
 					
 					if (callback instanceof RankingCallback) {						
@@ -99,11 +102,11 @@ public class NetworkManager {
 			}
 		}
 		
-//		È¸¿ø°¡ÀÔ / ·Î±×ÀÎ(HTTP) => º¸³»±â : ¾ÆÀÌµð ÆÐ½º¿öµå
-//		 * ·©Å·¹Þ±â (HTTP) => ¹Þ´Â°Å : ¾ÆÀÌµð&·©Å·
+//		È¸ï¿½ï¿½ï¿½ï¿½ / ï¿½Î±ï¿½ï¿½ï¿½(HTTP) => ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : ï¿½ï¿½ï¿½Ìµï¿½ ï¿½Ð½ï¿½ï¿½ï¿½ï¿½ï¿½
+//		 * ï¿½ï¿½Å·ï¿½Þ±ï¿½ (HTTP) => ï¿½Þ´Â°ï¿½ : ï¿½ï¿½ï¿½Ìµï¿½&ï¿½ï¿½Å·
 		
 		return null;
-		// ÀÀ´äÀÌ ÇÊ¿ä(HTTP), ÀÀ´äÀÌ ÇÊ¿ä ¾ø´Â°Í(¼ÒÄÏ)
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½(HTTP), ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ ï¿½ï¿½Â°ï¿½(ï¿½ï¿½ï¿½ï¿½)
 	}
 	public void sendMessage(String message, int kindOfMessage) {
 		
@@ -113,21 +116,157 @@ public class NetworkManager {
 		
 	}
 	
+	public void startSocketWithUsername(String username) {
+		// start socket
+		makeSocketConnection();
+		
+		// send username to server
+		sendUsername(username);
+	}
+	
+	public void sendUsername(String username) {
+		// make JSON data
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(KEY_TYPE, TYPE_SEND_USERNAME);
+		map.put("username", username);
+		sendJSONWithSocket(map);
+	}
+	
+	public void sendMatchingRequest(String friend_name) {
+		// make JSON data
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(KEY_TYPE, TYPE_MATCHING_REQUEST);
+		map.put("friend_name", friend_name);
+		sendJSONWithSocket(map);
+	}
+	
+	public void sendAttack(String friend_name) {
+		// make JSON data
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(KEY_TYPE, TYPE_MATCHING_REQUEST);
+		map.put("friend_name", friend_name);
+		sendJSONWithSocket(map);
+	}
 	
 	/*
 	 *
-	 * È¸¿ø°¡ÀÔ / ·Î±×ÀÎ(HTTP) => º¸³»±â : ¾ÆÀÌµð ÆÐ½º¿öµå
-	 * ·©Å·¹Þ±â (HTTP) => ¹Þ´Â°Å : ¾ÆÀÌµð&·©Å·
+	 * È¸ï¿½ï¿½ï¿½ï¿½ / ï¿½Î±ï¿½ï¿½ï¿½(HTTP) => ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : ï¿½ï¿½ï¿½Ìµï¿½ ï¿½Ð½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 * ï¿½ï¿½Å·ï¿½Þ±ï¿½ (HTTP) => ï¿½Þ´Â°ï¿½ : ï¿½ï¿½ï¿½Ìµï¿½&ï¿½ï¿½Å·
 	 * 
-	 * ¼ÒÄÏ
-	 *  => ¼­¹ö¿¡ µî·Ï & ¼ÒÄÏ µî·Ï 
-	 * ½ÅÃ» / ¼ö¶ô
-	 * °ÔÀÓ (½ºÅ³ °ø°Ý , ½ºÅ³ ´çÇÔ, °ÔÀÓ WIN/LOSE)
+	 * ï¿½ï¿½ï¿½ï¿½
+	 *  => ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ & ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 
+	 * ï¿½ï¿½Ã» / ï¿½ï¿½ï¿½ï¿½
+	 * ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ , ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ WIN/LOSE)
 	 * 
 	 * 
 	 */
 	
 	
+	
+	
+	private static final String domainString = "http://soma2.vps.phps.kr:4000";
+	private static final String loginPath = domainString + "/login";
+	private static final String joinPath = domainString + "/join";
+	private static final String getRankingPath = domainString + "/get_ranking";
+	private static final String socketIpString = "27.102.204.239";
+	private static final int socketPort = 1234;
+	
+	
+	private static final String KEY_TYPE = "type";
+	private static final String TYPE_SEND_USERNAME = "username";
+	private static final String TYPE_MATCHING_REQUEST = "matching_request";
+	
+	
+	private static NetworkManager _instance = null;
+	private Socket socket = null;
+	private BufferedWriter networkWriter = null;
+	private BufferedReader networkReader = null;
+	
+	private void makeSocketConnection() {
+		try {
+			socket = new Socket(socketIpString, socketPort);
+			
+			networkWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			networkReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void startReadingThread() {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				String line;
+//				String text = "";
+                while (true) {
+                	try {
+						line = networkReader.readLine();
+//						text += line;
+						
+						if (line != null) {
+							try {
+								JSONObject receivedData = new JSONObject(line);
+								
+							} catch (JSONException e) {
+								e.printStackTrace();
+							} 
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+                }
+				
+			}
+		}).start();
+	}
+	
+	public void sendJSONWithSocket(Map<String, String> map) {
+		// make JSON data
+		
+		JSONObject jsonData = new JSONObject();
+		try {
+			for (Map.Entry<String,String> entry : map.entrySet()) {
+			  String key = entry.getKey();
+			  String value = entry.getValue();
+			  
+			  jsonData.put(key, value);			  
+			}
+			sendStringWithSocket(jsonData.toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void sendStringWithSocket (String message) {
+		if (networkWriter != null) {
+			PrintWriter out = new PrintWriter(networkWriter, true);
+			out.println(message);
+			out.flush();
+		}	
+	}
+	
+	@SuppressWarnings("unused")
+	private void closeSocketConnection() {
+		try {
+			if (networkWriter != null) {
+				networkWriter.close();				
+			}
+			if (networkReader != null) {
+				networkReader.close();				
+			}
+			if (socket != null) {
+				socket.close();				
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	protected String sendHttpRequest(String urlString) {
 		try {
