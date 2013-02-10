@@ -20,6 +20,7 @@ public class Manager {
 	static float damaged_gage_per_attack_punch = 30;
 	
 	static float full_gage = 100;
+	static float full_hp = 100;
 	
 	static float position_of_btn_bone_x = 135;
 	static float position_of_btn_bone_y = 136;
