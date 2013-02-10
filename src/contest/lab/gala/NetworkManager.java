@@ -63,7 +63,7 @@ public class NetworkManager {
 	}
 	
 	public void doJoin(String id, String password, int selected_character, JoinCallback callback) {
-		String result = sendHttpRequest(loginPath + "?id=" + id + "&password=" + password + "&character=" + selected_character);
+		String result = sendHttpRequest(joinPath + "?id=" + id + "&password=" + password + "&character=" + selected_character);
 		debug("result : " + result);
 		if (result != null) {
 			try {

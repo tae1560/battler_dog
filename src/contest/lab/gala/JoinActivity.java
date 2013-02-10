@@ -57,7 +57,7 @@ public class JoinActivity extends Activity implements JoinCallback{
 			}
 		});
 
-		btn_login.setOnClickListener(new OnClickListener() {
+		btn_join.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
