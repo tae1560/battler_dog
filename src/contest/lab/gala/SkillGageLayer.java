@@ -19,6 +19,7 @@ public class SkillGageLayer extends CCLayer{
 	static CCSprite gage_bar_black = CCSprite.sprite("minigame/bg_gage_bar.png");
 	
 	static float gage;
+	static float hp;
 	
 	static Manager m;
 	
@@ -115,17 +116,17 @@ public class SkillGageLayer extends CCLayer{
 		switch(kindOfAttack)
 		{
 			case 1 : 
-				gage -= Manager.damaged_gage_per_attack_bark;
+				hp -= Manager.damaged_gage_per_attack_bark;
 				updateGageBar();
 				//* 데미지 효과 애니메이션
 				break;
 			case 2 :
-				gage -= Manager.damaged_gage_per_attack_bone;
+				hp -= Manager.damaged_gage_per_attack_bone;
 				updateGageBar();
 				//* 데미지 효과 애니메이션
 				break;
 			case 3 :
-				gage -= Manager.damaged_gage_per_attack_punch;
+				hp -= Manager.damaged_gage_per_attack_punch;
 				updateGageBar();
 				//* 데미지 효과 애니메이션
 				break;
