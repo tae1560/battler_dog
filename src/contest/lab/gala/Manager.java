@@ -7,13 +7,13 @@ public class Manager {
 	float ratio_width;	
 	float ratio_height;
 	
-	static float acquired_gage_per_bone = 5;
-	static float acquired_gage_per_gum = 7;
-	static float acquired_gage_per_redbull = 9;
+	static float acquired_gage_per_bone = 1;
+	static float acquired_gage_per_gum = 2;
+	static float acquired_gage_per_redbull = 3;
 	
-	static float required_gage_for_skill_bark = 20;
-	static float required_gage_for_skill_bone = 40;
-	static float required_gage_for_skill_punch = 60;
+	static float required_gage_for_skill_bark = 10;
+	static float required_gage_for_skill_bone = 15;
+	static float required_gage_for_skill_punch = 20;
 	
 	static float damaged_gage_per_attack_bark = 10;
 	static float damaged_gage_per_attack_bone = 20;
