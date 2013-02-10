@@ -46,10 +46,12 @@ public class GameLayer extends CCLayer{
 		CCLayer layer1 = new GameLayer();
 		CCLayer layer2 = new SkillGageLayer();
 		CCLayer layer3 = new BattleLayer();
+		CCLayer layer4 = new ComboLayer();
 		
 		scene.addChild(layer1);
 		scene.addChild(layer2);
 		scene.addChild(layer3);
+		scene.addChild(layer4);
 		
 		return scene;
 	}

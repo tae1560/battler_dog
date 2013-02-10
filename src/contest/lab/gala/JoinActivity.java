@@ -1,8 +1,6 @@
 package contest.lab.gala;
 
-import contest.lab.gala.callback.JoinCallback;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -10,6 +8,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import contest.lab.gala.callback.JoinCallback;
 
 public class JoinActivity extends Activity implements JoinCallback{
 	//////////회원가입, 로그인 테스트 용 UI ///////////
