@@ -21,6 +21,7 @@ import contest.lab.gala.callback.JoinCallback;
 import contest.lab.gala.callback.LoginCallback;
 import contest.lab.gala.callback.RankingCallback;
 import contest.lab.gala.data.RankingData;
+import contest.lab.gala.data.SkillType;
 
 public class NetworkManager {
 	
@@ -60,7 +61,7 @@ public class NetworkManager {
 				
 				String result = sendHttpRequest(loginPath + "?id=" + id + "&password=" + password);
 				if (result.equalsIgnoreCase("success")) {
-					// �α��� �����
+					// �α��� �����
 					if (callback instanceof LoginCallback) {
 						LoginCallback newCallback = (LoginCallback)callback;
 						newCallback.didSuccessLogin();
@@ -78,7 +79,7 @@ public class NetworkManager {
 				
 				String result = sendHttpRequest(joinPath + "?id=" + id + "&password=" + password);
 				if (result.equalsIgnoreCase("success")) {
-					// �α��� �����
+					// �α��� �����
 					if (callback instanceof JoinCallback) {
 						JoinCallback newCallback = (JoinCallback)callback;
 						newCallback.didSuccessJoin();
@@ -106,7 +107,7 @@ public class NetworkManager {
 //		 * ��ŷ�ޱ� (HTTP) => �޴°� : ���̵�&��ŷ
 		
 		return null;
-		// ������ �ʿ�(HTTP), ������ �ʿ� ��°�(����)
+		// ������ �ʿ�(HTTP), ������ �ʿ� ��°�����)
 	}
 	public void sendMessage(String message, int kindOfMessage) {
 		
@@ -140,11 +141,11 @@ public class NetworkManager {
 		sendJSONWithSocket(map);
 	}
 	
-	public void sendAttack(String friend_name) {
+	public void sendAttack(SkillType skillType) {
 		// make JSON data
 		Map<String, String> map = new HashMap<String, String>();
-		map.put(KEY_TYPE, TYPE_MATCHING_REQUEST);
-		map.put("friend_name", friend_name);
+		map.put(KEY_TYPE, TYPE_SEND_ATTACK);
+		map.put("skill_type", skillType.toString());
 		sendJSONWithSocket(map);
 	}
 	
@@ -154,9 +155,9 @@ public class NetworkManager {
 	 * ��ŷ�ޱ� (HTTP) => �޴°� : ���̵�&��ŷ
 	 * 
 	 * ����
-	 *  => ������ ��� & ���� ��� 
+	 *  => ������ ���& ���� ���
 	 * ��û / ����
-	 * ���� (��ų ��� , ��ų ����, ���� WIN/LOSE)
+	 * ���� (��ų ���, ��ų ����, ���� WIN/LOSE)
 	 * 
 	 * 
 	 */
@@ -176,6 +177,13 @@ public class NetworkManager {
 	private static final String TYPE_SEND_USERNAME = "username";
 	private static final String TYPE_MATCHING_REQUEST = "matching_request";
 	
+	// TODO : DEBUG - TEST
+	// SEND
+	private static final String TYPE_SEND_ATTACK = "test_attack_skill";
+	
+	// RECEIVE
+	private static final String TYPE_SEND_DAMAGED = "test_damaged_skill";
+	
 	
 	private static NetworkManager _instance = null;
 	private Socket socket = null;
@@ -189,7 +197,7 @@ public class NetworkManager {
 			networkWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			networkReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			
-			
+			startReadingThread();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -197,7 +205,7 @@ public class NetworkManager {
 		}
 	}
 	
-	public void startReadingThread() {
+	private void startReadingThread() {
 		new Thread(new Runnable() {
 			
 			@Override
@@ -226,7 +234,7 @@ public class NetworkManager {
 		}).start();
 	}
 	
-	public void sendJSONWithSocket(Map<String, String> map) {
+	private void sendJSONWithSocket(Map<String, String> map) {
 		// make JSON data
 		
 		JSONObject jsonData = new JSONObject();
