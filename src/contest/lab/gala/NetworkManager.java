@@ -14,12 +14,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cocos2d.actions.ease.CCEaseOut;
+import org.cocos2d.actions.interval.CCScaleTo;
+import org.cocos2d.nodes.CCLabelAtlas;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Debug;
 import android.util.Log;
 
+import contest.lab.gala.callback.GetDamagedCallback;
 import contest.lab.gala.callback.JoinCallback;
 import contest.lab.gala.callback.LoginCallback;
 import contest.lab.gala.callback.RankingCallback;
@@ -40,6 +44,10 @@ public class NetworkManager {
 			_instance = new NetworkManager();
 		}
 		return _instance;
+	}
+	
+	public void setGetDamagedCallback(GetDamagedCallback callback) {
+		this.getDamagedCallback = callback;
 	}
 	
 	public String sendRequest(String message, int kindOfRequest, Object callback) {
@@ -117,7 +125,8 @@ public class NetworkManager {
 	}
 	
 	public void receiveMessage(String message, int kindOfMessage) {
-		
+//		CCLabelAtlas label = new CCLabelAtlas()
+//		CCEaseOut.action(action, 3.0f);
 	}
 	
 	public void startSocketWithUsername(String username) {
@@ -194,6 +203,8 @@ public class NetworkManager {
 	private static final String TYPE_SEND_DAMAGED = "test_damaged_skill";
 	
 	
+	private GetDamagedCallback getDamagedCallback = null;
+	
 	private static NetworkManager _instance = null;
 	private Socket socket = null;
 	private BufferedWriter networkWriter = null;
@@ -234,6 +245,7 @@ public class NetworkManager {
 							try {
 								JSONObject receivedData = new JSONObject(line);
 								
+								parseReceivedData(receivedData);
 							} catch (JSONException e) {
 								e.printStackTrace();
 							} 
@@ -245,6 +257,27 @@ public class NetworkManager {
 				
 			}
 		}).start();
+	}
+	
+	private void parseReceivedData(JSONObject jsonObject) {
+		try {
+			String dataTypeString = jsonObject.getString("type");
+			
+			debug("dataTypeString : " + dataTypeString);
+			
+			if (dataTypeString != null) {
+				if (dataTypeString.equalsIgnoreCase("attack_skill")) {
+					String skillTypeString = jsonObject.getString("skill_type");
+					int skillType = Integer.parseInt(skillTypeString);
+					
+					this.getDamagedCallback.didGetDamaged(SkillType.parseInt(skillType));
+				}				
+			}
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void sendJSONWithSocket(Map<String, String> map) {

@@ -9,4 +9,17 @@ public enum SkillType {
 	private final int value;
 	public int toInteger() { return value; }
 	public String toString() { return Integer.toString(value); }
+	
+	public static SkillType parseInt(int skillType) {
+		switch (skillType) {
+		case 1:
+			return SkillType.BARK;
+		case 2:
+			return SkillType.BONE;
+		case 3:
+			return SkillType.PUNCH;
+		default:
+			return null;
+		}
+	}
 }
