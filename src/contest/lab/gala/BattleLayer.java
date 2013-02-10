@@ -1,14 +1,17 @@
 package contest.lab.gala;
 
 import org.cocos2d.layers.CCLayer;
+import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+
+import android.app.Activity;
 
 public class BattleLayer extends CCLayer{
 	CCSprite bg_battlelayer = CCSprite.sprite("battle/bg_battlelayer.png");
 	CCSprite bg_hp_bar = CCSprite.sprite("battle/bg_hp_bar.png");
 	CCSprite hp_bar_mine = CCSprite.sprite("battle/hp_bar.png");
 	CCSprite hp_bar_opponent = CCSprite.sprite("battle/hp_bar.png");
-	
+	CCSprite title = CCSprite.sprite("battle/title.png");
 	static float hp;
 	Manager m;
 	
@@ -35,5 +38,37 @@ public class BattleLayer extends CCLayer{
 		hp_bar_opponent.setScaleX(m.ratio_width);
 		hp_bar_opponent.setScaleY(m.ratio_height);
 		this.addChild(hp_bar_opponent);
+		
+		title.setPosition(360 * m.ratio_width, 1238 * m.ratio_height);
+		title.setScaleX(m.ratio_width);
+		title.setScaleY(m.ratio_height);
+		this.addChild(title);
+		
+	}
+	
+	///* 서버에게서 공격 정보를 받았을 때, Activity에서 호출하는 함수
+	public static void getDamaged(int kindOfAttack)
+	{
+		switch(kindOfAttack)
+		{
+			case 1 : 
+				hp -= Manager.damaged_gage_per_attack_bark;
+				SkillGageLayer.updateGageBar();
+				//* 데미지 효과 애니메이션
+				BattlerDogActivity.makeToast();
+				break;
+			case 2 :
+				hp -= Manager.damaged_gage_per_attack_bone;
+				SkillGageLayer.updateGageBar();
+				//* 데미지 효과 애니메이션
+				BattlerDogActivity.makeToast();
+				break;
+			case 3 :
+				hp -= Manager.damaged_gage_per_attack_punch;
+				SkillGageLayer.updateGageBar();
+				//* 데미지 효과 애니메이션
+				BattlerDogActivity.makeToast();
+				break;
+		}
 	}
 }
