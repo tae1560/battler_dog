@@ -17,6 +17,9 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.Debug;
+import android.util.Log;
+
 import contest.lab.gala.callback.JoinCallback;
 import contest.lab.gala.callback.LoginCallback;
 import contest.lab.gala.callback.RankingCallback;
@@ -118,6 +121,8 @@ public class NetworkManager {
 	}
 	
 	public void startSocketWithUsername(String username) {
+		debug("startSocketWithUsername");
+		
 		// start socket
 		makeSocketConnection();
 		
@@ -142,11 +147,15 @@ public class NetworkManager {
 	}
 	
 	public void sendAttack(SkillType skillType) {
+		debug("sendAttack started");
+		
 		// make JSON data
 		Map<String, String> map = new HashMap<String, String>();
 		map.put(KEY_TYPE, TYPE_SEND_ATTACK);
 		map.put("skill_type", skillType.toString());
 		sendJSONWithSocket(map);
+		
+		debug("sendAttack ended");
 	}
 	
 	/*
@@ -197,6 +206,8 @@ public class NetworkManager {
 			networkWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			networkReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			
+			debug("makeSocketConnection completed");
+			
 			startReadingThread();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -210,6 +221,8 @@ public class NetworkManager {
 			
 			@Override
 			public void run() {
+				debug("startReadingThread");
+				
 				String line;
 //				String text = "";
                 while (true) {
@@ -300,5 +313,9 @@ public class NetworkManager {
 		}
 		
 		return null;
+	}
+	
+	private void debug(String string) {
+		Log.e("galalab", string);
 	}
 }
