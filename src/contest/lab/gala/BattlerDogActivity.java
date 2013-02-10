@@ -8,13 +8,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.Toast;
 import contest.lab.gala.callback.LoginCallback;
 
 public class BattlerDogActivity extends Activity implements LoginCallback {
 	//** 공격 정보를 받았을 때, SkillGageLayer.getDamaged(int kindOfAttack);
 	protected CCGLSurfaceView _glSurfaceView;
-
+	EditText et_id;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,8 @@ public class BattlerDogActivity extends Activity implements LoginCallback {
 	@Override
 	protected void onStart() {
 
+		super.onStart();
+		
 		CCDirector.sharedDirector().attachInView(_glSurfaceView);
 
 		CCDirector.sharedDirector().setDeviceOrientation(CCDirector.kCCDeviceOrientationPortrait);
@@ -38,9 +41,9 @@ public class BattlerDogActivity extends Activity implements LoginCallback {
 
 		CCDirector.sharedDirector().setAnimationInterval(1.0f / 60.0f);
 
-		CCScene scene = GameLayer.makeScene();
-		CCDirector.sharedDirector().runWithScene(scene);
-		super.onStart();
+		et_id = (EditText)findViewById("R.id.et_id");
+		
+		
 	}
 
 	@Override
@@ -51,10 +54,20 @@ public class BattlerDogActivity extends Activity implements LoginCallback {
 		// 로그인 성공시
 		// => 페이지 넘기기
 	}
-	
-	public static void makeToast()
+	public void runGame()
 	{
-		Toast.makeText(CCDirector.sharedDirector().getActivity(), "조현정 짱 ", Toast.LENGTH_LONG).show();
+		CCScene scene = GameLayer.makeScene();
+		CCDirector.sharedDirector().runWithScene(scene);
 	}
 	
+	public static void makeToast(final int kindOfAttack)
+	{
+		CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(CCDirector.sharedDirector().getActivity().getApplicationContext(), "조현정 짱 : " + kindOfAttack, Toast.LENGTH_LONG).show();
+			}
+		});
+	}
 }

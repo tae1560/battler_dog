@@ -14,15 +14,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cocos2d.actions.ease.CCEaseOut;
-import org.cocos2d.actions.interval.CCScaleTo;
-import org.cocos2d.nodes.CCLabelAtlas;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.Debug;
 import android.util.Log;
-
 import contest.lab.gala.callback.GetDamagedCallback;
 import contest.lab.gala.callback.JoinCallback;
 import contest.lab.gala.callback.LoginCallback;
