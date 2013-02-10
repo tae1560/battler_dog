@@ -210,8 +210,12 @@ public class NetworkManager {
 			
 			startReadingThread();
 		} catch (UnknownHostException e) {
+			debug("UnknownHostException");
+			debug(e.getStackTrace().toString());
 			e.printStackTrace();
 		} catch (IOException e) {
+			debug("IOException");
+			debug(e.getStackTrace().toString());
 			e.printStackTrace();
 		}
 	}

@@ -5,6 +5,8 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
+import contest.lab.gala.data.SkillType;
+
 import android.view.MotionEvent;
 
 public class SkillGageLayer extends CCLayer{
@@ -19,7 +21,6 @@ public class SkillGageLayer extends CCLayer{
 	static CCSprite gage_bar_black = CCSprite.sprite("minigame/bg_gage_bar.png");
 	
 	static float gage;
-	static float hp;
 	
 	static Manager m;
 	
@@ -110,28 +111,7 @@ public class SkillGageLayer extends CCLayer{
 			btn_skill_punch_normal.setVisible(true);
 		}
 	}
-	///* 서버에게서 공격 정보를 받았을 때, Activity에서 호출하는 함수
-	public static void getDamaged(int kindOfAttack)
-	{
-		switch(kindOfAttack)
-		{
-			case 1 : 
-				hp -= Manager.damaged_gage_per_attack_bark;
-				updateGageBar();
-				//* 데미지 효과 애니메이션
-				break;
-			case 2 :
-				hp -= Manager.damaged_gage_per_attack_bone;
-				updateGageBar();
-				//* 데미지 효과 애니메이션
-				break;
-			case 3 :
-				hp -= Manager.damaged_gage_per_attack_punch;
-				updateGageBar();
-				//* 데미지 효과 애니메이션
-				break;
-		}
-	}
+	
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event) {
 		CGPoint touchPoint = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(event.getX(),event.getY()));
@@ -140,13 +120,14 @@ public class SkillGageLayer extends CCLayer{
 			gage -= Manager.required_gage_for_skill_bark;
 			updateSkillBtns();
 			updateGageBar();
-			///* 서버에게 공격 정보 전송
+			NetworkManager.getInstance().sendAttack(SkillType.BARK);
 		}
 		else if(btn_skill_bone_normal.getBoundingBox().contains(touchPoint.x, touchPoint.y) && gage >= Manager.required_gage_for_skill_bone)
 		{
 			gage -= Manager.required_gage_for_skill_bone;
 			updateSkillBtns();
 			updateGageBar();
+			NetworkManager.getInstance().sendAttack(SkillType.BONE);
 			///* 서버에게 공격 정보 전송
 		}
 		else if(btn_skill_punch_normal.getBoundingBox().contains(touchPoint.x, touchPoint.y) && gage >= Manager.required_gage_for_skill_punch)
@@ -154,6 +135,7 @@ public class SkillGageLayer extends CCLayer{
 			gage -= Manager.required_gage_for_skill_punch;
 			updateSkillBtns();
 			updateGageBar();
+			NetworkManager.getInstance().sendAttack(SkillType.PUNCH);
 			///* 서버에게 공격 정보 전송
 		}
 		return super.ccTouchesBegan(event);

@@ -55,6 +55,9 @@ public class GameLayer extends CCLayer{
 	}
 	void init()
 	{
+		NetworkManager.getInstance().startSocketWithUsername("Hyunjeong");
+		
+		
 		m = new Manager();
 		
 		bg_gamelayer = CCSprite.sprite("minigame/bg_gamelayer.png");
