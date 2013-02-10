@@ -1,6 +1,8 @@
 package contest.lab.gala;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.graphics.Paint.Join;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -60,7 +62,7 @@ public class JoinActivity extends Activity implements JoinCallback{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-
+				NetworkManager.getInstance().doJoin(et_id.getText().toString(), et_pw.getText().toString(), selected_character, JoinActivity.this);
 			}
 		});
 	}

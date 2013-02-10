@@ -45,14 +45,42 @@ public class NetworkManager {
 		this.getDamagedCallback = callback;
 	}
 	
+	public void doLogin(String id, String password, LoginCallback callback) {
+		String result = sendHttpRequest(loginPath + "?id=" + id + "&password=" + password);
+		debug("result : " + result);
+		if (result != null) {
+			try {
+				JSONObject jsonResult = new JSONObject(result);
+				if (jsonResult.getString("status").equalsIgnoreCase("success")) {
+					callback.didSuccessLogin();
+				} else {
+					debug("login failed");
+				}		
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void doJoin(String id, String password, int selected_character, JoinCallback callback) {
+		String result = sendHttpRequest(loginPath + "?id=" + id + "&password=" + password + "&character=" + selected_character);
+		debug("result : " + result);
+		if (result != null) {
+			try {
+				JSONObject jsonResult = new JSONObject(result);
+				if (jsonResult.getString("status").equalsIgnoreCase("success")) {
+					callback.didSuccessJoin();
+				} else {
+					debug("join failed");
+					debug(jsonResult.getString("message"));
+				}		
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public String sendRequest(String message, int kindOfRequest, Object callback) {
-		/*
-		 * �ﰢ���� ������ �ʿ� (HTTP)
-		 * �α��� ��û
-		 * ȸ�� ����
-		 * ����
-		 * 
-		 */
 		
 		if (kindOfRequest == NetworkManager.requestLogin) {
 			// id & password parsing
@@ -67,7 +95,6 @@ public class NetworkManager {
 				
 				String result = sendHttpRequest(loginPath + "?id=" + id + "&password=" + password);
 				if (result.equalsIgnoreCase("success")) {
-					// �α��� �����
 					if (callback instanceof LoginCallback) {
 						LoginCallback newCallback = (LoginCallback)callback;
 						newCallback.didSuccessLogin();
@@ -85,7 +112,6 @@ public class NetworkManager {
 				
 				String result = sendHttpRequest(joinPath + "?id=" + id + "&password=" + password);
 				if (result.equalsIgnoreCase("success")) {
-					// �α��� �����
 					if (callback instanceof JoinCallback) {
 						JoinCallback newCallback = (JoinCallback)callback;
 						newCallback.didSuccessJoin();
@@ -109,19 +135,14 @@ public class NetworkManager {
 			}
 		}
 		
-//		ȸ���� / �α���(HTTP) => ������ : ���̵� �н�����
-//		 * ��ŷ�ޱ� (HTTP) => �޴°� : ���̵�&��ŷ
-		
 		return null;
-		// ������ �ʿ�(HTTP), ������ �ʿ� ��°�����)
 	}
 	public void sendMessage(String message, int kindOfMessage) {
 		
 	}
 	
 	public void receiveMessage(String message, int kindOfMessage) {
-//		CCLabelAtlas label = new CCLabelAtlas()
-//		CCEaseOut.action(action, 3.0f);
+		
 	}
 	
 	public void startSocketWithUsername(String username) {
@@ -162,21 +183,7 @@ public class NetworkManager {
 		debug("sendAttack ended");
 	}
 	
-	/*
-	 *
-	 * ȸ���� / �α���(HTTP) => ������ : ���̵� �н�����
-	 * ��ŷ�ޱ� (HTTP) => �޴°� : ���̵�&��ŷ
-	 * 
-	 * ����
-	 *  => ������ ���& ���� ���
-	 * ��û / ����
-	 * ���� (��ų ���, ��ų ����, ���� WIN/LOSE)
-	 * 
-	 * 
-	 */
-	
-	
-	
+	// private -----------------------------------------------------------------
 	
 	private static final String domainString = "http://soma2.vps.phps.kr:4000";
 	private static final String loginPath = domainString + "/login";
@@ -329,7 +336,7 @@ public class NetworkManager {
 			connection.connect();
 
 			BufferedReader oBufReader = new BufferedReader(new InputStreamReader(url.openStream()));
-			String strBuffer;
+			String strBuffer = oBufReader.readLine(); 
 			String strRslt = ""; 
 			while((strBuffer = oBufReader.readLine()) != null)
 			{
