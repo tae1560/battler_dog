@@ -62,8 +62,8 @@ public class NetworkManager {
 		}
 	}
 	
-	public void doJoin(String id, String password, JoinCallback callback) {
-		String result = sendHttpRequest(loginPath + "?id=" + id + "&password=" + password);
+	public void doJoin(String id, String password, int selected_character, JoinCallback callback) {
+		String result = sendHttpRequest(loginPath + "?id=" + id + "&password=" + password + "&character=" + selected_character);
 		debug("result : " + result);
 		if (result != null) {
 			try {
@@ -72,6 +72,7 @@ public class NetworkManager {
 					callback.didSuccessJoin();
 				} else {
 					debug("join failed");
+					debug(jsonResult.getString("message"));
 				}		
 			} catch (JSONException e) {
 				e.printStackTrace();
