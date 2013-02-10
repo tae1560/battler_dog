@@ -5,18 +5,25 @@
     android:layout_height="fill_parent"
     >
     <TextView android:text="ID를 입력하세요" android:id="@+id/tv_askID" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-    <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/editText1" android:text="EditText"></EditText>
+    <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/editText1" android:text=""></EditText>
     <TextView android:text="비밀번호를 입력하세요" android:id="@+id/tv_askPW" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-    <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/editText2" android:text="EditText"></EditText>
-    
-    <RadioButton android:text="RadioButton" android:id="@+id/rb_char1" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
-    <RadioButton android:text="RadioButton" android:id="@+id/rb_char2" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
-    <RadioButton android:text="RadioButton" android:id="@+id/rb_char3" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
-    <RadioButton android:text="RadioButton" android:id="@+id/rb_char4" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
-    
-    
-    
-    
+    <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/editText2" android:text=""></EditText>
+	<RadioGroup android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/rbgroup_characters"
+		android:orientation="horizontal">
+		<RadioButton android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/rb_char1"
+			android:text="1"></RadioButton>
+		<RadioButton android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/rb_char2"
+			android:text="2"></RadioButton>
+		<RadioButton android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/rb_char3"
+			android:text="3"></RadioButton>
+		<RadioButton android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/rb_char4"
+			android:text="4"></RadioButton>
+	</RadioGroup>
 
     <Button android:text="회원가입" android:id="@+id/btn_join" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
     <Button android:text="로그인" android:id="@+id/btn_login" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
