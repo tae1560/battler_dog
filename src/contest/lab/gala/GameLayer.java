@@ -129,6 +129,8 @@ public class GameLayer extends CCLayer{
 	}
 	void clickedCorrectOne()
 	{
+		ComboLayer.showCombo();
+		
 		// 선택된 아이템에 의한 게이지 획득(게이지 바 업데이트 포함)
 		itemList.get(0).acquireGage();
 		
@@ -152,7 +154,7 @@ public class GameLayer extends CCLayer{
 	}
 	void clickedWrongOne()
 	{
-		
+		ComboLayer.resetCombo();
 	}
 	public GameLayer()
 	{
