@@ -66,7 +66,7 @@ public class NetworkManager {
 					}
 				}				
 			}
-		});
+		}).start();
 	}
 	
 	public void doJoin(final String id, final String password, final int selected_character, final JoinCallback callback) {
@@ -90,7 +90,7 @@ public class NetworkManager {
 					}
 				}
 			}
-		});
+		}).start();
 	}
 	
 	public String sendRequest(String message, int kindOfRequest, Object callback) {
