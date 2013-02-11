@@ -3,6 +3,7 @@ package contest.lab.gala;
 import org.cocos2d.nodes.CCDirector;
 
 public class Manager {
+	
 	// Galaxy 3 해상도에 대한 본 화면의 해상도의 비율
 	float ratio_width;	
 	float ratio_height;

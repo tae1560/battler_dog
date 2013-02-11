@@ -1,9 +1,13 @@
 package contest.lab.gala;
 
+import org.cocos2d.actions.interval.CCAnimate;
+import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
+import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCSprite;
 
 import contest.lab.gala.callback.GetDamagedCallback;
+import contest.lab.gala.data.CurrentUserInformation;
 import contest.lab.gala.data.SkillType;
 
 public class BattleLayer extends CCLayer implements GetDamagedCallback{
@@ -14,6 +18,52 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	CCSprite title = CCSprite.sprite("battle/title.png");
 	static float hp;
 	Manager m;
+	
+	CCSequence demagedSequence_bark;
+	CCSequence demagedSequence_bone;
+	CCSequence demagedSequence_punch;
+	
+	CCSequence attackSequence_bark;
+	CCSequence attackSequence_bone;
+	CCSequence attackSequence_punch;
+	
+	CCAnimation attackAnimation;
+	CCAnimation demagedAnimation;
+	CCAnimate attackAnimate;
+	CCAnimate demagedAnimate;
+	
+	CCAnimation normalAnimation_mine;
+	CCAnimation normalAnimation_opponent;
+	CCAnimate normalAnimate_mine;
+	CCAnimate normalAnimate_opponent;
+	
+	CCSprite myCharacter;
+	CCSprite opponentCharacter;
+	
+	public void makeNormalAnimation()
+	{
+		normalAnimation_mine = CCAnimation.animation("animation1");
+		myCharacter = CCSprite.sprite(String.format("char%d_normal0.png", CurrentUserInformation.userID));
+		for(int i = 1; i <= 5; i++ )
+		{
+			CCSprite frame = CCSprite.sprite(String.format("char%d_normal%d", CurrentUserInformation.userID, i));
+			frame.setScaleX(Manager.ratio_width);
+			frame.setScaleY(Manager.ratio_height);
+			normalAnimation_mine.addFrame(frame.getTexture());
+		}
+		normalAnimate_mine = CCAnimate.action(normalAnimation_mine, true);
+		
+		normalAnimation_opponent = CCAnimation.animation("animation2");
+		myCharacter = CCSprite.sprite(String.format("char%d_normal0.png", CurrentUserInformation.opponentID));
+		for(int i = 1; i <= 5; i++ )
+		{
+			CCSprite frame = CCSprite.sprite(String.format("char%d_normal%d", CurrentUserInformation.opponentID, i));
+			frame.setScaleX(Manager.ratio_width);
+			frame.setScaleY(Manager.ratio_height);
+			normalAnimation_opponent.addFrame(frame.getTexture());
+		}
+		normalAnimate_opponent = CCAnimate.action(normalAnimation_opponent, true);
+	}
 	
 	public BattleLayer()
 	{
