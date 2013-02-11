@@ -57,7 +57,7 @@ public class GameLayer extends CCLayer{
 	}
 	void init()
 	{
-		NetworkManager.getInstance().startSocketWithUsername("Hyunjeong");
+//		NetworkManager.getInstance().startSocketWithUsername("Hyunjeong");
 		
 		
 		m = new Manager();

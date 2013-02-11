@@ -17,6 +17,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.sax.StartElementListener;
 import android.util.Log;
 import contest.lab.gala.callback.GetDamagedCallback;
 import contest.lab.gala.callback.JoinCallback;
@@ -38,8 +39,13 @@ public class NetworkManager {
 	public static NetworkManager getInstance() {
 		if (_instance == null) {
 			_instance = new NetworkManager();
+			_instance.debug("make Instance");
 		}
 		return _instance;
+	}
+	
+	public NetworkManager() {
+		this.startSocket();
 	}
 	
 	public void setGetDamagedCallback(GetDamagedCallback callback) {
@@ -47,134 +53,157 @@ public class NetworkManager {
 	}
 	
 	public void doLogin(final String id, final String password, final LoginCallback callback) {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				String result = CommonUtils.requestWithGet(loginPath + "?id=" + id + "&password=" + password);
-				debug("result : " + result);
-				if (result != null) {
-					try {
-						JSONObject jsonResult = new JSONObject(result);
-						if (jsonResult.getString("status").equalsIgnoreCase("success")) {
-							callback.didSuccessLogin();
-						} else {
-							debug("login failed");
-						}		
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}				
-			}
-		}).start();
+		this.loginCallback = callback;
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(KEY_TYPE, TYPE_LOGIN);
+		map.put("id", id);
+		map.put("password", password);
+		sendJSONWithSocket(map);
+//		new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				String result = CommonUtils.requestWithGet(loginPath + "?id=" + id + "&password=" + password);
+//				debug("result : " + result);
+//				if (result != null) {
+//					try {
+//						JSONObject jsonResult = new JSONObject(result);
+//						if (jsonResult.getString("status").equalsIgnoreCase("success")) {
+//							callback.didSuccessLogin();
+//						} else {
+//							debug("login failed");
+//						}		
+//					} catch (JSONException e) {
+//						e.printStackTrace();
+//					}
+//				}				
+//			}
+//		}).start();
 	}
 	
 	public void doJoin(final String id, final String password, final int selected_character, final JoinCallback callback) {
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				String result = CommonUtils.requestWithGet(joinPath + "?id=" + id + "&password=" + password + "&character=" + selected_character);
-				debug("result : " + result);
-				if (result != null) {
-					try {
-						JSONObject jsonResult = new JSONObject(result);
-						if (jsonResult.getString("status").equalsIgnoreCase("success")) {
-							callback.didSuccessJoin();
-						} else {
-							debug("join failed");
-							debug(jsonResult.getString("message"));
-						}		
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}).start();
+		this.joinCallback = callback;
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(KEY_TYPE, TYPE_JOIN);
+		map.put("id", id);
+		map.put("password", password);
+		map.put("selected_character", Integer.toString(selected_character));
+		sendJSONWithSocket(map);
+//		
+//		new Thread(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				String result = CommonUtils.requestWithGet(joinPath + "?id=" + id + "&password=" + password + "&character=" + selected_character);
+//				debug("result : " + result);
+//				if (result != null) {
+//					try {
+//						JSONObject jsonResult = new JSONObject(result);
+//						if (jsonResult.getString("status").equalsIgnoreCase("success")) {
+//							callback.didSuccessJoin();
+//						} else {
+//							debug("join failed");
+//							debug(jsonResult.getString("message"));
+//						}		
+//					} catch (JSONException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//			}
+//		}).start();
 	}
 	
-	public String sendRequest(String message, int kindOfRequest, Object callback) {
-		
-		if (kindOfRequest == NetworkManager.requestLogin) {
-			// id & password parsing
-			// message : "id password"
-			String[] messages = message.split(" ");
-			
-			String id = null;
-			String password = null;
-			if (messages.length == 2) {
-				id = messages[0];
-				password = messages[1];
-				
-				String result = sendHttpRequest(loginPath + "?id=" + id + "&password=" + password);
-				if (result.equalsIgnoreCase("success")) {
-					if (callback instanceof LoginCallback) {
-						LoginCallback newCallback = (LoginCallback)callback;
-						newCallback.didSuccessLogin();
-					}
-				}
-			}
-		} else if (kindOfRequest == NetworkManager.requestJoin) {
-			String[] messages = message.split(" ");
-			
-			String id = null;
-			String password = null;
-			if (messages.length == 2) {
-				id = messages[0];
-				password = messages[1];
-				
-				String result = sendHttpRequest(joinPath + "?id=" + id + "&password=" + password);
-				if (result.equalsIgnoreCase("success")) {
-					if (callback instanceof JoinCallback) {
-						JoinCallback newCallback = (JoinCallback)callback;
-						newCallback.didSuccessJoin();
-					}
-				}
-			}
-		} else if (kindOfRequest == NetworkManager.requestRanking) {
-			// String message
-			if (message != null) {
-				String id = message;
-				
-				String result = sendHttpRequest(getRankingPath + "?id=" + id);
-				if (result != null) {
-					ArrayList<RankingData> array = null;
-					
-					if (callback instanceof RankingCallback) {						
-						RankingCallback newCallback = (RankingCallback)callback;
-						newCallback.didSuccessGetRanking(array);
-					}
-				}
-			}
-		}
-		
-		return null;
-	}
-	public void sendMessage(String message, int kindOfMessage) {
-		
-	}
+//	public String sendRequest(String message, int kindOfRequest, Object callback) {
+//		
+//		if (kindOfRequest == NetworkManager.requestLogin) {
+//			// id & password parsing
+//			// message : "id password"
+//			String[] messages = message.split(" ");
+//			
+//			String id = null;
+//			String password = null;
+//			if (messages.length == 2) {
+//				id = messages[0];
+//				password = messages[1];
+//				
+//				String result = sendHttpRequest(loginPath + "?id=" + id + "&password=" + password);
+//				if (result.equalsIgnoreCase("success")) {
+//					if (callback instanceof LoginCallback) {
+//						LoginCallback newCallback = (LoginCallback)callback;
+//						newCallback.didSuccessLogin();
+//					}
+//				}
+//			}
+//		} else if (kindOfRequest == NetworkManager.requestJoin) {
+//			String[] messages = message.split(" ");
+//			
+//			String id = null;
+//			String password = null;
+//			if (messages.length == 2) {
+//				id = messages[0];
+//				password = messages[1];
+//				
+//				String result = sendHttpRequest(joinPath + "?id=" + id + "&password=" + password);
+//				if (result.equalsIgnoreCase("success")) {
+//					if (callback instanceof JoinCallback) {
+//						JoinCallback newCallback = (JoinCallback)callback;
+//						newCallback.didSuccessJoin();
+//					}
+//				}
+//			}
+//		} else if (kindOfRequest == NetworkManager.requestRanking) {
+//			// String message
+//			if (message != null) {
+//				String id = message;
+//				
+//				String result = sendHttpRequest(getRankingPath + "?id=" + id);
+//				if (result != null) {
+//					ArrayList<RankingData> array = null;
+//					
+//					if (callback instanceof RankingCallback) {						
+//						RankingCallback newCallback = (RankingCallback)callback;
+//						newCallback.didSuccessGetRanking(array);
+//					}
+//				}
+//			}
+//		}
+//		
+//		return null;
+//	}
+//	public void sendMessage(String message, int kindOfMessage) {
+//		
+//	}
+//	
+//	public void receiveMessage(String message, int kindOfMessage) {
+//		
+//	}
 	
-	public void receiveMessage(String message, int kindOfMessage) {
-		
-	}
-	
-	public void startSocketWithUsername(String username) {
-		debug("startSocketWithUsername");
+	public void startSocket() {
+		debug("startSocket");
 		
 		// start socket
 		makeSocketConnection();
-		
-		// send username to server
-		sendUsername(username);
 	}
 	
-	public void sendUsername(String username) {
-		// make JSON data
-		Map<String, String> map = new HashMap<String, String>();
-		map.put(KEY_TYPE, TYPE_SEND_USERNAME);
-		map.put("username", username);
-		sendJSONWithSocket(map);
-	}
+//	public void startSocketWithUsername(String username) {
+//		debug("startSocketWithUsername");
+//		
+//		// start socket
+//		makeSocketConnection();
+//		
+//		// send username to server
+//		sendUsername(username);
+//	}
+//	
+//	public void sendUsername(String username) {
+//		// make JSON data
+//		Map<String, String> map = new HashMap<String, String>();
+//		map.put(KEY_TYPE, TYPE_SEND_USERNAME);
+//		map.put("username", username);
+//		sendJSONWithSocket(map);
+//	}
 	
 	public void sendMatchingRequest(String friend_name) {
 		// make JSON data
@@ -208,6 +237,8 @@ public class NetworkManager {
 	
 	private static final String KEY_TYPE = "type";
 	private static final String TYPE_SEND_USERNAME = "username";
+	private static final String TYPE_LOGIN = "login";
+	private static final String TYPE_JOIN = "join";
 	private static final String TYPE_MATCHING_REQUEST = "matching_request";
 	
 	// TODO : DEBUG - TEST
@@ -218,6 +249,8 @@ public class NetworkManager {
 	private static final String TYPE_SEND_DAMAGED = "test_damaged_skill";
 	
 	
+	private JoinCallback joinCallback = null;
+	private LoginCallback loginCallback = null;
 	private GetDamagedCallback getDamagedCallback = null;
 	
 	private static NetworkManager _instance = null;
@@ -283,14 +316,25 @@ public class NetworkManager {
 			String dataTypeString = jsonObject.getString("type");
 			
 			debug("dataTypeString : " + dataTypeString);
+			debug("jsonObject : " + jsonObject.toString());
 			
 			if (dataTypeString != null) {
 				if (dataTypeString.equalsIgnoreCase("attack_skill")) {
 					String skillTypeString = jsonObject.getString("skill_type");
 					int skillType = Integer.parseInt(skillTypeString);
 					
-					this.getDamagedCallback.didGetDamaged(SkillType.parseInt(skillType));
-				}				
+					if (this.getDamagedCallback != null) {
+						this.getDamagedCallback.didGetDamaged(SkillType.parseInt(skillType));						
+					}
+				} else if(dataTypeString.equalsIgnoreCase("login")) {
+					if (this.loginCallback != null) {
+						this.loginCallback.didSuccessLogin();						
+					}
+				} else if(dataTypeString.equalsIgnoreCase("join")) {
+					if (this.joinCallback != null) {
+						this.joinCallback.didSuccessJoin();						
+					}
+				}
 			}
 			
 		} catch (JSONException e) {
@@ -317,6 +361,9 @@ public class NetworkManager {
 	}
 	
 	private void sendStringWithSocket (String message) {
+		if (socket == null || socket.isClosed()) {
+			startSocket();
+		}
 		if (networkWriter != null) {
 			PrintWriter out = new PrintWriter(networkWriter, true);
 			out.println(message);
@@ -339,32 +386,6 @@ public class NetworkManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	protected String sendHttpRequest(String urlString) {
-		try {
-			URL url = new URL(urlString);
-			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.connect();
-
-			BufferedReader oBufReader = new BufferedReader(new InputStreamReader(url.openStream()));
-			String strBuffer = oBufReader.readLine(); 
-			String strRslt = ""; 
-			while((strBuffer = oBufReader.readLine()) != null)
-			{
-				if(strBuffer.length() > 1)
-				{
-					strRslt += strBuffer;
-				}
-			}
-			
-			return strRslt;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return null;
 	}
 	
 	private void debug(String string) {
