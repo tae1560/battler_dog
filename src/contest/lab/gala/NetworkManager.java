@@ -24,6 +24,7 @@ import contest.lab.gala.callback.LoginCallback;
 import contest.lab.gala.callback.RankingCallback;
 import contest.lab.gala.data.RankingData;
 import contest.lab.gala.data.SkillType;
+import contest.lab.gala.util.CommonUtils;
 
 public class NetworkManager {
 	
@@ -45,39 +46,51 @@ public class NetworkManager {
 		this.getDamagedCallback = callback;
 	}
 	
-	public void doLogin(String id, String password, LoginCallback callback) {
-		String result = sendHttpRequest(loginPath + "?id=" + id + "&password=" + password);
-		debug("result : " + result);
-		if (result != null) {
-			try {
-				JSONObject jsonResult = new JSONObject(result);
-				if (jsonResult.getString("status").equalsIgnoreCase("success")) {
-					callback.didSuccessLogin();
-				} else {
-					debug("login failed");
-				}		
-			} catch (JSONException e) {
-				e.printStackTrace();
+	public void doLogin(final String id, final String password, final LoginCallback callback) {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				String result = CommonUtils.requestWithGet(loginPath + "?id=" + id + "&password=" + password);
+				debug("result : " + result);
+				if (result != null) {
+					try {
+						JSONObject jsonResult = new JSONObject(result);
+						if (jsonResult.getString("status").equalsIgnoreCase("success")) {
+							callback.didSuccessLogin();
+						} else {
+							debug("login failed");
+						}		
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}				
 			}
-		}
+		}).start();
 	}
 	
-	public void doJoin(String id, String password, int selected_character, JoinCallback callback) {
-		String result = sendHttpRequest(joinPath + "?id=" + id + "&password=" + password + "&character=" + selected_character);
-		debug("result : " + result);
-		if (result != null) {
-			try {
-				JSONObject jsonResult = new JSONObject(result);
-				if (jsonResult.getString("status").equalsIgnoreCase("success")) {
-					callback.didSuccessJoin();
-				} else {
-					debug("join failed");
-					debug(jsonResult.getString("message"));
-				}		
-			} catch (JSONException e) {
-				e.printStackTrace();
+	public void doJoin(final String id, final String password, final int selected_character, final JoinCallback callback) {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				String result = CommonUtils.requestWithGet(joinPath + "?id=" + id + "&password=" + password + "&character=" + selected_character);
+				debug("result : " + result);
+				if (result != null) {
+					try {
+						JSONObject jsonResult = new JSONObject(result);
+						if (jsonResult.getString("status").equalsIgnoreCase("success")) {
+							callback.didSuccessJoin();
+						} else {
+							debug("join failed");
+							debug(jsonResult.getString("message"));
+						}		
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
 			}
-		}
+		}).start();
 	}
 	
 	public String sendRequest(String message, int kindOfRequest, Object callback) {

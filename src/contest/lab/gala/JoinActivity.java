@@ -11,8 +11,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import contest.lab.gala.callback.JoinCallback;
+import contest.lab.gala.callback.LoginCallback;
 
-public class JoinActivity extends Activity implements JoinCallback{
+public class JoinActivity extends Activity implements JoinCallback, LoginCallback{
 	//////////회원가입, 로그인 테스트 용 UI ///////////
 	EditText et_id;
 	EditText et_pw;
@@ -54,15 +55,17 @@ public class JoinActivity extends Activity implements JoinCallback{
 				{
 					selected_character = 4;
 				}
+				
+				NetworkManager.getInstance().doJoin(et_id.getText().toString(), et_pw.getText().toString(), selected_character, JoinActivity.this);
 			}
 		});
 
-		btn_join.setOnClickListener(new OnClickListener() {
+		btn_login.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				NetworkManager.getInstance().doJoin(et_id.getText().toString(), et_pw.getText().toString(), selected_character, JoinActivity.this);
+				NetworkManager.getInstance().doLogin(et_id.getText().toString(), et_pw.getText().toString(), JoinActivity.this);
 			}
 		});
 	}
@@ -74,7 +77,24 @@ public class JoinActivity extends Activity implements JoinCallback{
 
 		// 로그인 성공시
 		// => 페이지 넘기기
-		Toast.makeText(this, "회원 가입 성공 !!!! ", Toast.LENGTH_LONG).show();
+		runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(JoinActivity.this, "회원 가입 성공 !!!! ", Toast.LENGTH_LONG).show();
+			}
+		});
+	}
+	@Override
+	public void didSuccessLogin() {
+		// TODO Auto-generated method stub
+		runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(JoinActivity.this, "로그인 성공 !!!! ", Toast.LENGTH_LONG).show();
+			}
+		});
 		
 	}
 }
