@@ -222,7 +222,8 @@ public class NetworkManager {
 		debug("sendAttack ended");
 	}
 	
-	public void requestFriends() {
+	public void requestFriends(RequestFriendsCallback callback) {
+		this.requestFriendsCallback = callback;
 		
 		// make JSON data
 		Map<String, String> map = new HashMap<String, String>();
@@ -359,12 +360,9 @@ public class NetworkManager {
 						this.requestFriendsCallback.didGetFriends(friends);						
 					}
 				}
-				
-				//TYPE_REQUEST_FRIENDS
 			}
 			
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
