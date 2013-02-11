@@ -1,5 +1,8 @@
 package contest.lab.gala;
 
+import org.cocos2d.layers.CCScene;
+import org.cocos2d.nodes.CCDirector;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Paint.Join;
@@ -93,6 +96,8 @@ public class JoinActivity extends Activity implements JoinCallback, LoginCallbac
 			@Override
 			public void run() {
 				Toast.makeText(JoinActivity.this, "로그인 성공 !!!! ", Toast.LENGTH_LONG).show();
+				CCScene scene = ReadyToFightLayer.makeScene();
+				CCDirector.sharedDirector().runWithScene(scene);
 			}
 		});
 		

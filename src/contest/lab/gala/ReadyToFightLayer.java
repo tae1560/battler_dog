@@ -43,26 +43,26 @@ public class ReadyToFightLayer extends CCLayer{
 	{
 		this.setIsTouchEnabled(true);
 		
-		// 캐릭터 스프라이트 세팅 
-		for(int i = 0; i < numOfEntryPerOnePage; i++)
-		{
-			for(int j = 0; j < 4; j++)
-			{
-				characters[i][j] = CCSprite.sprite(String.format("character/icon_char%d.png", j));
-				characters[i][j].setPosition(100, 200 + i * 100);
-				this.addChild(characters[i][j]);
-			}
-		}
-		// on, offline 버튼 세팅
-		for(int i = 0; i < numOfEntryPerOnePage; i++)
-		{
-			for(int j = 0; j < 2; j++)
-			{
-				btn_challenge[i][j] = CCSprite.sprite(String.format("btn_challenge%d.png", j));
-				btn_challenge[i][j].setPosition(500, 200 + i * 100);
-				this.addChild(btn_challenge[i][j]);
-			}
-		}
+//		// 캐릭터 스프라이트 세팅 
+//		for(int i = 0; i < numOfEntryPerOnePage; i++)
+//		{
+//			for(int j = 0; j < 4; j++)
+//			{
+//				characters[i][j] = CCSprite.sprite(String.format("character/icon_char%d.png", j));
+//				characters[i][j].setPosition(100, 200 + i * 100);
+//				this.addChild(characters[i][j]);
+//			}
+//		}
+//		// on, offline 버튼 세팅
+//		for(int i = 0; i < numOfEntryPerOnePage; i++)
+//		{
+//			for(int j = 0; j < 2; j++)
+//			{
+//				btn_challenge[i][j] = CCSprite.sprite(String.format("btn_challenge%d.png", j));
+//				btn_challenge[i][j].setPosition(500, 200 + i * 100);
+//				this.addChild(btn_challenge[i][j]);
+//			}
+//		}
 	}
 	// 해당 user의 설정된 캐릭터를 보여줌
 	public void setUserCharacter(int user, int character)
