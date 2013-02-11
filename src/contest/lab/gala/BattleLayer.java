@@ -1,13 +1,10 @@
 package contest.lab.gala;
 
 import org.cocos2d.layers.CCLayer;
-import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
 
 import contest.lab.gala.callback.GetDamagedCallback;
 import contest.lab.gala.data.SkillType;
-
-import android.app.Activity;
 
 public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	CCSprite bg_battlelayer = CCSprite.sprite("battle/bg_battlelayer.png");
