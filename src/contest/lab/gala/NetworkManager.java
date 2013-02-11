@@ -6,26 +6,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
 import java.net.Socket;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.sax.StartElementListener;
 import android.util.Log;
 import contest.lab.gala.callback.GetDamagedCallback;
 import contest.lab.gala.callback.JoinCallback;
 import contest.lab.gala.callback.LoginCallback;
-import contest.lab.gala.callback.RankingCallback;
-import contest.lab.gala.data.RankingData;
+import contest.lab.gala.callback.RequestFriendsCallback;
 import contest.lab.gala.data.SkillType;
-import contest.lab.gala.util.CommonUtils;
+import contest.lab.gala.data.User;
 
 public class NetworkManager {
 	
@@ -225,20 +222,28 @@ public class NetworkManager {
 		debug("sendAttack ended");
 	}
 	
+	public void requestFriends() {
+		
+		// make JSON data
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(KEY_TYPE, TYPE_REQUEST_FRIENDS);
+		sendJSONWithSocket(map);
+	}
+	
 	// private -----------------------------------------------------------------
 	
-	private static final String domainString = "http://soma2.vps.phps.kr:4000";
-	private static final String loginPath = domainString + "/login";
-	private static final String joinPath = domainString + "/join";
-	private static final String getRankingPath = domainString + "/get_ranking";
+//	private static final String domainString = "http://soma2.vps.phps.kr:4000";
+//	private static final String loginPath = domainString + "/login";
+//	private static final String joinPath = domainString + "/join";
+//	private static final String getRankingPath = domainString + "/get_ranking";
 	private static final String socketIpString = "27.102.204.239";
 	private static final int socketPort = 1234;
 	
 	
 	private static final String KEY_TYPE = "type";
-	private static final String TYPE_SEND_USERNAME = "username";
 	private static final String TYPE_LOGIN = "login";
 	private static final String TYPE_JOIN = "join";
+	private static final String TYPE_REQUEST_FRIENDS = "request_friends";
 	private static final String TYPE_MATCHING_REQUEST = "matching_request";
 	
 	// TODO : DEBUG - TEST
@@ -246,12 +251,13 @@ public class NetworkManager {
 	private static final String TYPE_SEND_ATTACK = "test_attack_skill";
 	
 	// RECEIVE
-	private static final String TYPE_SEND_DAMAGED = "test_damaged_skill";
+	private static final String TYPE_GET_DAMAGED = "attack_skill";
 	
 	
 	private JoinCallback joinCallback = null;
 	private LoginCallback loginCallback = null;
 	private GetDamagedCallback getDamagedCallback = null;
+	private RequestFriendsCallback requestFriendsCallback = null;
 	
 	private static NetworkManager _instance = null;
 	private Socket socket = null;
@@ -319,22 +325,42 @@ public class NetworkManager {
 			debug("jsonObject : " + jsonObject.toString());
 			
 			if (dataTypeString != null) {
-				if (dataTypeString.equalsIgnoreCase("attack_skill")) {
+				if (dataTypeString.equalsIgnoreCase(TYPE_GET_DAMAGED)) {
 					String skillTypeString = jsonObject.getString("skill_type");
 					int skillType = Integer.parseInt(skillTypeString);
 					
 					if (this.getDamagedCallback != null) {
 						this.getDamagedCallback.didGetDamaged(SkillType.parseInt(skillType));						
 					}
-				} else if(dataTypeString.equalsIgnoreCase("login")) {
+				} else if(dataTypeString.equalsIgnoreCase(TYPE_LOGIN)) {
 					if (this.loginCallback != null) {
 						this.loginCallback.didSuccessLogin();						
 					}
-				} else if(dataTypeString.equalsIgnoreCase("join")) {
+				} else if(dataTypeString.equalsIgnoreCase(TYPE_JOIN)) {
 					if (this.joinCallback != null) {
 						this.joinCallback.didSuccessJoin();						
 					}
+				} else if(dataTypeString.equalsIgnoreCase(TYPE_REQUEST_FRIENDS)) {
+					if (this.requestFriendsCallback != null) {
+						JSONArray jsonFriends = jsonObject.getJSONArray("friends");
+						
+						ArrayList<User> friends = new ArrayList<User>();
+						for (int i = 0; i < jsonFriends.length(); i++) {
+							JSONObject friend = jsonFriends.getJSONObject(i);
+							String id = friend.getString("id");
+							int character = friend.getInt("character");
+//							int number_of_combo = friend.getInt("number_of_combo");
+							int number_of_wins = friend.getInt("number_of_wins");
+							boolean is_logon = (friend.getInt("is_logon") == 1);
+							
+							friends.add(new User(id, character, number_of_wins, is_logon));
+						}
+						
+						this.requestFriendsCallback.didGetFriends(friends);						
+					}
 				}
+				
+				//TYPE_REQUEST_FRIENDS
 			}
 			
 		} catch (JSONException e) {
