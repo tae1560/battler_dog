@@ -96,8 +96,10 @@ public class JoinActivity extends Activity implements JoinCallback, LoginCallbac
 			@Override
 			public void run() {
 				Toast.makeText(JoinActivity.this, "로그인 성공 !!!! ", Toast.LENGTH_LONG).show();
-				CCScene scene = ReadyToFightLayer.makeScene();
-				CCDirector.sharedDirector().runWithScene(scene);
+				
+				NetworkManager.getInstance().requestFriends(null);
+//				CCScene scene = ReadyToFightLayer.makeScene();
+//				CCDirector.sharedDirector().runWithScene(scene);
 			}
 		});
 		

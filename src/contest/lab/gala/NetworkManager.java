@@ -20,6 +20,7 @@ import android.util.Log;
 import contest.lab.gala.callback.GetDamagedCallback;
 import contest.lab.gala.callback.JoinCallback;
 import contest.lab.gala.callback.LoginCallback;
+import contest.lab.gala.callback.OnMatchedCallback;
 import contest.lab.gala.callback.RequestFriendsCallback;
 import contest.lab.gala.data.SkillType;
 import contest.lab.gala.data.User;
@@ -202,11 +203,22 @@ public class NetworkManager {
 //		sendJSONWithSocket(map);
 //	}
 	
-	public void sendMatchingRequest(String friend_name) {
+	public void requestRandomMatching(OnMatchedCallback callback) {
+		this.onMatchedCallback = callback;
+		
 		// make JSON data
 		Map<String, String> map = new HashMap<String, String>();
-		map.put(KEY_TYPE, TYPE_MATCHING_REQUEST);
-		map.put("friend_name", friend_name);
+		map.put(KEY_TYPE, TYPE_REQUEST_MATCHING);
+		sendJSONWithSocket(map);
+	}
+	
+	public void requestMatchingWithFriend(String friend_id, OnMatchedCallback callback) {
+		this.onMatchedCallback = callback;
+		
+		// make JSON data
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(KEY_TYPE, TYPE_REQUEST_MATCHING);
+		map.put("friend_name", friend_id);
 		sendJSONWithSocket(map);
 	}
 	
@@ -245,16 +257,16 @@ public class NetworkManager {
 	private static final String TYPE_LOGIN = "login";
 	private static final String TYPE_JOIN = "join";
 	private static final String TYPE_REQUEST_FRIENDS = "request_friends";
-	private static final String TYPE_MATCHING_REQUEST = "matching_request";
+	private static final String TYPE_REQUEST_MATCHING = "request_matching";
 	
 	// TODO : DEBUG - TEST
 	// SEND
-	private static final String TYPE_SEND_ATTACK = "test_attack_skill";
+	private static final String TYPE_SEND_ATTACK = "attack_skill";
 	
 	// RECEIVE
 	private static final String TYPE_GET_DAMAGED = "attack_skill";
 	
-	
+	private OnMatchedCallback onMatchedCallback = null;
 	private JoinCallback joinCallback = null;
 	private LoginCallback loginCallback = null;
 	private GetDamagedCallback getDamagedCallback = null;
@@ -348,16 +360,15 @@ public class NetworkManager {
 						ArrayList<User> friends = new ArrayList<User>();
 						for (int i = 0; i < jsonFriends.length(); i++) {
 							JSONObject friend = jsonFriends.getJSONObject(i);
-							String id = friend.getString("id");
-							int character = friend.getInt("character");
-//							int number_of_combo = friend.getInt("number_of_combo");
-							int number_of_wins = friend.getInt("number_of_wins");
-							boolean is_logon = (friend.getInt("is_logon") == 1);
-							
-							friends.add(new User(id, character, number_of_wins, is_logon));
+							friends.add(User.parseJson(friend));
 						}
 						
 						this.requestFriendsCallback.didGetFriends(friends);						
+					}
+				} else if(dataTypeString.equalsIgnoreCase(TYPE_REQUEST_MATCHING)) {
+					if (this.onMatchedCallback != null) {
+						JSONObject enemy = jsonObject.getJSONObject("user_information");
+						this.onMatchedCallback.onMatched(User.parseJson(enemy));
 					}
 				}
 			}
