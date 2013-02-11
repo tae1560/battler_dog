@@ -1,12 +1,16 @@
 package contest.lab.gala;
 
+import java.util.ArrayList;
+
 import org.cocos2d.nodes.CCDirector;
+
+import contest.lab.gala.data.User;
 
 public class Manager {
 	
 	// Galaxy 3 해상도에 대한 본 화면의 해상도의 비율
-	float ratio_width;	
-	float ratio_height;
+	static float ratio_width;	
+	static float ratio_height;
 	
 	static float acquired_gage_per_bone = 1;
 	static float acquired_gage_per_gum = 2;
@@ -31,6 +35,8 @@ public class Manager {
 	
 	static float position_of_btn_redbull_x = 585;
 	static float position_of_btn_redbull_y = 136;
+	
+	static ArrayList<User> friendList;
 	
 	public Manager()
 	{

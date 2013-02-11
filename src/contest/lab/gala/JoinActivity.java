@@ -1,11 +1,12 @@
 package contest.lab.gala;
 
+import java.util.ArrayList;
+
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.graphics.Paint.Join;
+import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -15,6 +16,8 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 import contest.lab.gala.callback.JoinCallback;
 import contest.lab.gala.callback.LoginCallback;
+import contest.lab.gala.callback.RequestFriendsCallback;
+import contest.lab.gala.data.User;
 
 public class JoinActivity extends Activity implements JoinCallback, LoginCallback{
 	//////////회원가입, 로그인 테스트 용 UI ///////////
@@ -82,9 +85,18 @@ public class JoinActivity extends Activity implements JoinCallback, LoginCallbac
 		// => 페이지 넘기기
 		runOnUiThread(new Runnable() {
 			
+			// for scalability
 			@Override
 			public void run() {
 				Toast.makeText(JoinActivity.this, "회원 가입 성공 !!!! ", Toast.LENGTH_LONG).show();
+				NetworkManager.getInstance().requestFriends(new RequestFriendsCallback() {			
+					@Override
+					public void didGetFriends(ArrayList<User> friends) {
+						Manager.friendList = friends;
+						Intent intent = new Intent(JoinActivity.this, BattlerDogActivity.class);
+						startActivity(intent);
+					}
+				});
 			}
 		});
 	}
@@ -96,8 +108,15 @@ public class JoinActivity extends Activity implements JoinCallback, LoginCallbac
 			@Override
 			public void run() {
 				Toast.makeText(JoinActivity.this, "로그인 성공 !!!! ", Toast.LENGTH_LONG).show();
-				CCScene scene = ReadyToFightLayer.makeScene();
-				CCDirector.sharedDirector().runWithScene(scene);
+				NetworkManager.getInstance().requestFriends(new RequestFriendsCallback() {			
+					@Override
+					public void didGetFriends(ArrayList<User> friends) {
+						Manager.friendList = friends;
+						Intent intent = new Intent(JoinActivity.this, BattlerDogActivity.class);
+						startActivity(intent);
+					}
+				});
+				
 			}
 		});
 		

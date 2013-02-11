@@ -41,12 +41,12 @@ public class BattlerDogActivity extends Activity {
 
 		CCDirector.sharedDirector().setAnimationInterval(1.0f / 60.0f);
 
-		runGame();
+		showFriendList();
 	}
 
-	public void runGame()
+	public void showFriendList()
 	{
-		CCScene scene = GameLayer.makeScene();
+		CCScene scene = ReadyToFightLayer.makeScene();
 		CCDirector.sharedDirector().runWithScene(scene);
 	}
 	

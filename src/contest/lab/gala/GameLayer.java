@@ -11,6 +11,11 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
+import contest.lab.gala.item.Bone;
+import contest.lab.gala.item.Gum;
+import contest.lab.gala.item.Item;
+import contest.lab.gala.item.Redbull;
+
 public class GameLayer extends CCLayer{
 	// 화면에 보이는 아이템의 리스트
 	ArrayList<Item> itemList;			
