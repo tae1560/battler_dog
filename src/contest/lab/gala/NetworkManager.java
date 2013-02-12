@@ -113,7 +113,7 @@ public class NetworkManager {
 		// make JSON data
 		Map<String, String> map = new HashMap<String, String>();
 		map.put(KEY_TYPE, TYPE_REQUEST_MATCHING);
-		map.put("friend_name", friend_id);
+		map.put("friend_id", friend_id);
 		sendJSONWithSocket(map);
 	}
 	
@@ -173,24 +173,30 @@ public class NetworkManager {
 	private BufferedReader networkReader = null;
 	
 	private void makeSocketConnection() {
-		try {
-			socket = new Socket(socketIpString, socketPort);
-			
-			networkWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			networkReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			
-			debug("makeSocketConnection completed");
-			
-			startReadingThread();
-		} catch (UnknownHostException e) {
-			debug("UnknownHostException");
-			debug(e.getStackTrace().toString());
-			e.printStackTrace();
-		} catch (IOException e) {
-			debug("IOException");
-			debug(e.getStackTrace().toString());
-			e.printStackTrace();
-		}
+		new Thread(new Runnable() {
+			// TODO : 여기 쓰레드 화에 따른 예외처리 + 각종 보내는 곳에 쓰레드화  
+			@Override
+			public void run() {
+				try {
+					socket = new Socket(socketIpString, socketPort);
+					
+					networkWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+					networkReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+					
+					debug("makeSocketConnection completed");
+					
+					startReadingThread();
+				} catch (UnknownHostException e) {
+					debug("UnknownHostException");
+					debug(e.getStackTrace().toString());
+					e.printStackTrace();
+				} catch (IOException e) {
+					debug("IOException");
+					debug(e.getStackTrace().toString());
+					e.printStackTrace();
+				}
+			}
+		}).start();
 	}
 	
 	private void startReadingThread() {
