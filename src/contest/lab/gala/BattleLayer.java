@@ -8,15 +8,32 @@ import org.cocos2d.actions.interval.CCMoveBy;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCAnimation;
+import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
+
+import android.view.MotionEvent;
 
 import contest.lab.gala.callback.ClickAttackBtnCallback;
 import contest.lab.gala.callback.GetDamagedCallback;
 import contest.lab.gala.data.CurrentUserInformation;
 import contest.lab.gala.data.SkillType;
 
-public class BattleLayer extends CCLayer implements GetDamagedCallback, ClickAttackBtnCallback{
+public class BattleLayer extends CCLayer implements GetDamagedCallback{
+	public static CCSprite btn_skill_bark_activated = CCSprite.sprite("minigame/btn_skill_bark_activated.png");
+	public static CCSprite btn_skill_bark_normal = CCSprite.sprite("minigame/btn_skill_bark_normal.png");
+	public static CCSprite btn_skill_bone_activated = CCSprite.sprite("minigame/btn_skill_bone_activated.png");
+	public static CCSprite btn_skill_bone_normal = CCSprite.sprite("minigame/btn_skill_bone_normal.png");
+	public static CCSprite btn_skill_punch_activated = CCSprite.sprite("minigame/btn_skill_punch_activated.png");
+	public static CCSprite btn_skill_punch_normal = CCSprite.sprite("minigame/btn_skill_punch_normal.png");
+	
+	public static CCSprite gage_bar = CCSprite.sprite("minigame/gage_bar.png");
+	public static CCSprite gage_bar_black = CCSprite.sprite("minigame/bg_gage_bar.png");
+	
+	
+	public static float gage;
+	
+	////////////////////////////////////////////////////////////////////////////
 	CCSprite bg_battlelayer = CCSprite.sprite("battle/bg_battlelayer.png");
 	CCSprite bg_hp_bar = CCSprite.sprite("battle/bg_hp_bar.png");
 	CCSprite hp_bar_mine = CCSprite.sprite("battle/hp_bar.png");
@@ -26,6 +43,12 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, ClickAtt
 	static float hp;
 	
 	int ACTION_FLYING = 100;
+	int ACTION_DAMAGED = 200;
+	int ACTION_ATTACK = 300;
+	
+	CCCallFuncN returnToNormalMode;
+	CCSequence damagedAndReturnToNormal_mine;
+	CCSequence damagedAndReturnToNormal_opponent;
 	
 	CCSprite coming_bark;
 	CCSprite going_bark;
@@ -176,13 +199,38 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, ClickAtt
 		attackSequence_bark = CCSequence.actions(attackAction, afterDamaged_opponent);
 		//		attackSequence_bone;
 		//		attackSequence_punch;
+		
+		returnToNormalMode = CCCallFuncN.action(this, "returnToNormalMode");
+		damagedAndReturnToNormal_mine = CCSequence.actions(damagedAnimate_mine, returnToNormalMode);
+		damagedAndReturnToNormal_opponent = CCSequence.actions(damagedAnimate_opponent, returnToNormalMode);
 	}
 	public void runAfterDamagedAnimation_opponent(Object o)
 	{
-		this.removeChildByTag(ACTION_FLYING, true);
 		opponentCharacter_normal.setVisible(false);
-		this.addChild(opponentCharacter_hurted);
+		this.addChild(opponentCharacter_hurted, 1, ACTION_DAMAGED);
+		
+		opponentCharacter_hurted.runAction(damagedAndReturnToNormal_opponent);
 		/////////////////////////////
+	}
+	public void runAfterDamagedAnimation_mine(Object o)
+	{
+		myCharacter_normal.setVisible(false);
+		this.addChild(myCharacter_hurted, 1, ACTION_DAMAGED);
+		myCharacter_hurted.runAction(damagedAndReturnToNormal_mine);
+		
+	}
+	public void returnToNormalMode(Object o)
+	{
+		this.removeChildByTag(ACTION_FLYING, true);
+		this.removeChildByTag(ACTION_DAMAGED, true);
+		this.removeChildByTag(ACTION_ATTACK, true);
+		
+//		myCharacter_normal.resumeSchedulerAndActions();
+//		myCharacter_normal.resumeSchedulerAndActions();
+		myCharacter_normal.setVisible(true);
+//		myCharacter_normal.runAction(CCRepeatForever.action(normalAnimate_mine));
+		opponentCharacter_normal.setVisible(true);
+//		opponentCharacter_normal.runAction(CCRepeatForever.action(normalAnimate_opponent));
 	}
 //	public void runAttackAnimation_mine(int kindOfAttack)
 //	{
@@ -220,44 +268,54 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, ClickAtt
 //		}
 //	}
 
-	public void runAttackAnimation_opponent(int kindOfAttack)
-	{
-		opponentCharacter_normal.stopAction(normalAnimate_mine);
-		opponentCharacter_normal.setVisible(false);
-		switch(kindOfAttack)
-		{
-		case 1 : 
-			opponentCharacter_normal.setVisible(false);
-//			opponentCharacter_normal.setVisible(false);
-			attack_bark_opponent.setVisible(true);
 
-			coming_bark.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
-			this.addChild(going_bark, ACTION_FLYING);
-			coming_bark.runAction(damagedSequence_bark);
-			break;
-		case 2 : 
-			opponentCharacter_normal.setVisible(false);
-//			opponentCharacter_normal.setVisible(false);
-			attack_bone_opponent.setVisible(true);
-
-			going_bone.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
-			this.addChild(going_bone, ACTION_FLYING);
-			going_bone.runAction(damagedSequence_bark);
-			break;
-		case 3 : 
-			opponentCharacter_normal.setVisible(false);
-//			opponentCharacter_normal.setVisible(false);
-			attack_punch_opponent.setVisible(true);
-
-			going_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
-			this.addChild(going_punch, ACTION_FLYING);
-			going_punch.runAction(damagedSequence_bark);
-			break;
-		}
-	}
 
 	public BattleLayer()
 	{
+		this.setIsTouchEnabled(true);
+		
+		gage = 0;
+		gage_bar.setPosition(86 * Manager.ratio_width, 570 * Manager.ratio_height);
+		gage_bar.setScaleX(Manager.ratio_width);
+		gage_bar.setScaleY(Manager.ratio_height);
+		this.addChild(gage_bar);
+		
+		gage_bar_black.setPosition(85 * Manager.ratio_width, 765 * Manager.ratio_height);
+		gage_bar_black.setAnchorPoint(0.5f, 1f);
+		gage_bar_black.setScaleX(Manager.ratio_width);
+		gage_bar_black.setScaleY(1 - gage / Manager.full_gage);
+		gage_bar_black.setScaleY(Manager.ratio_height);
+		this.addChild(gage_bar_black);
+		
+		// 스킬 버튼 위치 설정, 레이어에 추가
+		btn_skill_bark_activated.setPosition(631 * Manager.ratio_width, 733 * Manager.ratio_height);
+		btn_skill_bark_activated.setScaleX(Manager.ratio_width);	//* 확인 필요
+		btn_skill_bark_activated.setScaleY(Manager.ratio_height);
+		this.addChild(btn_skill_bark_activated);
+		btn_skill_bark_normal.setPosition(631 * Manager.ratio_width, 733 * Manager.ratio_height);
+		btn_skill_bark_normal.setScaleX(Manager.ratio_width);	//* 확인 필요
+		btn_skill_bark_normal.setScaleY(Manager.ratio_height);
+		this.addChild(btn_skill_bark_normal);
+		
+		btn_skill_bone_activated.setPosition(631 * Manager.ratio_width, 589 * Manager.ratio_height);
+		btn_skill_bone_activated.setScaleX(Manager.ratio_width);
+		btn_skill_bone_activated.setScaleY(Manager.ratio_height);
+		this.addChild(btn_skill_bone_activated);
+		btn_skill_bone_normal.setPosition(631 * Manager.ratio_width, 589 * Manager.ratio_height);
+		btn_skill_bone_normal.setScaleX(Manager.ratio_width);
+		btn_skill_bone_normal.setScaleY(Manager.ratio_height);
+		this.addChild(btn_skill_bone_normal);
+		
+		btn_skill_punch_activated.setPosition(631 * Manager.ratio_width, 439 * Manager.ratio_height);
+		btn_skill_punch_activated.setScaleX(Manager.ratio_width);
+		btn_skill_punch_activated.setScaleY(Manager.ratio_height);
+		this.addChild(btn_skill_punch_activated);
+		btn_skill_punch_normal.setPosition(631 * Manager.ratio_width, 439 * Manager.ratio_height);
+		btn_skill_punch_normal.setScaleX(Manager.ratio_width);
+		btn_skill_punch_normal.setScaleY(Manager.ratio_height);
+		this.addChild(btn_skill_punch_normal);
+
+		////////////////////////////////////////////////////////////////////////////
 		bg_battlelayer.setPosition(360 * Manager.ratio_width, 1057 * Manager.ratio_height);
 		bg_battlelayer.setScaleX(Manager.ratio_width);
 		bg_battlelayer.setScaleY(Manager.ratio_height);
@@ -318,61 +376,67 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, ClickAtt
 		attack_bark_opponent.setScaleX(Manager.ratio_width);
 		attack_bark_opponent.setScaleY(Manager.ratio_height);
 		attack_bark_opponent.setVisible(false);
+		attack_bark_opponent.setPosition(508 * Manager.ratio_width, 1019 * Manager.ratio_height);
 		this.addChild(attack_bark_opponent);
 		attack_bark_mine = CCSprite.sprite(String.format("character/attack_bark%d.png", CurrentUserInformation.userChar));
+		attack_bark_mine.setPosition(212 * Manager.ratio_width, 1019 * Manager.ratio_height);
 		attack_bark_mine.setScaleX(-1 * Manager.ratio_width);
 		attack_bark_mine.setScaleY(Manager.ratio_height);
-		attack_bark_mine.setVisible(false);
-		this.addChild(attack_bark_mine);
+//		attack_bark_mine.setVisible(false);
+//		this.addChild(attack_bark_mine);
 
 		attack_bone_opponent = CCSprite.sprite(String.format("character/attack_bone%d.png", CurrentUserInformation.opponentchar));
 		attack_bone_opponent.setScaleX(Manager.ratio_width);
 		attack_bone_opponent.setScaleY(Manager.ratio_height);
-		attack_bone_opponent.setVisible(false);
-		this.addChild(attack_bone_opponent);
+//		attack_bone_opponent.setVisible(false);
+		attack_bone_opponent.setPosition(508 * Manager.ratio_width, 1019 * Manager.ratio_height);
+//		this.addChild(attack_bone_opponent);
 		attack_bone_mine = CCSprite.sprite(String.format("character/attack_bone%d.png", CurrentUserInformation.userChar));
-		attack_bone_mine.setScaleX(Manager.ratio_width);
-		attack_bone_mine.setScaleY(-1 * Manager.ratio_height);
-		attack_bone_mine.setVisible(false);
-		this.addChild(attack_bone_mine);
+		attack_bone_mine.setScaleX(-1 * Manager.ratio_width);
+		attack_bone_mine.setScaleY(Manager.ratio_height);
+		attack_bone_mine.setPosition(212 * Manager.ratio_width, 1019 * Manager.ratio_height);
+//		attack_bone_mine.setVisible(false);
+//		this.addChild(attack_bone_mine);
 
 		attack_punch_opponent = CCSprite.sprite(String.format("character/attack_punch%d.png", CurrentUserInformation.opponentchar));
 		attack_punch_opponent.setScaleX(Manager.ratio_width);
 		attack_punch_opponent.setScaleY(Manager.ratio_height);
-		attack_punch_opponent.setVisible(false);
-		this.addChild(attack_punch_opponent);
+//		attack_punch_opponent.setVisible(false);
+		attack_punch_opponent.setPosition(508 * Manager.ratio_width, 1019 * Manager.ratio_height);
+//		this.addChild(attack_punch_opponent);
 		attack_punch_mine = CCSprite.sprite(String.format("character/attack_punch%d.png", CurrentUserInformation.userChar));
-		attack_punch_mine.setScaleX(Manager.ratio_width);
-		attack_punch_mine.setScaleY(-1 * Manager.ratio_height);
-		attack_punch_mine.setVisible(false);
-		this.addChild(attack_punch_mine);
+		attack_punch_mine.setScaleX(-1 * Manager.ratio_width);
+		attack_punch_mine.setScaleY(Manager.ratio_height);
+//		attack_punch_mine.setVisible(false);
+		attack_punch_mine.setPosition(212 * Manager.ratio_width, 1019 * Manager.ratio_height);
+//		this.addChild(attack_punch_mine);
 
 		coming_bark = CCSprite.sprite("battle/coming_bark.png");
 		coming_bark.setScaleX(Manager.ratio_width);
 		coming_bark.setScaleY(Manager.ratio_height);
 
 		going_bark = CCSprite.sprite("battle/coming_bark.png");
-		going_bark.setScaleX(Manager.ratio_width);
-		going_bark.setScaleY(-1 * Manager.ratio_height);
+		going_bark.setScaleX(-1 * Manager.ratio_width);
+		going_bark.setScaleY(Manager.ratio_height);
 
 		coming_bone = CCSprite.sprite("battle/coming_bone.png");
 		coming_bone.setScaleX(Manager.ratio_width);
 		coming_bone.setScaleY(Manager.ratio_height);
 
 		going_bone = CCSprite.sprite("battle/coming_bone.png");
-		going_bone.setScaleX(Manager.ratio_width);
-		going_bone.setScaleY(-1 * Manager.ratio_height);
+		going_bone.setScaleX(-1 * Manager.ratio_width);
+		going_bone.setScaleY(Manager.ratio_height);
 
 		coming_punch = CCSprite.sprite("battle/coming_punch.png");
 		coming_punch.setScaleX(Manager.ratio_width);
 		coming_punch.setScaleY(Manager.ratio_height);
 
 		going_punch = CCSprite.sprite("battle/coming_punch.png");
-		going_punch.setScaleX(Manager.ratio_width);
+		going_punch.setScaleX(-1 * Manager.ratio_width);
 		going_punch.setScaleY(-1 * Manager.ratio_height);
 
 		NetworkManager.getInstance().setGetDamagedCallback(this);
-		SkillGageLayer.getInstance().setClickAttackBtnCallback(this);
+//		SkillGageLayer.getInstance().setClickAttackBtnCallback(this);
 //		myCharacter_normal.runAction(normalAnimate_mine);
 //		opponentCharacter_normal.runAction(normalAnimate_opponent);
 	}
@@ -385,26 +449,25 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, ClickAtt
 		{
 		case 1 : 
 			hp -= Manager.damaged_gage_per_attack_bark;
-			SkillGageLayer.updateGageBar();
+			updateGageBar();
 			//* 데미지 효과 애니메이션
 			BattlerDogActivity.makeToast(1);
 			break;
 		case 2 :
 			hp -= Manager.damaged_gage_per_attack_bone;
-			SkillGageLayer.updateGageBar();
+			updateGageBar();
 			//* 데미지 효과 애니메이션
 			BattlerDogActivity.makeToast(2);
 			break;
 		case 3 :
 			hp -= Manager.damaged_gage_per_attack_punch;
-			SkillGageLayer.updateGageBar();
+			updateGageBar();
 			//* 데미지 효과 애니메이션
 			BattlerDogActivity.makeToast(3);
 			break;
 		}
 	}
 
-	@Override
 	public void runAttackAnimation_mine(int kindOfAttack) {
 		myCharacter_normal.stopAction(normalAnimate_mine);
 		myCharacter_normal.setVisible(false);
@@ -413,30 +476,138 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, ClickAtt
 		case 1 : 
 			myCharacter_normal.setVisible(false);
 //			opponentCharacter_normal.setVisible(false);
-			attack_bark_mine.setVisible(true);
-
+			this.addChild(attack_bark_mine, 1, ACTION_ATTACK);
 			going_bark.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
-			this.addChild(going_bark, ACTION_FLYING);
+			this.addChild(going_bark, 500, ACTION_FLYING);
 			going_bark.runAction(attackSequence_bark);
 			break;
 		case 2 : 
 			myCharacter_normal.setVisible(false);
 //			opponentCharacter_normal.setVisible(false);
-			attack_bone_mine.setVisible(true);
+			this.addChild(attack_bone_mine, 1, ACTION_ATTACK);
 
 			going_bone.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
-			this.addChild(going_bone, ACTION_FLYING);
+			this.addChild(going_bone, 500, ACTION_FLYING);
 			going_bone.runAction(attackSequence_bark);
 			break;
 		case 3 : 
 			myCharacter_normal.setVisible(false);
 //			opponentCharacter_normal.setVisible(false);
-			attack_punch_mine.setVisible(true);
 
+			this.addChild(attack_punch_mine, 1, ACTION_ATTACK);
+			
 			going_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
-			this.addChild(going_punch, ACTION_FLYING);
+			this.addChild(going_punch, 500, ACTION_FLYING);
 			going_punch.runAction(attackSequence_bark);
 			break;
 		}
 	}
+	
+	public void runAttackAnimation_opponent(int kindOfAttack)
+	{
+		opponentCharacter_normal.stopAction(normalAnimate_mine);
+		opponentCharacter_normal.setVisible(false);
+		switch(kindOfAttack)
+		{
+		case 1 : 
+			opponentCharacter_normal.setVisible(false);
+//			opponentCharacter_normal.setVisible(false);
+
+			this.addChild(attack_bark_opponent, 1, ACTION_ATTACK);
+			
+			coming_bark.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+			this.addChild(coming_bark, 1, ACTION_FLYING);
+			coming_bark.runAction(damagedSequence_bark);
+			break;
+		case 2 : 
+			opponentCharacter_normal.setVisible(false);
+//			opponentCharacter_normal.setVisible(false);
+			this.addChild(attack_bone_opponent, 1, ACTION_ATTACK);
+			
+			going_bone.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+			this.addChild(going_bone, ACTION_FLYING);
+			going_bone.runAction(damagedSequence_bark);
+			break;
+		case 3 : 
+			opponentCharacter_normal.setVisible(false);
+//			opponentCharacter_normal.setVisible(false);
+			this.addChild(attack_punch_opponent, 1, ACTION_ATTACK);
+			
+			going_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+			this.addChild(going_punch, ACTION_FLYING);
+			going_punch.runAction(damagedSequence_bark);
+			break;
+		}
+	}
+	/*
+	 * 스킬 버튼의 활성, 비활성 상태 업데이트
+	 */
+	public static void updateSkillBtns()
+	{
+		// 스킬 버튼 활성화 ==> normal image의 visibility를  false로
+		if(gage >= Manager.required_gage_for_skill_punch)
+		{
+			btn_skill_bark_normal.setVisible(false);
+			btn_skill_bone_normal.setVisible(false);
+			btn_skill_punch_normal.setVisible(false);
+		}
+		else if(gage >= Manager.required_gage_for_skill_bone)
+		{
+			btn_skill_bark_normal.setVisible(false);
+			btn_skill_bone_normal.setVisible(false);
+			btn_skill_punch_normal.setVisible(true);
+		}
+		else if(gage >= Manager.required_gage_for_skill_bark)
+		{
+			btn_skill_bark_normal.setVisible(false);
+			btn_skill_bone_normal.setVisible(true);
+			btn_skill_punch_normal.setVisible(true);
+		}
+		else
+		{
+			btn_skill_bark_normal.setVisible(true);
+			btn_skill_bone_normal.setVisible(true);
+			btn_skill_punch_normal.setVisible(true);
+		}
+	}
+	/*
+	 * 게이지에 따른 게이지 바 길이 업데이트
+	 */
+	public static void updateGageBar()
+	{
+		gage_bar_black.setScaleY((1 - (gage / Manager.full_gage)) * Manager.ratio_height);
+	}
+	
+	@Override
+	public boolean ccTouchesBegan(MotionEvent event) {
+		CGPoint touchPoint = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(event.getX(),event.getY()));
+		if(btn_skill_bark_normal.getBoundingBox().contains(touchPoint.x, touchPoint.y) && gage >= Manager.required_gage_for_skill_bark)
+		{
+			gage -= Manager.required_gage_for_skill_bark;
+			updateSkillBtns();
+			updateGageBar();
+			runAttackAnimation_mine(1);
+			NetworkManager.getInstance().sendAttack(SkillType.BARK);
+		}
+		else if(btn_skill_bone_normal.getBoundingBox().contains(touchPoint.x, touchPoint.y) && gage >= Manager.required_gage_for_skill_bone)
+		{
+			gage -= Manager.required_gage_for_skill_bone;
+			updateSkillBtns();
+			updateGageBar();
+			runAttackAnimation_mine(2);
+			NetworkManager.getInstance().sendAttack(SkillType.BONE);
+			///* 서버에게 공격 정보 전송
+		}
+		else if(btn_skill_punch_normal.getBoundingBox().contains(touchPoint.x, touchPoint.y) && gage >= Manager.required_gage_for_skill_punch)
+		{
+			gage -= Manager.required_gage_for_skill_punch;
+			updateSkillBtns();
+			updateGageBar();
+			runAttackAnimation_mine(3);
+			NetworkManager.getInstance().sendAttack(SkillType.PUNCH);
+			///* 서버에게 공격 정보 전송
+		}
+		return super.ccTouchesBegan(event);
+	}
+
 }
