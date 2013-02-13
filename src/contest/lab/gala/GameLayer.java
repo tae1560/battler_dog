@@ -68,7 +68,7 @@ public class GameLayer extends CCLayer{
 		m = new Manager();
 		
 		bg_gamelayer = CCSprite.sprite("minigame/bg_gamelayer.png");
-		bg_gamelayer.setPosition(360 * m.ratio_width, 640 * m.ratio_height);
+		bg_gamelayer.setPosition(360 * Manager.ratio_width, 640 * Manager.ratio_height);
 		this.addChild(bg_gamelayer);
 		
 		
@@ -77,7 +77,7 @@ public class GameLayer extends CCLayer{
 		itemPositions = new ArrayList<CGPoint>();
 		for(int i = 0; i < numOfItems; i++)
 		{
-			CGPoint cgpoint = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(360 * m.ratio_width, (920 - i * 130) * m.ratio_height));	//* 재조정 필요
+			CGPoint cgpoint = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(360 * Manager.ratio_width, (920 - i * 130) * Manager.ratio_height));	//* 재조정 필요
 			itemPositions.add(cgpoint);
 		}
 		
@@ -87,8 +87,8 @@ public class GameLayer extends CCLayer{
 		{
 			Item newItem = createNewItem();
 			newItem.image.setPosition(itemPositions.get(i));
-			newItem.image.setScaleX(m.ratio_width);
-			newItem.image.setScaleY(m.ratio_height);
+			newItem.image.setScaleX(Manager.ratio_width);
+			newItem.image.setScaleY(Manager.ratio_height);
 			itemList.add(newItem);
 			this.addChild(newItem.image);
 		}
@@ -98,16 +98,16 @@ public class GameLayer extends CCLayer{
 		btn_gum = CCMenuItemSprite.item(btn_gum_unclick, btn_gum_click, this, "clickedGum");
 		btn_redbull = CCMenuItemSprite.item(btn_redbull_unclick, btn_redbull_click, this, "clickedRedbull");
 		
-		btn_bone.setScaleX(m.ratio_width);
-		btn_bone.setScaleY(m.ratio_height);
-		btn_gum.setScaleX(m.ratio_width);
-		btn_gum.setScaleY(m.ratio_height);
-		btn_redbull.setScaleX(m.ratio_width);
-		btn_redbull.setScaleY(m.ratio_height);
+		btn_bone.setScaleX(Manager.ratio_width);
+		btn_bone.setScaleY(Manager.ratio_height);
+		btn_gum.setScaleX(Manager.ratio_width);
+		btn_gum.setScaleY(Manager.ratio_height);
+		btn_redbull.setScaleX(Manager.ratio_width);
+		btn_redbull.setScaleY(Manager.ratio_height);
 		
 		buttons = CCMenu.menu(btn_bone, btn_gum, btn_redbull);
-		buttons.alignItemsHorizontally(32 * m.ratio_width);
-		buttons.setPosition(360 * m.ratio_width, 100 * m.ratio_height);
+		buttons.alignItemsHorizontally(32 * Manager.ratio_width);
+		buttons.setPosition(360 * Manager.ratio_width, 100 * Manager.ratio_height);
 		this.addChild(buttons);
 	}
 	public void clickedBone(Object sender)
@@ -147,8 +147,8 @@ public class GameLayer extends CCLayer{
 		itemList.remove(0);
 		// 새로운 아이템을 리스트에 추가
 		Item newItem = createNewItem();
-		newItem.image.setScaleX(m.ratio_width);
-		newItem.image.setScaleY(m.ratio_height);
+		newItem.image.setScaleX(Manager.ratio_width);
+		newItem.image.setScaleY(Manager.ratio_height);
 		
 		itemList.add(newItem);
 		// 아이템들의 포지션 재조정

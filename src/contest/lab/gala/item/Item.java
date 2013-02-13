@@ -1,4 +1,4 @@
-package contest.lab.gala;
+package contest.lab.gala.item;
 
 import org.cocos2d.nodes.CCSprite;
 

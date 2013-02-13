@@ -1,6 +1,5 @@
 package contest.lab.gala;
 
-import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCFiniteTimeAction;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
@@ -12,11 +11,12 @@ import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
+import contest.lab.gala.callback.ClickAttackBtnCallback;
 import contest.lab.gala.callback.GetDamagedCallback;
 import contest.lab.gala.data.CurrentUserInformation;
 import contest.lab.gala.data.SkillType;
 
-public class BattleLayer extends CCLayer implements GetDamagedCallback{
+public class BattleLayer extends CCLayer implements GetDamagedCallback, ClickAttackBtnCallback{
 	CCSprite bg_battlelayer = CCSprite.sprite("battle/bg_battlelayer.png");
 	CCSprite bg_hp_bar = CCSprite.sprite("battle/bg_hp_bar.png");
 	CCSprite hp_bar_mine = CCSprite.sprite("battle/hp_bar.png");
@@ -24,7 +24,9 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	CCSprite title = CCSprite.sprite("battle/title.png");
 
 	static float hp;
-
+	
+	int ACTION_FLYING = 100;
+	
 	CCSprite coming_bark;
 	CCSprite going_bark;
 	CCSprite coming_bone;
@@ -66,8 +68,8 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 
 	CCAnimation normalAnimation_mine;
 	CCAnimation normalAnimation_opponent;
-	CCRepeatForever normalAnimate_mine;
-	CCRepeatForever normalAnimate_opponent;
+	CCAnimate normalAnimate_mine;
+	CCAnimate normalAnimate_opponent;
 
 	CCSprite myCharacter_normal;
 	CCSprite opponentCharacter_normal;
@@ -77,28 +79,32 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	
 	public void makeNormalAnimation()
 	{
-		normalAnimation_mine = CCAnimation.animation("animation1");
-		myCharacter_normal = CCSprite.sprite(String.format("character/char%d_normal0.png", CurrentUserInformation.userID));
-		for(int i = 1; i <= 5; i++ )
+		normalAnimation_mine = CCAnimation.animation("animation1", 0.15f);
+//		myCharacter_normal = CCSprite.sprite(String.format("character/char%d_normal1.png", CurrentUserInformation.userChar));
+//		myCharacter_normal.setPosition(139 * Manager.ratio_width, 1019 * Manager.ratio_height);
+		for(int i = 2; i <= 5; i++ )
 		{
-			CCSprite frame = CCSprite.sprite(String.format("character/char%d_normal%d", CurrentUserInformation.userID, i));
+			CCSprite frame = CCSprite.sprite(String.format("character/char%d_normal%d.png", CurrentUserInformation.userChar, i));
 			frame.setScaleX(-1 * Manager.ratio_width);
 			frame.setScaleY(Manager.ratio_height);
+			frame.setPosition(212 * Manager.ratio_width, 1019 * Manager.ratio_height);
 			normalAnimation_mine.addFrame(frame.getTexture());
 		}
-		normalAnimate_mine = CCRepeatForever.action(CCAnimate.action(normalAnimation_mine, true));
-
-
-		normalAnimation_opponent = CCAnimation.animation("animation2");
-		myCharacter_normal = CCSprite.sprite(String.format("character/char%d_normal0.png", CurrentUserInformation.opponentID));
-		for(int i = 1; i <= 5; i++ )
+//		normalAnimate_mine = CCRepeatForever.action(CCAnimate.action(normalAnimation_mine, true));
+		normalAnimate_mine = CCAnimate.action(normalAnimation_mine, false);
+		
+		normalAnimation_opponent = CCAnimation.animation("animation2",0.15f);
+		opponentCharacter_normal = CCSprite.sprite(String.format("character/char%d_normal1.png", CurrentUserInformation.opponentchar));
+//		opponentCharacter_normal.setPosition(581 * Manager.ratio_width, 1019 * Manager.ratio_height);
+		for(int i = 5; i >= 2; i-- )
 		{
-			CCSprite frame = CCSprite.sprite(String.format("character/char%d_normal%d", CurrentUserInformation.opponentID, i));
+			CCSprite frame = CCSprite.sprite(String.format("character/char%d_normal%d.png", CurrentUserInformation.opponentchar, i));
 			frame.setScaleX(Manager.ratio_width);
 			frame.setScaleY(Manager.ratio_height);
+			frame.setPosition(508 * Manager.ratio_width, 1019 * Manager.ratio_height);
 			normalAnimation_opponent.addFrame(frame.getTexture());
 		}
-		normalAnimate_opponent = CCRepeatForever.action(CCAnimate.action(normalAnimation_opponent, true));
+		normalAnimate_opponent = CCAnimate.action(normalAnimation_opponent, true);
 	}
 
 //	public void makeAttackAnimation()
@@ -127,24 +133,27 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 //
 //	}
 
+	
 	public void makeDemagedAnimation()
 	{
-		damagedAnimation_mine = CCAnimation.animation("animation5");
-		myCharacter_normal = CCSprite.sprite(String.format("char%d_damaged0.png", CurrentUserInformation.userID));
+		damagedAnimation_mine = CCAnimation.animation("animation5", 0.15f);
+		myCharacter_hurted = CCSprite.sprite(String.format("character/char%d_hurted1.png", CurrentUserInformation.userChar));
+		myCharacter_hurted.setPosition(139 * Manager.ratio_width, 1019 * Manager.ratio_height);
 		for(int i = 1; i <= 5; i++ )
 		{
-			CCSprite frame = CCSprite.sprite(String.format("char%d_damaged%d", CurrentUserInformation.userID, i));
+			CCSprite frame = CCSprite.sprite(String.format("character/char%d_hurted%d.png", CurrentUserInformation.userChar, i));
 			frame.setScaleX(-1 * Manager.ratio_width);
 			frame.setScaleY(Manager.ratio_height);
 			damagedAnimation_mine.addFrame(frame.getTexture());
 		}
 		damagedAnimate_mine = CCAnimate.action(damagedAnimation_mine, false);
 
-		damagedAnimation_opponent = CCAnimation.animation("animation6");
-		myCharacter_normal = CCSprite.sprite(String.format("char%d_damaged0.png", CurrentUserInformation.opponentID));
+		damagedAnimation_opponent = CCAnimation.animation("animation6", 0.15f);
+		opponentCharacter_hurted = CCSprite.sprite(String.format("character/char%d_hurted1.png", CurrentUserInformation.opponentchar));
+		opponentCharacter_hurted.setPosition(581 * Manager.ratio_width, 1019 * Manager.ratio_height);
 		for(int i = 1; i <= 5; i++ )
 		{
-			CCSprite frame = CCSprite.sprite(String.format("char%d_damaged%d", CurrentUserInformation.opponentID, i));
+			CCSprite frame = CCSprite.sprite(String.format("character/char%d_hurted%d.png", CurrentUserInformation.opponentchar, i));
 			frame.setScaleX(Manager.ratio_width);
 			frame.setScaleY(Manager.ratio_height);
 			damagedAnimation_opponent.addFrame(frame.getTexture());
@@ -170,66 +179,120 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	}
 	public void runAfterDamagedAnimation_opponent(Object o)
 	{
+		this.removeChildByTag(ACTION_FLYING, true);
 		opponentCharacter_normal.setVisible(false);
 		this.addChild(opponentCharacter_hurted);
 		/////////////////////////////
 	}
-	public void runAttackAnimation_mine(int kindOfAttack)
-	{
-		myCharacter_normal.stopAction(normalAnimate_mine);
-		switch(kindOfAttack)
-		{
-		case 1 : 
-			myCharacter_normal.setVisible(false);
-//			opponentCharacter_normal.setVisible(false);
-			attack_bark_mine.setVisible(true);
-
-			going_bark.setPosition(225,1030);
-			this.addChild(going_bark);
-			going_bark.runAction(attackSequence_bark);
-		}
-	}
+//	public void runAttackAnimation_mine(int kindOfAttack)
+//	{
+//		myCharacter_normal.stopAction(normalAnimate_mine);
+//		myCharacter_normal.setVisible(false);
+//		switch(kindOfAttack)
+//		{
+//		case 1 : 
+//			myCharacter_normal.setVisible(false);
+////			opponentCharacter_normal.setVisible(false);
+//			attack_bark_mine.setVisible(true);
+//
+//			going_bark.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+//			this.addChild(going_bark, ACTION_FLYING);
+//			going_bark.runAction(attackSequence_bark);
+//			break;
+//		case 2 : 
+//			myCharacter_normal.setVisible(false);
+////			opponentCharacter_normal.setVisible(false);
+//			attack_bone_mine.setVisible(true);
+//
+//			going_bone.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+//			this.addChild(going_bone, ACTION_FLYING);
+//			going_bone.runAction(attackSequence_bark);
+//			break;
+//		case 3 : 
+//			myCharacter_normal.setVisible(false);
+////			opponentCharacter_normal.setVisible(false);
+//			attack_punch_mine.setVisible(true);
+//
+//			going_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+//			this.addChild(going_punch, ACTION_FLYING);
+//			going_punch.runAction(attackSequence_bark);
+//			break;
+//		}
+//	}
 
 	public void runAttackAnimation_opponent(int kindOfAttack)
 	{
+		opponentCharacter_normal.stopAction(normalAnimate_mine);
+		opponentCharacter_normal.setVisible(false);
+		switch(kindOfAttack)
+		{
+		case 1 : 
+			opponentCharacter_normal.setVisible(false);
+//			opponentCharacter_normal.setVisible(false);
+			attack_bark_opponent.setVisible(true);
 
+			coming_bark.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+			this.addChild(going_bark, ACTION_FLYING);
+			coming_bark.runAction(damagedSequence_bark);
+			break;
+		case 2 : 
+			opponentCharacter_normal.setVisible(false);
+//			opponentCharacter_normal.setVisible(false);
+			attack_bone_opponent.setVisible(true);
+
+			going_bone.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+			this.addChild(going_bone, ACTION_FLYING);
+			going_bone.runAction(damagedSequence_bark);
+			break;
+		case 3 : 
+			opponentCharacter_normal.setVisible(false);
+//			opponentCharacter_normal.setVisible(false);
+			attack_punch_opponent.setVisible(true);
+
+			going_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+			this.addChild(going_punch, ACTION_FLYING);
+			going_punch.runAction(damagedSequence_bark);
+			break;
+		}
 	}
 
 	public BattleLayer()
 	{
+		bg_battlelayer.setPosition(360 * Manager.ratio_width, 1057 * Manager.ratio_height);
+		bg_battlelayer.setScaleX(Manager.ratio_width);
+		bg_battlelayer.setScaleY(Manager.ratio_height);
+		this.addChild(bg_battlelayer);
+
 		makeNormalAnimation();
 //		makeAttackAnimation();
 		makeDemagedAnimation();
 		makeActions();
 		makeSequences();
 
-		myCharacter_normal = CCSprite.sprite(String.format("char%d_normal0.png", CurrentUserInformation.userChar));
-		myCharacter_normal.setScaleX(Manager.ratio_width);
+		myCharacter_normal = CCSprite.sprite(String.format("character/char%d_normal1.png", CurrentUserInformation.userChar));
+		myCharacter_normal.setScaleX(-1 * Manager.ratio_width);
 		myCharacter_normal.setScaleY(Manager.ratio_height);
 		myCharacter_normal.setPosition(212 * Manager.ratio_width, 1019 * Manager.ratio_height);
+		myCharacter_normal.runAction(CCRepeatForever.action(normalAnimate_mine));
 		this.addChild(myCharacter_normal);
-		myCharacter_normal.runAction(normalAnimate_mine);
 
-		opponentCharacter_normal = CCSprite.sprite(String.format("char%d_normal0.png", CurrentUserInformation.opponentchar));
+		opponentCharacter_normal = CCSprite.sprite(String.format("character/char%d_normal1.png", CurrentUserInformation.opponentchar));
 		opponentCharacter_normal.setScaleX(Manager.ratio_width);
 		opponentCharacter_normal.setScaleY(Manager.ratio_height);
 		opponentCharacter_normal.setPosition(508 * Manager.ratio_width, 1019 * Manager.ratio_height);
+		opponentCharacter_normal.runAction(CCRepeatForever.action(normalAnimate_opponent));
 		this.addChild(opponentCharacter_normal);
-		opponentCharacter_normal.runAction(normalAnimate_opponent);
 
-		myCharacter_hurted = CCSprite.sprite(String.format("char%d_hurted0.png", CurrentUserInformation.userChar));
-		myCharacter_hurted.setScaleX(Manager.ratio_width);
+		myCharacter_hurted = CCSprite.sprite(String.format("character/char%d_hurted1.png", CurrentUserInformation.userChar));
+		myCharacter_hurted.setScaleX(-1 * Manager.ratio_width);
 		myCharacter_hurted.setScaleY(Manager.ratio_height);
 		myCharacter_hurted.setPosition(212 * Manager.ratio_width, 1019 * Manager.ratio_height);
-		opponentCharacter_hurted = CCSprite.sprite(String.format("char%d_hurted0.png", CurrentUserInformation.opponentchar));
+
+		opponentCharacter_hurted = CCSprite.sprite(String.format("character/char%d_hurted1.png", CurrentUserInformation.opponentchar));
 		opponentCharacter_hurted.setScaleX(Manager.ratio_width);
 		opponentCharacter_hurted.setScaleY(Manager.ratio_height);
 		opponentCharacter_hurted.setPosition(508 * Manager.ratio_width, 1019 * Manager.ratio_height);
 		
-		bg_battlelayer.setPosition(360 * Manager.ratio_width, 1057 * Manager.ratio_height);
-		bg_battlelayer.setScaleX(Manager.ratio_width);
-		bg_battlelayer.setScaleY(Manager.ratio_height);
-		this.addChild(bg_battlelayer);
 
 		bg_hp_bar.setPosition(360 * Manager.ratio_width, 1240 * Manager.ratio_height);
 		bg_hp_bar.setScaleX(-1 * Manager.ratio_width);
@@ -251,34 +314,34 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 		title.setScaleY(Manager.ratio_height);
 		this.addChild(title);
 
-		attack_bark_opponent = CCSprite.sprite(String.format("character/attack_bark%d", CurrentUserInformation.opponentchar));
+		attack_bark_opponent = CCSprite.sprite(String.format("character/attack_bark%d.png", CurrentUserInformation.opponentchar));
 		attack_bark_opponent.setScaleX(Manager.ratio_width);
 		attack_bark_opponent.setScaleY(Manager.ratio_height);
 		attack_bark_opponent.setVisible(false);
 		this.addChild(attack_bark_opponent);
-		attack_bark_mine = CCSprite.sprite(String.format("character/attack_bark%d", CurrentUserInformation.userChar));
+		attack_bark_mine = CCSprite.sprite(String.format("character/attack_bark%d.png", CurrentUserInformation.userChar));
 		attack_bark_mine.setScaleX(-1 * Manager.ratio_width);
 		attack_bark_mine.setScaleY(Manager.ratio_height);
 		attack_bark_mine.setVisible(false);
 		this.addChild(attack_bark_mine);
 
-		attack_bone_opponent = CCSprite.sprite(String.format("character/attack_bone%d", CurrentUserInformation.opponentchar));
+		attack_bone_opponent = CCSprite.sprite(String.format("character/attack_bone%d.png", CurrentUserInformation.opponentchar));
 		attack_bone_opponent.setScaleX(Manager.ratio_width);
 		attack_bone_opponent.setScaleY(Manager.ratio_height);
 		attack_bone_opponent.setVisible(false);
 		this.addChild(attack_bone_opponent);
-		attack_bone_mine = CCSprite.sprite(String.format("character/attack_bone%d", CurrentUserInformation.userChar));
+		attack_bone_mine = CCSprite.sprite(String.format("character/attack_bone%d.png", CurrentUserInformation.userChar));
 		attack_bone_mine.setScaleX(Manager.ratio_width);
 		attack_bone_mine.setScaleY(-1 * Manager.ratio_height);
 		attack_bone_mine.setVisible(false);
 		this.addChild(attack_bone_mine);
 
-		attack_punch_opponent = CCSprite.sprite(String.format("character/attack_bone%d", CurrentUserInformation.opponentchar));
+		attack_punch_opponent = CCSprite.sprite(String.format("character/attack_punch%d.png", CurrentUserInformation.opponentchar));
 		attack_punch_opponent.setScaleX(Manager.ratio_width);
 		attack_punch_opponent.setScaleY(Manager.ratio_height);
 		attack_punch_opponent.setVisible(false);
 		this.addChild(attack_punch_opponent);
-		attack_punch_mine = CCSprite.sprite(String.format("character/attack_bone%d", CurrentUserInformation.userChar));
+		attack_punch_mine = CCSprite.sprite(String.format("character/attack_punch%d.png", CurrentUserInformation.userChar));
 		attack_punch_mine.setScaleX(Manager.ratio_width);
 		attack_punch_mine.setScaleY(-1 * Manager.ratio_height);
 		attack_punch_mine.setVisible(false);
@@ -308,9 +371,10 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 		going_punch.setScaleX(Manager.ratio_width);
 		going_punch.setScaleY(-1 * Manager.ratio_height);
 
-
 		NetworkManager.getInstance().setGetDamagedCallback(this);
-
+		SkillGageLayer.getInstance().setClickAttackBtnCallback(this);
+//		myCharacter_normal.runAction(normalAnimate_mine);
+//		opponentCharacter_normal.runAction(normalAnimate_opponent);
 	}
 
 
@@ -336,6 +400,42 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 			SkillGageLayer.updateGageBar();
 			//* 데미지 효과 애니메이션
 			BattlerDogActivity.makeToast(3);
+			break;
+		}
+	}
+
+	@Override
+	public void runAttackAnimation_mine(int kindOfAttack) {
+		myCharacter_normal.stopAction(normalAnimate_mine);
+		myCharacter_normal.setVisible(false);
+		switch(kindOfAttack)
+		{
+		case 1 : 
+			myCharacter_normal.setVisible(false);
+//			opponentCharacter_normal.setVisible(false);
+			attack_bark_mine.setVisible(true);
+
+			going_bark.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+			this.addChild(going_bark, ACTION_FLYING);
+			going_bark.runAction(attackSequence_bark);
+			break;
+		case 2 : 
+			myCharacter_normal.setVisible(false);
+//			opponentCharacter_normal.setVisible(false);
+			attack_bone_mine.setVisible(true);
+
+			going_bone.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+			this.addChild(going_bone, ACTION_FLYING);
+			going_bone.runAction(attackSequence_bark);
+			break;
+		case 3 : 
+			myCharacter_normal.setVisible(false);
+//			opponentCharacter_normal.setVisible(false);
+			attack_punch_mine.setVisible(true);
+
+			going_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+			this.addChild(going_punch, ACTION_FLYING);
+			going_punch.runAction(attackSequence_bark);
 			break;
 		}
 	}

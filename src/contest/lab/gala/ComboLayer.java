@@ -14,7 +14,7 @@ public class ComboLayer extends CCLayer{
 		m = new Manager();
 		combo = CCLabel.makeLabel("" + numOfCombo, "Arial", 40);
 		combo.setColor(ccColor3B.ccWHITE);
-		combo.setPosition(200 * m.ratio_width, 300 * m.ratio_height);
+		combo.setPosition(200 * Manager.ratio_width, 300 * Manager.ratio_height);
 		this.addChild(combo);
 	}
 	static void showCombo()
