@@ -3,10 +3,13 @@ package contest.lab.gala;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.cocos2d.actions.base.CCRepeatForever;
+import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItemSprite;
+import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
@@ -24,8 +27,7 @@ public class GameLayer extends CCLayer{
 	
 	// 가로 세로 비율 지정을 위한 매니저 객체 
 	// Manager.ratio_x; , Manager.ratio_y;
-	Manager m;
-	
+
 	
 	// 한 화면에 보이는 아이템의 개수
 	int numOfItems = 4;
@@ -45,16 +47,18 @@ public class GameLayer extends CCLayer{
 	CCSprite bg_battlelayer;
 	CCSprite bg_gamelayer;
 	
+	CCSprite rectangle1;
+	CCSprite rectangle2;
 	static CCScene makeScene()
 	{
 		CCScene scene = CCScene.node();
 		CCLayer layer1 = new GameLayer();
-		CCLayer layer2 = new SkillGageLayer();
+//		CCLayer layer2 = new SkillGageLayer();
 		CCLayer layer3 = new BattleLayer();
 		CCLayer layer4 = new ComboLayer();
 		
 		scene.addChild(layer1);
-		scene.addChild(layer2);
+//		scene.addChild(layer2);
 		scene.addChild(layer3);
 		scene.addChild(layer4);
 		
@@ -62,22 +66,16 @@ public class GameLayer extends CCLayer{
 	}
 	void init()
 	{
-//		NetworkManager.getInstance().startSocketWithUsername("Hyunjeong");
-		
-		
-		m = new Manager();
-		
+
 		bg_gamelayer = CCSprite.sprite("minigame/bg_gamelayer.png");
 		bg_gamelayer.setPosition(360 * Manager.ratio_width, 640 * Manager.ratio_height);
-		this.addChild(bg_gamelayer);
-		
-		
+		this.addChild(bg_gamelayer);		
 		
 		// item들의 position들을 리스트로 저장
 		itemPositions = new ArrayList<CGPoint>();
 		for(int i = 0; i < numOfItems; i++)
 		{
-			CGPoint cgpoint = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(360 * Manager.ratio_width, (920 - i * 130) * Manager.ratio_height));	//* 재조정 필요
+			CGPoint cgpoint = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(360 * Manager.ratio_width, (920 - i * 135) * Manager.ratio_height));	//* 재조정 필요
 			itemPositions.add(cgpoint);
 		}
 		
@@ -109,6 +107,22 @@ public class GameLayer extends CCLayer{
 		buttons.alignItemsHorizontally(32 * Manager.ratio_width);
 		buttons.setPosition(360 * Manager.ratio_width, 100 * Manager.ratio_height);
 		this.addChild(buttons);
+		
+		rectangle1 = CCSprite.sprite("minigame/rectangle1.png");
+		rectangle2 = CCSprite.sprite("minigame/rectangle2.png");
+		rectangle1.setPosition(itemPositions.get(0).x, itemPositions.get(0).y - 10 * Manager.ratio_height);
+		rectangle1.setScaleX(Manager.ratio_width);
+		rectangle1.setScaleY(Manager.ratio_height);
+		rectangle2.setScaleX(Manager.ratio_width);
+		rectangle2.setScaleY(Manager.ratio_height);
+		
+		CCAnimation rectAnimation = CCAnimation.animation("animation", 0.5f);
+		rectAnimation.addFrame(rectangle1.getTexture());
+		rectAnimation.addFrame(rectangle2.getTexture());
+		
+		CCAnimate rectAnimate = CCAnimate.action(rectAnimation);
+		rectangle1.runAction(CCRepeatForever.action(rectAnimate));
+		this.addChild(rectangle1);
 	}
 	public void clickedBone(Object sender)
 	{

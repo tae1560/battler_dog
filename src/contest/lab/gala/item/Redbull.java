@@ -3,7 +3,7 @@ package contest.lab.gala.item;
 import org.cocos2d.nodes.CCSprite;
 
 import contest.lab.gala.Manager;
-import contest.lab.gala.SkillGageLayer;
+import contest.lab.gala.BattleLayer;
 
 public class Redbull extends Item{
 	public Redbull()
@@ -12,10 +12,10 @@ public class Redbull extends Item{
 	}
 	public void acquireGage()
 	{
-		SkillGageLayer.gage += Manager.acquired_gage_per_redbull;
-		if(SkillGageLayer.gage >= 100)
-			SkillGageLayer.gage = 100;
-		SkillGageLayer.updateGageBar();
-		SkillGageLayer.updateSkillBtns();
+		BattleLayer.gage += Manager.acquired_gage_per_redbull;
+		if(BattleLayer.gage >= 100)
+			BattleLayer.gage = 100;
+		BattleLayer.updateGageBar();
+		BattleLayer.updateSkillBtns();
 	}
 }
