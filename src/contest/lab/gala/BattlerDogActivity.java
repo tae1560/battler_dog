@@ -5,11 +5,11 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
-import contest.lab.gala.callback.LoginCallback;
 
 public class BattlerDogActivity extends Activity {
 	//** 공격 정보를 받았을 때, SkillGageLayer.getDamaged(int kindOfAttack);
@@ -26,7 +26,8 @@ public class BattlerDogActivity extends Activity {
 		_glSurfaceView = new CCGLSurfaceView(this);
 
 		setContentView(_glSurfaceView);
-
+		
+		
 	}
 	@Override
 	protected void onStart() {
@@ -41,12 +42,15 @@ public class BattlerDogActivity extends Activity {
 
 		CCDirector.sharedDirector().setAnimationInterval(1.0f / 60.0f);
 
-		runGame();
+		Manager.setRatioes();
+		CCScene scene = GameLayer.makeScene();
+		CCDirector.sharedDirector().runWithScene(scene);
+//		showFriendList();
 	}
 
-	public void runGame()
+	public void showFriendList()
 	{
-		CCScene scene = GameLayer.makeScene();
+		CCScene scene = ReadyToFightLayer.makeScene();
 		CCDirector.sharedDirector().runWithScene(scene);
 	}
 	
@@ -59,5 +63,18 @@ public class BattlerDogActivity extends Activity {
 				Toast.makeText(CCDirector.sharedDirector().getActivity().getApplicationContext(), "조현정 짱 : " + kindOfAttack, Toast.LENGTH_LONG).show();
 			}
 		});
+	}
+	
+	public void goLoginPage()
+	{
+//		Intent intent = new Intent(BattlerDogActivity.this, JoinActivity.class);
+//		startActivity(intent);
+		CCScene scene = GameLayer.makeScene();
+		CCDirector.sharedDirector().replaceScene(scene);
+	}
+	public void goJoinPage()
+	{
+		Intent intent = new Intent(BattlerDogActivity.this, JoinActivity.class);
+		startActivity(intent);
 	}
 }

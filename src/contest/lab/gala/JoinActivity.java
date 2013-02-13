@@ -1,12 +1,7 @@
 package contest.lab.gala;
 
-import org.cocos2d.layers.CCScene;
-import org.cocos2d.nodes.CCDirector;
-
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Paint.Join;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -88,6 +83,7 @@ public class JoinActivity extends Activity implements JoinCallback, LoginCallbac
 		// => 페이지 넘기기
 		runOnUiThread(new Runnable() {
 			
+			// for scalability
 			@Override
 			public void run() {
 				Toast.makeText(JoinActivity.this, "회원 가입 성공 !!!! ", Toast.LENGTH_LONG).show();

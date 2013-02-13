@@ -16,7 +16,7 @@ public class User {
 		this.number_of_wins = number_of_wins;
 		this.is_logon = is_logon;
 	}
-	
+
 	public static User parseJson(JSONObject jsonFriend) {
 		User user = null;
 		try {
