@@ -1,10 +1,5 @@
 package contest.lab.gala;
 
-import java.util.ArrayList;
-
-import org.cocos2d.layers.CCScene;
-import org.cocos2d.nodes.CCDirector;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
@@ -16,14 +11,15 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 import contest.lab.gala.callback.JoinCallback;
 import contest.lab.gala.callback.LoginCallback;
-import contest.lab.gala.callback.RequestFriendsCallback;
+import contest.lab.gala.callback.OnMatchedCallback;
 import contest.lab.gala.data.User;
+import contest.lab.gala.util.CommonUtils;
 
 public class JoinActivity extends Activity implements JoinCallback, LoginCallback{
 	//////////회원가입, 로그인 테스트 용 UI ///////////
 	EditText et_id;
 	EditText et_pw;
-	int selected_character;
+	int selected_character = -1;
 	//////////////////////////////////////////////
 	protected void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,7 +58,9 @@ public class JoinActivity extends Activity implements JoinCallback, LoginCallbac
 					selected_character = 4;
 				}
 				
-				NetworkManager.getInstance().doJoin(et_id.getText().toString(), et_pw.getText().toString(), selected_character, JoinActivity.this);
+				if (selected_character >= 0) {
+					NetworkManager.getInstance().doJoin(et_id.getText().toString(), et_pw.getText().toString(), selected_character, JoinActivity.this);					
+				}				
 			}
 		});
 
@@ -89,14 +87,20 @@ public class JoinActivity extends Activity implements JoinCallback, LoginCallbac
 			@Override
 			public void run() {
 				Toast.makeText(JoinActivity.this, "회원 가입 성공 !!!! ", Toast.LENGTH_LONG).show();
-				NetworkManager.getInstance().requestFriends(new RequestFriendsCallback() {			
+				
+
+				NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
+					
 					@Override
-					public void didGetFriends(ArrayList<User> friends) {
-						Manager.friendList = friends;
+					public void onMatched(User enemy) {
+						// TODO Auto-generated method stub
+						CommonUtils.debug("onMatched " + enemy.id);
 						Intent intent = new Intent(JoinActivity.this, BattlerDogActivity.class);
-						startActivity(intent);
+						startActivity(intent);						
 					}
 				});
+				
+				
 			}
 		});
 	}
@@ -108,15 +112,43 @@ public class JoinActivity extends Activity implements JoinCallback, LoginCallbac
 			@Override
 			public void run() {
 				Toast.makeText(JoinActivity.this, "로그인 성공 !!!! ", Toast.LENGTH_LONG).show();
-				NetworkManager.getInstance().requestFriends(new RequestFriendsCallback() {			
+				
+				NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
+					
 					@Override
-					public void didGetFriends(ArrayList<User> friends) {
-						Manager.friendList = friends;
+					public void onMatched(User enemy) {
+						// TODO Auto-generated method stub
+						CommonUtils.debug("onMatched " + enemy.id);
 						Intent intent = new Intent(JoinActivity.this, BattlerDogActivity.class);
-						startActivity(intent);
+						startActivity(intent);						
 					}
 				});
 				
+				
+				
+//				CCScene scene = ReadyToFightLayer.makeScene();
+//				CCDirector.sharedDirector().runWithScene(scene);
+			}
+		});
+		
+	}
+	@Override
+	public void didFailedLogin(final String message) {
+		runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(JoinActivity.this, "Failed Login - " + message, Toast.LENGTH_LONG).show();
+			}
+		});
+	}
+	@Override
+	public void didFailedJoin(final String message) {
+		runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(JoinActivity.this, "Failed Join - " + message, Toast.LENGTH_LONG).show();
 			}
 		});
 		

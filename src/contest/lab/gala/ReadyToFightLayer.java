@@ -8,7 +8,6 @@ import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
 
 public class ReadyToFightLayer extends CCLayer{
-	
 	int numOfEntryPerOnePage = 4;
 	int numOfTotalEntries;
 	int currentPageNum = 0;   // 0부터 시작  currentPageNum * 4, +1, +2, +3 번 까지 보여줌
