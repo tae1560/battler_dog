@@ -10,7 +10,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +45,7 @@ public class NetworkManager {
 	}
 	
 	public NetworkManager() {
-		this.startSocket();
+		checkSocketAndStart();
 	}
 	
 	public void setGetDamagedCallback(GetDamagedCallback callback) {
@@ -91,11 +93,51 @@ public class NetworkManager {
 		sendJSONWithSocket(map);
 	}
 	
-	public void startSocket() {
+	private boolean checkIfSocketUnabled() {
+		if (socket == null || socket.isClosed() || networkWriter == null) {
+			return false;
+		}
+		debug("socket.isInputShutdown() : " + socket.isInputShutdown());
+		debug("socket.isOutputShutdown() : " + socket.isOutputShutdown());
+		return true;
+	}
+	
+	public void checkSocketAndStart() {
+		// start socket
+		if (checkIfSocketUnabled()) {
+			startSocket(null);
+		}		
+	}
+	
+	Thread makeSocketConnectionThread = null;
+	Queue<String> messageQueue = new LinkedList<String>();
+	public void startSocket(String message) {
 		debug("startSocket");
 		
-		// start socket
-		makeSocketConnection();
+		if (message != null) {
+			messageQueue.offer(message);
+		}
+		
+		if (makeSocketConnectionThread == null) {
+
+			makeSocketConnectionThread = new Thread(new Runnable() {  
+				@Override
+				public void run() {
+					makeSocketConnection();
+					
+					makeSocketConnectionThread = null;
+					
+					while (!messageQueue.isEmpty()) {
+						String message = messageQueue.poll();
+						if (message != null) {
+							sendStringWithSocketDirectly(message);
+						}	
+					}
+				}
+			});
+			
+			makeSocketConnectionThread.start();
+		}
 	}
 	
 	public void requestRandomMatching(OnMatchedCallback callback) {
@@ -154,7 +196,6 @@ public class NetworkManager {
 	private static final String TYPE_REQUEST_FRIENDS = "request_friends";
 	private static final String TYPE_REQUEST_MATCHING = "request_matching";
 	
-	// TODO : DEBUG - TEST
 	// SEND
 	private static final String TYPE_SEND_ATTACK = "attack_skill";
 	
@@ -173,30 +214,24 @@ public class NetworkManager {
 	private BufferedReader networkReader = null;
 	
 	private void makeSocketConnection() {
-		new Thread(new Runnable() {
-			// TODO : 여기 쓰레드 화에 따른 예외처리 + 각종 보내는 곳에 쓰레드화  
-			@Override
-			public void run() {
-				try {
-					socket = new Socket(socketIpString, socketPort);
-					
-					networkWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-					networkReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					
-					debug("makeSocketConnection completed");
-					
-					startReadingThread();
-				} catch (UnknownHostException e) {
-					debug("UnknownHostException");
-					debug(e.getStackTrace().toString());
-					e.printStackTrace();
-				} catch (IOException e) {
-					debug("IOException");
-					debug(e.getStackTrace().toString());
-					e.printStackTrace();
-				}
-			}
-		}).start();
+		try {
+			socket = new Socket(socketIpString, socketPort);
+			
+			networkWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			networkReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			
+			debug("makeSocketConnection completed");
+			
+			startReadingThread();
+		} catch (UnknownHostException e) {
+			debug("UnknownHostException");
+			debug(e.getStackTrace().toString());
+			e.printStackTrace();
+		} catch (IOException e) {
+			debug("IOException");
+			debug(e.getStackTrace().toString());
+			e.printStackTrace();
+		}
 	}
 	
 	private void startReadingThread() {
@@ -304,17 +339,30 @@ public class NetworkManager {
 		}
 	}
 	
-	private void sendStringWithSocket (String message) {
-		debug("message : " + message);
-		
-		if (socket == null || socket.isClosed()) {
-			startSocket();
-		}
+	private void sendStringWithSocketDirectly (String message) {
 		if (networkWriter != null) {
 			PrintWriter out = new PrintWriter(networkWriter, true);
 			out.println(message);
 			out.flush();
-		}	
+		}
+	}
+	
+	private void sendStringWithSocket (final String message) {
+		debug("message : " + message);
+		
+		if (checkIfSocketUnabled()) {
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					sendStringWithSocketDirectly(message);					
+				}
+			}).start();
+		} else {
+			startSocket(message);
+		}
+		
+			
 	}
 	
 	@SuppressWarnings("unused")
