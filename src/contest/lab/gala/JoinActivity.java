@@ -1,19 +1,20 @@
 package contest.lab.gala;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import contest.lab.gala.callback.JoinCallback;
-import contest.lab.gala.callback.OnMatchedCallback;
+import contest.lab.gala.callback.RequestFriendsCallback;
 import contest.lab.gala.data.User;
-import contest.lab.gala.util.CommonUtils;
 
 public class JoinActivity extends Activity implements JoinCallback{
 	//////////회원가입, 로그인 테스트 용 UI ///////////
@@ -90,8 +91,18 @@ public class JoinActivity extends Activity implements JoinCallback{
 //						startActivity(intent);						
 //					}
 //				});	
-				Intent intent = new Intent(JoinActivity.this, BattlerDogActivity.class);
-				startActivity(intent);
+				
+				NetworkManager.getInstance().requestFriends(new RequestFriendsCallback() {
+					
+					@Override
+					public void didGetFriends(ArrayList<User> friends) {
+						Manager.friendList = (ArrayList<User>) friends.clone();
+						Intent intent = new Intent(JoinActivity.this, BattlerDogActivity.class);
+						startActivity(intent);
+					}
+				});
+				
+				
 			}
 		});
 	}

@@ -1,5 +1,7 @@
 package contest.lab.gala;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,12 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import contest.lab.gala.callback.LoginCallback;
+import contest.lab.gala.callback.RequestFriendsCallback;
+import contest.lab.gala.data.User;
 
 public class LoginActivity extends Activity implements LoginCallback{
-	
+
 	EditText et_id;
 	EditText et_pw;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,18 +52,25 @@ public class LoginActivity extends Activity implements LoginCallback{
 			public void run() {
 				Toast.makeText(LoginActivity.this, "로그인 성공 !!!! ", Toast.LENGTH_LONG).show();
 
-//				NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
-//
-//					@Override
-//					public void onMatched(User enemy) {
-//						// TODO Auto-generated method stub
-//						CommonUtils.debug("onMatched " + enemy.id);
-//						Intent intent = new Intent(LoginActivity.this, BattlerDogActivity.class);
-//						startActivity(intent);						
-//					}
-//				});
-				Intent intent = new Intent(LoginActivity.this, BattlerDogActivity.class);
-				startActivity(intent);
+				//				NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
+				//
+				//					@Override
+				//					public void onMatched(User enemy) {
+				//						// TODO Auto-generated method stub
+				//						CommonUtils.debug("onMatched " + enemy.id);
+				//						Intent intent = new Intent(LoginActivity.this, BattlerDogActivity.class);
+				//						startActivity(intent);						
+				//					}
+				//				});
+				NetworkManager.getInstance().requestFriends(new RequestFriendsCallback() {
+
+					@Override
+					public void didGetFriends(ArrayList<User> friends) {
+						Manager.friendList = (ArrayList<User>) friends.clone();
+						Intent intent = new Intent(LoginActivity.this, BattlerDogActivity.class);
+						startActivity(intent);
+					}
+				});
 
 
 				//				CCScene scene = ReadyToFightLayer.makeScene();
