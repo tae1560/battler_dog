@@ -13,8 +13,6 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
 import android.view.MotionEvent;
-
-import contest.lab.gala.callback.ClickAttackBtnCallback;
 import contest.lab.gala.callback.GetDamagedCallback;
 import contest.lab.gala.data.CurrentUserInformation;
 import contest.lab.gala.data.SkillType;
@@ -45,6 +43,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	int ACTION_FLYING = 100;
 	int ACTION_DAMAGED = 200;
 	int ACTION_ATTACK = 300;
+	static int numOfCurrentActions = 0;
 	
 	CCCallFuncN returnToNormalMode;
 	CCSequence damagedAndReturnToNormal_mine;
@@ -221,9 +220,15 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	}
 	public void returnToNormalMode(Object o)
 	{
-		this.removeChildByTag(ACTION_FLYING, true);
-		this.removeChildByTag(ACTION_DAMAGED, true);
-		this.removeChildByTag(ACTION_ATTACK, true);
+		int i;
+		for(i = 0; i < numOfCurrentActions; i++)
+		{
+			this.removeChildByTag(ACTION_FLYING, true);
+			this.removeChildByTag(ACTION_DAMAGED, true);
+			this.removeChildByTag(ACTION_ATTACK, true);
+		}
+		for(int j = 0; j < i; j++)
+			numOfCurrentActions--;
 		
 //		myCharacter_normal.resumeSchedulerAndActions();
 //		myCharacter_normal.resumeSchedulerAndActions();
@@ -231,6 +236,8 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 //		myCharacter_normal.runAction(CCRepeatForever.action(normalAnimate_mine));
 		opponentCharacter_normal.setVisible(true);
 //		opponentCharacter_normal.runAction(CCRepeatForever.action(normalAnimate_opponent));
+		
+		
 	}
 //	public void runAttackAnimation_mine(int kindOfAttack)
 //	{
@@ -469,6 +476,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	}
 
 	public void runAttackAnimation_mine(int kindOfAttack) {
+		numOfCurrentActions++;
 		myCharacter_normal.stopAction(normalAnimate_mine);
 		myCharacter_normal.setVisible(false);
 		switch(kindOfAttack)
@@ -505,6 +513,8 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	
 	public void runAttackAnimation_opponent(int kindOfAttack)
 	{
+		numOfCurrentActions++;
+		
 		opponentCharacter_normal.stopAction(normalAnimate_mine);
 		opponentCharacter_normal.setVisible(false);
 		switch(kindOfAttack)
