@@ -215,7 +215,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 		//		damagedSequence_bone;
 		//		damagedSequence_punch;
 
-		CCCallFuncN afterDamaged_opponent = CCCallFuncN.action(this, "runAfterDamagedAnimation_opponent");
+		CCCallFuncN afterDamaged_opponent = CCCallFuncN.action(this, "runAfterDamagedAnimation_mine");
 		CCSequence DamagedSequence = CCSequence.actions(damagedAction, afterDamaged_opponent);
 		//		attackSequence_bone;
 		//		attackSequence_punch;
@@ -574,18 +574,18 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 //			opponentCharacter_normal.setVisible(false);
 			this.addChild(attack_bone_opponent, 1, ACTION_ATTACK);
 			
-			going_bone.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+			coming_bone.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(going_bone, ACTION_FLYING);
-			going_bone.runAction(opponent_attack_sequence);
+			coming_bone.runAction(opponent_attack_sequence);
 			break;
 		case 3 : 
 			opponentCharacter_normal.setVisible(false);
 //			opponentCharacter_normal.setVisible(false);
 			this.addChild(attack_punch_opponent, 1, ACTION_ATTACK);
 			
-			going_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
+			coming_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(going_punch, ACTION_FLYING);
-			going_punch.runAction(opponent_attack_sequence);
+			coming_punch.runAction(opponent_attack_sequence);
 			break;
 		}
 	}
