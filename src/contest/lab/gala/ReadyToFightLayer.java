@@ -56,6 +56,20 @@ public class ReadyToFightLayer extends CCLayer{
 		CCScene scene = CCScene.node();
 		CCLayer layer = new ReadyToFightLayer();
 		scene.addChild(layer);
+		
+		NetworkManager.getInstance().setOnMatchedCallback(new OnMatchedCallback() {
+			@Override
+			public void onMatched(User enemy) {
+				// TODO Auto-generated method stub
+				CurrentUserInformation.opponentchar = enemy.character;
+				CurrentUserInformation.opponentID = enemy.id;
+
+				CommonUtils.debug("onMatched " + enemy.id);
+				CCScene scene = GameLayer.makeScene();
+				CCDirector.sharedDirector().replaceScene(scene);
+			}
+		});
+		
 		return scene;
 	}
 	public ReadyToFightLayer()
