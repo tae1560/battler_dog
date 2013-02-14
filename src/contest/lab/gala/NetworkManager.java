@@ -22,6 +22,7 @@ import android.util.Log;
 import contest.lab.gala.callback.GetDamagedCallback;
 import contest.lab.gala.callback.JoinCallback;
 import contest.lab.gala.callback.LoginCallback;
+import contest.lab.gala.callback.OnGameEndedCallback;
 import contest.lab.gala.callback.OnMatchedCallback;
 import contest.lab.gala.callback.RequestFriendsCallback;
 import contest.lab.gala.data.SkillType;
@@ -46,10 +47,6 @@ public class NetworkManager {
 	
 	public NetworkManager() {
 		checkSocketAndStart();
-	}
-	
-	public void setGetDamagedCallback(GetDamagedCallback callback) {
-		this.getDamagedCallback = callback;
 	}
 	
 	public void doLogin(final String id, final String password, final LoginCallback callback) {
@@ -133,6 +130,22 @@ public class NetworkManager {
 		sendJSONWithSocket(map);
 	}
 	
+	public void setGetDamagedCallback(GetDamagedCallback callback) {
+		this.getDamagedCallback = callback;
+	}
+	
+	public void setGameEndedCallback(OnGameEndedCallback callback) {
+		this.onGameEndedCallback = callback;
+	}
+	
+	private void gameEndRequest() {
+		
+		// make JSON data
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(KEY_TYPE, TYPE_GAME_END_CHECK);
+		sendJSONWithSocket(map);
+	}
+	
 	// private -----------------------------------------------------------------
 	
 //	private static final String domainString = "http://soma2.vps.phps.kr:4000";
@@ -148,6 +161,8 @@ public class NetworkManager {
 	private static final String TYPE_JOIN = "join";
 	private static final String TYPE_REQUEST_FRIENDS = "request_friends";
 	private static final String TYPE_REQUEST_MATCHING = "request_matching";
+	private static final String TYPE_GAME_END_CHECK = "game_end_check";
+	private static final String TYPE_GAME_END = "game_end";
 	
 	// SEND
 	private static final String TYPE_SEND_ATTACK = "attack_skill";
@@ -159,6 +174,7 @@ public class NetworkManager {
 	private JoinCallback joinCallback = null;
 	private LoginCallback loginCallback = null;
 	private GetDamagedCallback getDamagedCallback = null;
+	private OnGameEndedCallback onGameEndedCallback = null;
 	private RequestFriendsCallback requestFriendsCallback = null;
 	
 	private static NetworkManager _instance = null;
@@ -287,7 +303,14 @@ public class NetworkManager {
 				} else if(dataTypeString.equalsIgnoreCase(TYPE_LOGIN)) {
 					if (this.loginCallback != null) {
 						if (jsonObject.getString("status").equalsIgnoreCase("success")) {
-							this.loginCallback.didSuccessLogin();							
+							String userString = jsonObject.getString("user");
+							JSONObject userJsonObject = new JSONObject(userString);
+							String id = userJsonObject.getString("login_id");
+							int character = Integer.parseInt(userJsonObject.getString("character"));
+							int number_of_wins = userJsonObject.getInt("number_of_wins");
+							boolean is_logon = true;
+							
+							this.loginCallback.didSuccessLogin(new User(id, character, number_of_wins, is_logon));
 						} else {
 							this.loginCallback.didFailedLogin(jsonObject.getString("message"));
 						}						
@@ -295,7 +318,14 @@ public class NetworkManager {
 				} else if(dataTypeString.equalsIgnoreCase(TYPE_JOIN)) {
 					if (this.joinCallback != null) {
 						if (jsonObject.getString("status").equalsIgnoreCase("success")) {
-							this.joinCallback.didSuccessJoin();							
+							String userString = jsonObject.getString("user");
+							JSONObject userJsonObject = new JSONObject(userString);
+							String id = userJsonObject.getString("login_id");
+							int character = Integer.parseInt(userJsonObject.getString("character"));
+							int number_of_wins = userJsonObject.getInt("number_of_wins");
+							boolean is_logon = true;
+							
+							this.joinCallback.didSuccessJoin(new User(id, character, number_of_wins, is_logon));							
 						} else {
 							this.joinCallback.didFailedJoin(jsonObject.getString("message"));
 						}
@@ -316,6 +346,15 @@ public class NetworkManager {
 					if (this.onMatchedCallback != null) {
 						JSONObject enemy = jsonObject.getJSONObject("user_information");
 						this.onMatchedCallback.onMatched(User.parseJson(enemy));
+						this.onMatchedCallback = null;
+					}
+				} else if(dataTypeString.equalsIgnoreCase(TYPE_GAME_END_CHECK)) {
+					gameEndRequest();
+				} else if(dataTypeString.equalsIgnoreCase(TYPE_GAME_END)) {
+					if (this.onGameEndedCallback != null) {
+						boolean isWin = jsonObject.getString("status").equalsIgnoreCase("win");
+						this.onGameEndedCallback.onGameEnded(isWin);
+						this.onGameEndedCallback = null;
 					}
 				}
 			}

@@ -3,17 +3,15 @@ package contest.lab.gala;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import contest.lab.gala.callback.JoinCallback;
-import contest.lab.gala.callback.OnMatchedCallback;
 import contest.lab.gala.data.User;
-import contest.lab.gala.util.CommonUtils;
 
 public class JoinActivity extends Activity implements JoinCallback{
 	//////////회원가입, 로그인 테스트 용 UI ///////////
@@ -65,7 +63,7 @@ public class JoinActivity extends Activity implements JoinCallback{
 		});
 	}
 	@Override
-	public void didSuccessJoin() {
+	public void didSuccessJoin(User user) {
 		// TODO Auto-generated method stub
 		// 호출방법
 		// NetworkManager.getInstance().sendRequest("id password", NetworkManager.requestLogin, this);
