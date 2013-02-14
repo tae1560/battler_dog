@@ -210,13 +210,13 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	}
 	public CCSequence makeMyDamagedSequence(CCFiniteTimeAction damagedAction)
 	{
-		CCCallFuncN afterDemaged_mine = CCCallFuncN.action(this, "runAfterDamagedAnimation_mine");
-		damagedSequence_bark = CCSequence.actions(damagedAction, afterDemaged_mine);
+//		CCCallFuncN afterDemaged_mine = CCCallFuncN.action(this, "runAfterDamagedAnimation_mine");
+//		damagedSequence_bark = CCSequence.actions(damagedAction, afterDemaged_mine);
 		//		damagedSequence_bone;
 		//		damagedSequence_punch;
 
 		CCCallFuncN afterDamaged_opponent = CCCallFuncN.action(this, "runAfterDamagedAnimation_opponent");
-		CCSequence DamagedSequence = CCSequence.actions(attackAction, afterDamaged_opponent);
+		CCSequence DamagedSequence = CCSequence.actions(damagedAction, afterDamaged_opponent);
 		//		attackSequence_bone;
 		//		attackSequence_punch;
 		

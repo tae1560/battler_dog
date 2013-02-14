@@ -248,7 +248,8 @@ public class NetworkManager {
 						line = networkReader.readLine();
 //						text += line;
 						
-						if (line != null) {
+						if (line != null && line.length() > 0) {
+							debug("line : " + line);
 							try {
 								JSONObject receivedData = new JSONObject(line);
 								
