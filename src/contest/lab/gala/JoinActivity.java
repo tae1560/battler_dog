@@ -15,7 +15,7 @@ import contest.lab.gala.callback.OnMatchedCallback;
 import contest.lab.gala.data.User;
 import contest.lab.gala.util.CommonUtils;
 
-public class JoinActivity extends Activity implements JoinCallback, LoginCallback{
+public class JoinActivity extends Activity implements JoinCallback{
 	//////////회원가입, 로그인 테스트 용 UI ///////////
 	EditText et_id;
 	EditText et_pw;
@@ -64,14 +64,14 @@ public class JoinActivity extends Activity implements JoinCallback, LoginCallbac
 			}
 		});
 
-		btn_login.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				NetworkManager.getInstance().doLogin(et_id.getText().toString(), et_pw.getText().toString(), JoinActivity.this);
-			}
-		});
+//		btn_login.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				NetworkManager.getInstance().doLogin(et_id.getText().toString(), et_pw.getText().toString(), JoinActivity.this);
+//			}
+//		});
 	}
 	@Override
 	public void didSuccessJoin() {
@@ -98,47 +98,7 @@ public class JoinActivity extends Activity implements JoinCallback, LoginCallbac
 						Intent intent = new Intent(JoinActivity.this, BattlerDogActivity.class);
 						startActivity(intent);						
 					}
-				});
-				
-				
-			}
-		});
-	}
-	@Override
-	public void didSuccessLogin() {
-		// TODO Auto-generated method stub
-		runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				Toast.makeText(JoinActivity.this, "로그인 성공 !!!! ", Toast.LENGTH_LONG).show();
-				
-				NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
-					
-					@Override
-					public void onMatched(User enemy) {
-						// TODO Auto-generated method stub
-						CommonUtils.debug("onMatched " + enemy.id);
-						Intent intent = new Intent(JoinActivity.this, BattlerDogActivity.class);
-						startActivity(intent);						
-					}
-				});
-				
-				
-				
-//				CCScene scene = ReadyToFightLayer.makeScene();
-//				CCDirector.sharedDirector().runWithScene(scene);
-			}
-		});
-		
-	}
-	@Override
-	public void didFailedLogin(final String message) {
-		runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				Toast.makeText(JoinActivity.this, "Failed Login - " + message, Toast.LENGTH_LONG).show();
+				});	
 			}
 		});
 	}
