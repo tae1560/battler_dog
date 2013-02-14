@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import contest.lab.gala.callback.LoginCallback;
 import contest.lab.gala.callback.RequestFriendsCallback;
+import contest.lab.gala.data.CurrentUserInformation;
 import contest.lab.gala.data.User;
 
 
@@ -46,39 +47,17 @@ public class LoginActivity extends Activity implements LoginCallback{
 	}
 	@Override
 	public void didSuccessLogin(User user) {
-		// TODO Auto-generated method stub
-		runOnUiThread(new Runnable() {
+		CurrentUserInformation.userID = user.id;
+		CurrentUserInformation.userChar = user.character;
+		NetworkManager.getInstance().requestFriends(new RequestFriendsCallback() {
 
 			@Override
-			public void run() {
-				Toast.makeText(LoginActivity.this, "로그인 성공 !!!! ", Toast.LENGTH_LONG).show();
-
-				//				NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
-				//
-				//					@Override
-				//					public void onMatched(User enemy) {
-				//						// TODO Auto-generated method stub
-				//						CommonUtils.debug("onMatched " + enemy.id);
-				//						Intent intent = new Intent(LoginActivity.this, BattlerDogActivity.class);
-				//						startActivity(intent);						
-				//					}
-				//				});
-				NetworkManager.getInstance().requestFriends(new RequestFriendsCallback() {
-
-					@Override
-					public void didGetFriends(ArrayList<User> friends) {
-						Manager.friendList = (ArrayList<User>) friends.clone();
-						Intent intent = new Intent(LoginActivity.this, BattlerDogActivity.class);
-						startActivity(intent);
-					}
-				});
-
-
-				//				CCScene scene = ReadyToFightLayer.makeScene();
-				//				CCDirector.sharedDirector().runWithScene(scene);
+			public void didGetFriends(ArrayList<User> friends) {
+				Manager.friendList = (ArrayList<User>) friends.clone();
+				Intent intent = new Intent(LoginActivity.this, BattlerDogActivity.class);
+				startActivity(intent);
 			}
 		});
-
 	}
 	@Override
 	public void didFailedLogin(final String message) {
