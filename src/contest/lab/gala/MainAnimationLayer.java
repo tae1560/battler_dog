@@ -102,15 +102,15 @@ public class MainAnimationLayer extends CCLayer{
 	
 	public void goLogin(Object sender)
 	{
-//		BattlerDogActivity activity = (BattlerDogActivity)CCDirector.sharedDirector().getActivity();
-//		activity.goLoginPage();
-		CCScene scene = GameLayer.makeScene();
-		CCDirector.sharedDirector().replaceScene(scene);
+		MainActivity activity = (MainActivity)CCDirector.sharedDirector().getActivity();
+		activity.goLoginPage();
+//		CCScene scene = GameLayer.makeScene();
+//		CCDirector.sharedDirector().replaceScene(scene);
 	}
 	
 	public void goJoin(Object sender)
 	{
-		BattlerDogActivity activity = (BattlerDogActivity)CCDirector.sharedDirector().getActivity();
+		MainActivity activity = (MainActivity)CCDirector.sharedDirector().getActivity();
 		activity.goJoinPage();
 	}
 }

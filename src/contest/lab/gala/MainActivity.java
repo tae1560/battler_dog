@@ -9,11 +9,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
-public class BattlerDogActivity extends Activity {
-	//** 공격 정보를 받았을 때, SkillGageLayer.getDamaged(int kindOfAttack);
-	protected CCGLSurfaceView _glSurfaceView;
+public class MainActivity extends Activity{
+protected CCGLSurfaceView _glSurfaceView;
 	
 	
 	/** Called when the activity is first created. */
@@ -44,29 +42,21 @@ public class BattlerDogActivity extends Activity {
 
 		Manager.setRatioes();
 //		CCScene scene = GameLayer.makeScene();
-		CCScene scene = ReadyToFightLayer.makeScene();
+		CCScene scene = MainAnimationLayer.makeScene();
 		CCDirector.sharedDirector().runWithScene(scene);
 //		showFriendList();
 	}
 
-	public void showFriendList()
+	public void goLoginPage()
 	{
-		CCScene scene = ReadyToFightLayer.makeScene();
-		CCDirector.sharedDirector().runWithScene(scene);
+		Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+		startActivity(intent);
+//		CCScene scene = GameLayer.makeScene();
+//		CCDirector.sharedDirector().replaceScene(scene);
 	}
-	
-	public static void makeToast(final int kindOfAttack)
+	public void goJoinPage()
 	{
-		CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				Toast.makeText(CCDirector.sharedDirector().getActivity().getApplicationContext(), "조현정 짱 : " + kindOfAttack, Toast.LENGTH_LONG).show();
-			}
-		});
+		Intent intent = new Intent(MainActivity.this, JoinActivity.class);
+		startActivity(intent);
 	}
-	
-	
-	
 }
