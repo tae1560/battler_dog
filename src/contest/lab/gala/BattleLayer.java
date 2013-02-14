@@ -1,5 +1,6 @@
 package contest.lab.gala;
 
+import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCFiniteTimeAction;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
@@ -182,12 +183,32 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 		}
 		damagedAnimate_opponent = CCAnimate.action(damagedAnimation_opponent, false);
 	}
-	public void makeActions()
+	public CCFiniteTimeAction makeDamagedAction()
 	{
-		damagedAction = CCMoveBy.action(1, CGPoint.make(-200, 0));
-		attackAction = CCMoveBy.action(1, CGPoint.make(200, 0));
+		return CCMoveBy.action(1, CGPoint.make(-200, 0));
 	}
-	public void makeSequences()
+	public CCFiniteTimeAction makeAttackAction()
+	{
+		return CCMoveBy.action(1, CGPoint.make(200, 0));
+	}
+	public CCSequence makeMyAttackSequence(CCFiniteTimeAction attackAction)
+	{
+//		CCCallFuncN afterDemaged_mine = CCCallFuncN.action(this, "runAfterDamagedAnimation_mine");
+//		damagedSequence_bark = CCSequence.actions(damagedAction, afterDemaged_mine);
+		//		damagedSequence_bone;
+		//		damagedSequence_punch;
+
+		CCCallFuncN afterDamaged_opponent = CCCallFuncN.action(this, "runAfterDamagedAnimation_opponent");
+		CCSequence attackSequence = CCSequence.actions(attackAction, afterDamaged_opponent);
+		//		attackSequence_bone;
+		//		attackSequence_punch;
+		
+		return attackSequence;
+//		returnToNormalMode = CCCallFuncN.action(this, "returnToNormalMode");
+//		damagedAndReturnToNormal_mine = CCSequence.actions(damagedAnimate_mine, returnToNormalMode);
+//		damagedAndReturnToNormal_opponent = CCSequence.actions(damagedAnimate_opponent, returnToNormalMode);
+	}
+	public CCSequence makeMyDamagedSequence(CCFiniteTimeAction damagedAction)
 	{
 		CCCallFuncN afterDemaged_mine = CCCallFuncN.action(this, "runAfterDamagedAnimation_mine");
 		damagedSequence_bark = CCSequence.actions(damagedAction, afterDemaged_mine);
@@ -195,24 +216,30 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 		//		damagedSequence_punch;
 
 		CCCallFuncN afterDamaged_opponent = CCCallFuncN.action(this, "runAfterDamagedAnimation_opponent");
-		attackSequence_bark = CCSequence.actions(attackAction, afterDamaged_opponent);
+		CCSequence DamagedSequence = CCSequence.actions(attackAction, afterDamaged_opponent);
 		//		attackSequence_bone;
 		//		attackSequence_punch;
 		
-		returnToNormalMode = CCCallFuncN.action(this, "returnToNormalMode");
-		damagedAndReturnToNormal_mine = CCSequence.actions(damagedAnimate_mine, returnToNormalMode);
-		damagedAndReturnToNormal_opponent = CCSequence.actions(damagedAnimate_opponent, returnToNormalMode);
+		return DamagedSequence;
+//		CCCallFuncN returnToNormalMode = CCCallFuncN.action(this, "returnToNormalMode");
+//		damagedAndReturnToNormal_mine = CCSequence.actions(damagedAnimate_mine, returnToNormalMode);
+//		damagedAndReturnToNormal_opponent = CCSequence.actions(damagedAnimate_opponent, returnToNormalMode);
 	}
 	public void runAfterDamagedAnimation_opponent(Object o)
 	{
 		opponentCharacter_normal.setVisible(false);
 		this.addChild(opponentCharacter_hurted, 1, ACTION_DAMAGED);
+		CCCallFuncN returnToNormalMode = CCCallFuncN.action(this, "returnToNormalMode");
+		CCSequence damagedAndReturnToNormal_opponent = CCSequence.actions(damagedAnimate_opponent, returnToNormalMode);
 		
 		opponentCharacter_hurted.runAction(damagedAndReturnToNormal_opponent);
 		/////////////////////////////
 	}
 	public void runAfterDamagedAnimation_mine(Object o)
 	{
+		CCCallFuncN returnToNormalMode = CCCallFuncN.action(this, "returnToNormalMode");
+		CCSequence damagedAndReturnToNormal_mine = CCSequence.actions(damagedAnimate_mine, returnToNormalMode);
+		
 		myCharacter_normal.setVisible(false);
 		this.addChild(myCharacter_hurted, 1, ACTION_DAMAGED);
 		myCharacter_hurted.runAction(damagedAndReturnToNormal_mine);
@@ -331,8 +358,6 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 		makeNormalAnimation();
 //		makeAttackAnimation();
 		makeDemagedAnimation();
-		makeActions();
-		makeSequences();
 
 		myCharacter_normal = CCSprite.sprite(String.format("character/char%d_normal1.png", CurrentUserInformation.userChar));
 		myCharacter_normal.setScaleX(-1 * Manager.ratio_width);
@@ -458,25 +483,35 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 			hp -= Manager.damaged_gage_per_attack_bark;
 			updateGageBar();
 			//* 데미지 효과 애니메이션
-			BattlerDogActivity.makeToast(1);
+			runAttackAnimation_opponent(1);
+//			BattlerDogActivity.makeToast(1);
 			break;
 		case 2 :
 			hp -= Manager.damaged_gage_per_attack_bone;
 			updateGageBar();
+			runAttackAnimation_opponent(2);
 			//* 데미지 효과 애니메이션
-			BattlerDogActivity.makeToast(2);
+//			BattlerDogActivity.makeToast(2);
 			break;
 		case 3 :
 			hp -= Manager.damaged_gage_per_attack_punch;
 			updateGageBar();
 			//* 데미지 효과 애니메이션
-			BattlerDogActivity.makeToast(3);
+			runAttackAnimation_opponent(3);
+//			BattlerDogActivity.makeToast(3);
 			break;
 		}
 	}
 
 	public void runAttackAnimation_mine(int kindOfAttack) {
 		numOfCurrentActions++;
+		
+//		CCFiniteTimeAction damagedAction = makeDamagedAction();
+		CCFiniteTimeAction attackAction = makeAttackAction();
+		
+		
+		CCSequence my_attack_sequence = makeMyAttackSequence(attackAction);
+		
 		myCharacter_normal.stopAction(normalAnimate_mine);
 		myCharacter_normal.setVisible(false);
 		switch(kindOfAttack)
@@ -487,7 +522,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 			this.addChild(attack_bark_mine, 1, ACTION_ATTACK);
 			going_bark.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(going_bark, 500, ACTION_FLYING);
-			going_bark.runAction(attackSequence_bark);
+			going_bark.runAction(my_attack_sequence);
 			break;
 		case 2 : 
 			myCharacter_normal.setVisible(false);
@@ -496,7 +531,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 
 			going_bone.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(going_bone, 500, ACTION_FLYING);
-			going_bone.runAction(attackSequence_bark);
+			going_bone.runAction(my_attack_sequence);
 			break;
 		case 3 : 
 			myCharacter_normal.setVisible(false);
@@ -506,7 +541,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 			
 			going_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(going_punch, 500, ACTION_FLYING);
-			going_punch.runAction(attackSequence_bark);
+			going_punch.runAction(my_attack_sequence);
 			break;
 		}
 	}
@@ -514,6 +549,11 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	public void runAttackAnimation_opponent(int kindOfAttack)
 	{
 		numOfCurrentActions++;
+		
+		CCFiniteTimeAction damagedAction = makeDamagedAction();
+//		CCFiniteTimeAction attackAction = makeAttackAction();
+		
+		CCSequence opponent_attack_sequence = makeMyDamagedSequence(damagedAction);
 		
 		opponentCharacter_normal.stopAction(normalAnimate_mine);
 		opponentCharacter_normal.setVisible(false);
@@ -527,7 +567,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 			
 			coming_bark.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(coming_bark, 1, ACTION_FLYING);
-			coming_bark.runAction(damagedSequence_bark);
+			coming_bark.runAction(opponent_attack_sequence);
 			break;
 		case 2 : 
 			opponentCharacter_normal.setVisible(false);
@@ -536,7 +576,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 			
 			going_bone.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(going_bone, ACTION_FLYING);
-			going_bone.runAction(damagedSequence_bark);
+			going_bone.runAction(opponent_attack_sequence);
 			break;
 		case 3 : 
 			opponentCharacter_normal.setVisible(false);
@@ -545,7 +585,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 			
 			going_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(going_punch, ACTION_FLYING);
-			going_punch.runAction(damagedSequence_bark);
+			going_punch.runAction(opponent_attack_sequence);
 			break;
 		}
 	}

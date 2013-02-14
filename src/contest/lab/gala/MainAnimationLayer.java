@@ -26,6 +26,8 @@ public class MainAnimationLayer extends CCLayer{
 	CCSprite loginButton_clicked = CCSprite.sprite("main_animation/btn_login_clicked.png");
 	CCSprite joinButton_unclicked = CCSprite.sprite("main_animation/btn_join_unclicked.png");
 	CCSprite joinButton_clicked = CCSprite.sprite("main_animation/btn_join_clicked.png");
+	CCMenuItemSprite btn_login = CCMenuItemSprite.item(loginButton_unclicked, loginButton_clicked, this, "goLogin");
+	CCMenuItemSprite btn_join = CCMenuItemSprite.item(joinButton_unclicked, joinButton_clicked, this, "goJoin");
 	
 	
 	static CCScene makeScene()
@@ -66,8 +68,8 @@ public class MainAnimationLayer extends CCLayer{
 		
 		
 		/// 메뉴버튼 추가
-		CCMenuItemSprite btn_login = CCMenuItemSprite.item(loginButton_unclicked, loginButton_clicked, this, "goLogin");
-		CCMenuItemSprite btn_join = CCMenuItemSprite.item(joinButton_unclicked, joinButton_clicked, this, "goJoin");
+//		btn_login = CCMenuItemSprite.item(loginButton_unclicked, loginButton_clicked, this, "goLogin");
+//		btn_join = CCMenuItemSprite.item(joinButton_unclicked, joinButton_clicked, this, "goJoin");
 		
 		btn_login.setScaleX(Manager.ratio_width);
 		btn_login.setScaleY(Manager.ratio_height);
@@ -77,11 +79,24 @@ public class MainAnimationLayer extends CCLayer{
 		menu_login_join = CCMenu.menu(btn_login, btn_join);
 		menu_login_join.setPosition(360* Manager.ratio_width, 96 * Manager.ratio_height);
 		menu_login_join.alignItemsHorizontally();
+		
+		loginButton_unclicked.setVisible(false);
+		loginButton_clicked.setVisible(false);
+		joinButton_unclicked.setVisible(false);
+		joinButton_clicked.setVisible(false);
+		
+//		btn_login.setVisible(false);
+//		btn_join.setVisible(false);
 		menu_login_join.setVisible(false);
-		this.addChild(menu_login_join);
+//		this.addChild(menu_login_join);
 	}
 	public void afterAnimation(Object o)
 	{
+		loginButton_unclicked.setVisible(true);
+		loginButton_clicked.setVisible(true);
+		joinButton_unclicked.setVisible(true);
+		joinButton_clicked.setVisible(true);
+		this.addChild(menu_login_join);
 		menu_login_join.setVisible(true);
 	}
 	

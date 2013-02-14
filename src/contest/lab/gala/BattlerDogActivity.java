@@ -43,7 +43,8 @@ public class BattlerDogActivity extends Activity {
 		CCDirector.sharedDirector().setAnimationInterval(1.0f / 60.0f);
 
 		Manager.setRatioes();
-		CCScene scene = GameLayer.makeScene();
+//		CCScene scene = GameLayer.makeScene();
+		CCScene scene = MainAnimationLayer.makeScene();
 		CCDirector.sharedDirector().runWithScene(scene);
 //		showFriendList();
 	}
@@ -60,6 +61,7 @@ public class BattlerDogActivity extends Activity {
 			
 			@Override
 			public void run() {
+				
 				Toast.makeText(CCDirector.sharedDirector().getActivity().getApplicationContext(), "Á¶ÇöÁ¤ Â¯ : " + kindOfAttack, Toast.LENGTH_LONG).show();
 			}
 		});
