@@ -66,7 +66,7 @@ public class JoinActivity extends Activity implements JoinCallback{
 		});
 	}
 	@Override
-	public void didSuccessJoin() {
+	public void didSuccessJoin(User user) {
 		// TODO Auto-generated method stub
 		// 호출방법
 		// NetworkManager.getInstance().sendRequest("id password", NetworkManager.requestLogin, this);

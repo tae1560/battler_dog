@@ -14,6 +14,7 @@ import contest.lab.gala.callback.LoginCallback;
 import contest.lab.gala.callback.RequestFriendsCallback;
 import contest.lab.gala.data.User;
 
+
 public class LoginActivity extends Activity implements LoginCallback{
 
 	EditText et_id;
@@ -44,7 +45,7 @@ public class LoginActivity extends Activity implements LoginCallback{
 		super.onStart();
 	}
 	@Override
-	public void didSuccessLogin() {
+	public void didSuccessLogin(User user) {
 		// TODO Auto-generated method stub
 		runOnUiThread(new Runnable() {
 
