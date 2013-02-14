@@ -138,6 +138,10 @@ public class NetworkManager {
 		this.onGameEndedCallback = callback;
 	}
 	
+	public void setOnMatchedCallback(OnMatchedCallback callback) {
+		this.onMatchedCallback = callback;
+	}
+	
 	private void gameEndRequest() {
 		
 		// make JSON data
