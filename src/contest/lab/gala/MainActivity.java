@@ -58,5 +58,6 @@ protected CCGLSurfaceView _glSurfaceView;
 	{
 		Intent intent = new Intent(MainActivity.this, JoinActivity.class);
 		startActivity(intent);
+		finish();
 	}
 }

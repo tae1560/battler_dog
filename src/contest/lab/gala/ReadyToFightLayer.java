@@ -6,8 +6,9 @@ import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
-import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCSpriteFrameCache;
+import org.cocos2d.nodes.CCTextureCache;
 
 import contest.lab.gala.callback.OnMatchedCallback;
 import contest.lab.gala.data.CurrentUserInformation;
@@ -47,6 +48,11 @@ public class ReadyToFightLayer extends CCLayer{
 
 	public static CCScene makeScene()
 	{
+		CCDirector.sharedDirector().purgeCachedData();
+		CCDirector.sharedDirector().getSendCleanupToScene();
+		CCSpriteFrameCache.purgeSharedSpriteFrameCache();
+		CCTextureCache.purgeSharedTextureCache();
+		
 		CCScene scene = CCScene.node();
 		CCLayer layer = new ReadyToFightLayer();
 		scene.addChild(layer);
@@ -75,28 +81,38 @@ public class ReadyToFightLayer extends CCLayer{
 			{
 				bg_myEntry.setPosition(366 * Manager.ratio_width, (1123 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
 				bg_myEntry.setVisible(false);
+				bg_myEntry.setScaleX(Manager.ratio_width);
+				bg_myEntry.setScaleY(Manager.ratio_height);
 				this.addChild(bg_myEntry);
 			}
 			characters[i] = CCSprite.sprite(String.format("ranking/icon_char%d.png", Manager.friendList.get(i).character));
 			characters[i].setPosition(240 * Manager.ratio_width, (1123 - (i % numOfEntryPerOnePage) * 160)*Manager.ratio_height);
+			characters[i].setScaleX(Manager.ratio_width);
+			characters[i].setScaleY(Manager.ratio_height);
 			characters[i].setVisible(false);
 			this.addChild(characters[i]);
 
 			//ranking[i] = CCLabelAtlas.label(i + "", "ranking/ranking_font.png", 10, 10, '0');
-			ranking[i] = CCLabel.makeLabel(i + "", "Arial", 20);
+			ranking[i] = CCLabel.makeLabel(i + "", "Arial", 40);
 			ranking[i].setPosition(95 * Manager.ratio_width, (1123 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
 			ranking[i].setVisible(false);
+			ranking[i].setScaleX(Manager.ratio_width);
+			ranking[i].setScaleY(Manager.ratio_height);
 			addChild(ranking[i]);
 			
-			userIDs[i] = CCLabel.makeLabel(Manager.friendList.get(i).id, "Arial", 20);
+			userIDs[i] = CCLabel.makeLabel(Manager.friendList.get(i).id, "Arial", 40);
 			userIDs[i].setPosition(331 * Manager.ratio_width, (1171 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
 			userIDs[i].setVisible(false);
+			userIDs[i].setScaleX(Manager.ratio_width);
+			userIDs[i].setScaleY(Manager.ratio_height);
 			addChild(userIDs[i]);
 
 //			userNumOfWins[i] = CCLabelAtlas.label(Manager.friendList.get(i).number_of_wins + "", "ranking/win_font.png", 10, 10, '0');
 			userNumOfWins[i] = CCLabel.makeLabel(Manager.friendList.get(i).number_of_wins + "", "Arial", 20);
 			userNumOfWins[i].setPosition(356 * Manager.ratio_width, (1090 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
 			userNumOfWins[i].setVisible(false);
+			userNumOfWins[i].setScaleX(Manager.ratio_width);
+			userNumOfWins[i].setScaleY(Manager.ratio_height);
 			addChild(userNumOfWins[i]);
 		}
 
@@ -114,7 +130,9 @@ public class ReadyToFightLayer extends CCLayer{
 					menu_challenge.setTag(i);
 					CCMenu newMenu = CCMenu.menu(menu_challenge);
 					newMenu.setVisible(false);
-					newMenu.setPosition(581 * Manager.ratio_width, (1120 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
+					newMenu.setScaleX(Manager.ratio_width);
+					newMenu.setScaleY(Manager.ratio_height);
+					newMenu.alignItemsHorizontally(30 * Manager.ratio_width);
 					this.addChild(newMenu);
 					btn_challenge[i] = newMenu;
 				}
@@ -126,6 +144,8 @@ public class ReadyToFightLayer extends CCLayer{
 					CCMenuItemSprite menu_challenge = CCMenuItemSprite.item(btn_challenge_unclick, btn_challenge_click);
 					CCMenu newMenu = CCMenu.menu(menu_challenge);
 					newMenu.setVisible(false);
+					newMenu.setScaleX(Manager.ratio_width);
+					newMenu.setScaleY(Manager.ratio_height);
 					newMenu.setPosition(581 * Manager.ratio_width, (1120 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
 					this.addChild(newMenu);
 					btn_challenge[i] = newMenu;
@@ -136,8 +156,8 @@ public class ReadyToFightLayer extends CCLayer{
 		CCMenuItemSprite btn_next = CCMenuItemSprite.item(btn_next_unclicked, btn_next_clicked, this, "clickedNextButton");
 		CCMenuItemSprite btn_before = CCMenuItemSprite.item(btn_before_unclicked, btn_before_clicked, this, "clickedBeforeButton");
 		CCMenu controlPage = CCMenu.menu(btn_before, btn_next);
-		controlPage.alignItemsHorizontally(10);
-		controlPage.setPosition(240, 320);
+		controlPage.alignItemsHorizontally(50 * Manager.ratio_width);
+		controlPage.setPosition(240 * Manager.ratio_width, 320 * Manager.ratio_height);
 		this.addChild(controlPage);
 
 		updatePage();
@@ -145,8 +165,8 @@ public class ReadyToFightLayer extends CCLayer{
 		CCMenuItemSprite btn_random_game = CCMenuItemSprite.item(btn_goRandomGame_unclicked, btn_goRandomGame_clicked, this, "clickedRandomGameButton");
 		CCMenuItemSprite btn_setting = CCMenuItemSprite.item(btn_setting_unclicked, btn_setting_clicked, this, "clickedSettingButton");
 		CCMenu otherMenu = CCMenu.menu(btn_random_game, btn_setting);
-		otherMenu.alignItemsHorizontally(20);
-		otherMenu.setPosition(240, 100);
+		otherMenu.alignItemsHorizontally(50 * Manager.ratio_width);
+		otherMenu.setPosition(240 * Manager.ratio_width, 100 * Manager.ratio_height);
 		this.addChild(otherMenu);
 	}
 	
@@ -160,8 +180,11 @@ public class ReadyToFightLayer extends CCLayer{
 			public void onMatched(User enemy) {
 				CurrentUserInformation.opponentID = enemy.id;
 				CurrentUserInformation.opponentchar = enemy.character;
+				
+				CCDirector.sharedDirector().purgeCachedData();
+				
 				CCScene scene = GameLayer.makeScene();
-				CCDirector.sharedDirector().replaceScene(scene);
+				CCDirector.sharedDirector().replaceScene(scene);	
 			}
 		});
 	}

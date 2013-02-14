@@ -12,6 +12,8 @@ import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.nodes.CCSpriteFrameCache;
+import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 
 import contest.lab.gala.item.Bone;
@@ -51,6 +53,11 @@ public class GameLayer extends CCLayer{
 	CCSprite rectangle2;
 	static CCScene makeScene()
 	{
+		CCDirector.sharedDirector().purgeCachedData();
+		CCDirector.sharedDirector().getSendCleanupToScene();
+		CCSpriteFrameCache.purgeSharedSpriteFrameCache();
+		CCTextureCache.purgeSharedTextureCache();
+		
 		CCScene scene = CCScene.node();
 		CCLayer layer1 = new GameLayer();
 //		CCLayer layer2 = new SkillGageLayer();
