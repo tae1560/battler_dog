@@ -93,53 +93,6 @@ public class NetworkManager {
 		sendJSONWithSocket(map);
 	}
 	
-	private boolean checkIfSocketUnabled() {
-		if (socket == null || socket.isClosed() || networkWriter == null) {
-			return false;
-		}
-		debug("socket.isInputShutdown() : " + socket.isInputShutdown());
-		debug("socket.isOutputShutdown() : " + socket.isOutputShutdown());
-		return true;
-	}
-	
-	public void checkSocketAndStart() {
-		// start socket
-		if (checkIfSocketUnabled()) {
-			startSocket(null);
-		}		
-	}
-	
-	Thread makeSocketConnectionThread = null;
-	Queue<String> messageQueue = new LinkedList<String>();
-	public void startSocket(String message) {
-		debug("startSocket");
-		
-		if (message != null) {
-			messageQueue.offer(message);
-		}
-		
-		if (makeSocketConnectionThread == null) {
-
-			makeSocketConnectionThread = new Thread(new Runnable() {  
-				@Override
-				public void run() {
-					makeSocketConnection();
-					
-					makeSocketConnectionThread = null;
-					
-					while (!messageQueue.isEmpty()) {
-						String message = messageQueue.poll();
-						if (message != null) {
-							sendStringWithSocketDirectly(message);
-						}	
-					}
-				}
-			});
-			
-			makeSocketConnectionThread.start();
-		}
-	}
-	
 	public void requestRandomMatching(OnMatchedCallback callback) {
 		this.onMatchedCallback = callback;
 		
@@ -233,6 +186,55 @@ public class NetworkManager {
 			e.printStackTrace();
 		}
 	}
+	
+
+	private boolean checkIfSocketUnabled() {
+		if (socket == null || socket.isClosed() || networkWriter == null) {
+			return false;
+		}
+		debug("socket.isInputShutdown() : " + socket.isInputShutdown());
+		debug("socket.isOutputShutdown() : " + socket.isOutputShutdown());
+		return true;
+	}
+	
+	private void checkSocketAndStart() {
+		// start socket
+		if (checkIfSocketUnabled()) {
+			startSocket(null);
+		}		
+	}
+	
+	Thread makeSocketConnectionThread = null;
+	Queue<String> messageQueue = new LinkedList<String>();
+	private void startSocket(String message) {
+		debug("startSocket");
+		
+		if (message != null) {
+			messageQueue.offer(message);
+		}
+		
+		if (makeSocketConnectionThread == null) {
+
+			makeSocketConnectionThread = new Thread(new Runnable() {  
+				@Override
+				public void run() {
+					makeSocketConnection();
+					
+					makeSocketConnectionThread = null;
+					
+					while (!messageQueue.isEmpty()) {
+						String message = messageQueue.poll();
+						if (message != null) {
+							sendStringWithSocketDirectly(message);
+						}	
+					}
+				}
+			});
+			
+			makeSocketConnectionThread.start();
+		}
+	}
+	
 	
 	private void startReadingThread() {
 		new Thread(new Runnable() {
