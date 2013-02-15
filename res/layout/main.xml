@@ -1,31 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/bg_join"
-    >
-    <TextView android:text="ID를 입력하세요" android:id="@+id/tv_askID" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-    <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/editText1" android:text=""></EditText>
-    <TextView android:text="비밀번호를 입력하세요" android:id="@+id/tv_askPW" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-    <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/editText2" android:text=""></EditText>
-	<RadioGroup android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:id="@+id/rbgroup_characters"
+    >	
+    
+  <RelativeLayout
+	android:layout_width="wrap_content"
+  	android:layout_height="wrap_content"
+  	android:layout_centerInParent="true"
+  	android:padding="30dp"
+  	>
+	  <ImageView
+	  	android:background="@drawable/iv_id"
+	  	android:id="@+id/usernameLabel"
+	  	android:layout_width="wrap_content"
+	  	android:layout_height="wrap_content"
+	  	android:layout_marginLeft="5dp"
+	  	android:paddingTop="10dp"
+	  /> 
+	  <EditText
+	  	android:id="@+id/userIDEntry"
+	  	android:layout_width="fill_parent"
+	  	android:layout_height="wrap_content"
+	  	android:layout_toRightOf="@id/usernameLabel"
+	  	android:layout_alignBaseline="@id/usernameLabel"
+	  	android:layout_marginLeft="15dp"
+	  />
+	  <ImageView
+	  	android:background="@drawable/iv_pw"
+	  	android:id="@+id/passwordLabel"
+	  	android:layout_width="wrap_content"
+	  	android:layout_height="wrap_content"
+	  	android:layout_below="@id/usernameLabel"
+	  	android:paddingTop="35dp"
+	  	android:layout_marginLeft="5dp"
+	  /> 
+	  <EditText
+	  	android:id="@+id/passwordEntry"
+	  	android:layout_width="fill_parent"
+	  	android:layout_height="wrap_content"
+	  	android:layout_toRightOf="@id/passwordLabel"
+	  	android:layout_below="@id/userIDEntry"
+	  	android:layout_alignBaseline="@id/passwordLabel"
+	  	android:layout_marginLeft="15dp"
+	  />  
+	  
+	  <RadioGroup 
+	  	android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:id="@+id/rbgroup_characters"
+		android:layout_below="@id/passwordEntry"
+		android:checkedButton="@+id/rb_char1"
+		android:paddingTop="50dp"
+		android:layout_gravity="center"
 		android:orientation="horizontal">
-		<RadioButton android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:id="@+id/rb_char1"
-			android:text="1"></RadioButton>
-		<RadioButton android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:id="@+id/rb_char2"
-			android:text="2"></RadioButton>
-		<RadioButton android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:id="@+id/rb_char3"
-			android:text="3"></RadioButton>
-		<RadioButton android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:id="@+id/rb_char4"
-			android:text="4"></RadioButton>
+	      <RadioButton 
+	      	android:layout_width="68dp" 
+	      	android:button="@drawable/selector_char0" 
+	      	android:id="@+id/rb_char1" 
+	      	android:layout_height="wrap_content">
+	      </RadioButton>
+		<RadioButton 
+			android:layout_width="68dp"
+			android:layout_height="wrap_content" 
+			android:id="@+id/rb_char2"
+			android:button="@drawable/selector_char1">
+		</RadioButton>
+		<RadioButton 
+			android:layout_width="68dp"
+			android:layout_height="wrap_content" 
+			android:id="@+id/rb_char3"
+			android:button="@drawable/selector_char2">
+		</RadioButton>
+		<RadioButton
+			android:layout_width="68dp"
+			android:layout_height="wrap_content" 
+			android:id="@+id/rb_char4"
+			android:button="@drawable/selector_char3">
+		</RadioButton>
 	</RadioGroup>
-
-    <Button android:text="회원가입" android:id="@+id/btn_join" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-    <Button android:text="로그인" android:id="@+id/btn_login" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-</AbsoluteLayout>
+	  
+	  <ImageButton
+	  	android:id="@+id/btn_join"
+	  	android:layout_width="150dp"
+	  	android:layout_height="wrap_content"
+	  	android:layout_below="@id/rbgroup_characters"
+	  	android:layout_alignParentRight="true"
+	  	android:layout_marginRight="30dp"
+	  	android:layout_marginTop="40dp"
+	  	android:background="@drawable/btn_join_unclicked"
+	  />
+  </RelativeLayout>
+    
+</RelativeLayout>
