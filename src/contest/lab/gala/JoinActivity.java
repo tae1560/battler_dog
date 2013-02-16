@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -18,7 +19,7 @@ import contest.lab.gala.data.CurrentUserInformation;
 import contest.lab.gala.data.User;
 
 public class JoinActivity extends Activity implements JoinCallback{
-	//////////È¸¿ø°¡ÀÔ, ·Î±×ÀÎ Å×½ºÆ® ¿ë UI ///////////
+	//////////È¸ï¿½ï¿½ï¿½ï¿½, ï¿½Î±ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ® ï¿½ï¿½ UI ///////////
 	EditText et_id;
 	EditText et_pw;
 	int selected_character = -1;
@@ -41,7 +42,7 @@ public class JoinActivity extends Activity implements JoinCallback{
 		final RadioButton rb_char4 = (RadioButton)findViewById(R.id.rb_char4);
 
 		
-		Button btn_join = (Button)findViewById(R.id.btn_join);
+		ImageButton btn_join = (ImageButton)findViewById(R.id.btn_join);
 		btn_join.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

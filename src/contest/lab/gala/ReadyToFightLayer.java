@@ -128,8 +128,10 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 				CurrentUserInformation.opponentID = enemy.id;
 
 				CommonUtils.debug("onMatched " + enemy.id);
-				CCScene scene = GameLayer.makeScene();
-				CCDirector.sharedDirector().replaceScene(scene);
+//				CCScene scene = GameLayer.makeScene();
+//				CCDirector.sharedDirector().replaceScene(scene);
+				Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), GameActivity.class);
+				CCDirector.sharedDirector().getActivity().startActivity(intent);
 			}
 		});
 	}

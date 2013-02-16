@@ -17,6 +17,12 @@
                   android:label="@string/app_name">
             
         </activity>
+        
+        <activity android:name="contest.lab.gala.ResultActivity"
+        		  android:screenOrientation="portrait"
+                  android:label="@string/app_name">
+            
+        </activity>
         <activity android:name="contest.lab.gala.JoinActivity"
 			      android:screenOrientation="portrait"
                   android:label="@string/app_name">
