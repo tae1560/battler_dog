@@ -284,9 +284,11 @@ public class NetworkManager {
 							String id = userJsonObject.getString("login_id");
 							int character = Integer.parseInt(userJsonObject.getString("character"));
 							int number_of_wins = userJsonObject.getInt("number_of_wins");
+							int total_wins = userJsonObject.getInt("total_wins");
+							int total_loses = userJsonObject.getInt("total_loses");
 							boolean is_logon = true;
 							
-							this.loginCallback.didSuccessLogin(new User(id, character, number_of_wins, is_logon));
+							this.loginCallback.didSuccessLogin(new User(id, character, number_of_wins, is_logon, total_wins, total_loses));
 						} else {
 							this.loginCallback.didFailedLogin(jsonObject.getString("message"));
 						}						
@@ -300,8 +302,10 @@ public class NetworkManager {
 							int character = Integer.parseInt(userJsonObject.getString("character"));
 							int number_of_wins = userJsonObject.getInt("number_of_wins");
 							boolean is_logon = true;
+							int total_wins = userJsonObject.getInt("total_wins");
+							int total_loses = userJsonObject.getInt("total_loses");
 							
-							this.joinCallback.didSuccessJoin(new User(id, character, number_of_wins, is_logon));							
+							this.joinCallback.didSuccessJoin(new User(id, character, number_of_wins, is_logon, total_wins, total_loses));							
 						} else {
 							this.joinCallback.didFailedJoin(jsonObject.getString("message"));
 						}
@@ -329,7 +333,7 @@ public class NetworkManager {
 				} else if(dataTypeString.equalsIgnoreCase(TYPE_GAME_END)) {
 					if (this.onGameEndedCallback != null) {
 						boolean isWin = jsonObject.getString("status").equalsIgnoreCase("win");
-						this.onGameEndedCallback.onGameEnded(isWin);
+						this.onGameEndedCallback.onGameEnded(isWin, User.parseJson(jsonObject.getJSONObject("user_information")));
 						this.onGameEndedCallback = null;
 					}
 				}

@@ -5,6 +5,7 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
 import contest.lab.gala.callback.OnGameEndedCallback;
+import contest.lab.gala.data.User;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -46,7 +47,7 @@ public class GameActivity extends Activity {
 		NetworkManager.getInstance().setGameEndedCallback(new OnGameEndedCallback() {
 			
 			@Override
-			public void onGameEnded(boolean isWin) {
+			public void onGameEnded(boolean isWin, User user) {
 				// isWin => 1 => win the game
 				Manager.resultOfGame = isWin;
 			}
