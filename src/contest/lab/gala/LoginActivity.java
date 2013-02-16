@@ -1,9 +1,9 @@
 package contest.lab.gala;
 
-import org.cocos2d.layers.CCScene;
-import org.cocos2d.nodes.CCDirector;
+import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,10 +11,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import contest.lab.gala.callback.LoginCallback;
-import contest.lab.gala.callback.OnMatchedCallback;
+import contest.lab.gala.callback.RequestFriendsCallback;
 import contest.lab.gala.data.CurrentUserInformation;
 import contest.lab.gala.data.User;
-import contest.lab.gala.util.CommonUtils;
 
 
 public class LoginActivity extends Activity implements LoginCallback{
@@ -49,37 +48,37 @@ public class LoginActivity extends Activity implements LoginCallback{
 	public void didSuccessLogin(User user) {
 		CurrentUserInformation.userID = user.id;
 		CurrentUserInformation.userChar = user.character;
-//		NetworkManager.getInstance().requestFriends(new RequestFriendsCallback() {
-//
-//			@Override
-//			public void didGetFriends(ArrayList<User> friends) {
-//				Manager.friendList = (ArrayList<User>) friends.clone();
-//				Intent intent = new Intent(LoginActivity.this, BattlerDogActivity.class);
-//				startActivity(intent);
-//			}
-//		});
-		NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
+		NetworkManager.getInstance().requestFriends(new RequestFriendsCallback() {
+
 			@Override
-			public void onMatched(final User enemy) {
-				// TODO Auto-generated method stub
-				
-				CurrentUserInformation.opponentchar = enemy.character;
-				CurrentUserInformation.opponentID = enemy.id;
-				
-				CCScene scene = GameLayer.makeScene();
-				CCDirector.sharedDirector().replaceScene(scene);
-				
-				CommonUtils.debug("onMatched " + enemy.id);
-				
-//				runOnUiThread(new Runnable() {
-//
-//					@Override
-//					public void run() {
-//						
-//					}
-//				});
+			public void didGetFriends(ArrayList<User> friends) {
+				Manager.friendList = (ArrayList<User>) friends.clone();
+				Intent intent = new Intent(LoginActivity.this, BattlerDogActivity.class);
+				startActivity(intent);
 			}
 		});
+//		NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
+//			@Override
+//			public void onMatched(final User enemy) {
+//				// TODO Auto-generated method stub
+//				
+//				CurrentUserInformation.opponentchar = enemy.character;
+//				CurrentUserInformation.opponentID = enemy.id;
+//				
+//				CCScene scene = GameLayer.makeScene();
+//				CCDirector.sharedDirector().replaceScene(scene);
+//				
+//				CommonUtils.debug("onMatched " + enemy.id);
+//				
+////				runOnUiThread(new Runnable() {
+////
+////					@Override
+////					public void run() {
+////						
+////					}
+////				});
+//			}
+//		});
 		
 		runOnUiThread(new Runnable() {
 
