@@ -4,6 +4,8 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
+import contest.lab.gala.callback.OnGameEndedCallback;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
@@ -40,6 +42,14 @@ public class GameActivity extends Activity {
 		//		CCScene scene = GameLayer.makeScene();
 		CCScene scene = GameLayer.makeScene();
 		CCDirector.sharedDirector().runWithScene(scene);
+		
+		NetworkManager.getInstance().setGameEndedCallback(new OnGameEndedCallback() {
+			
+			@Override
+			public void onGameEnded(boolean isWin) {
+				
+			}
+		});
 //		showFriendList();
 	}
 
