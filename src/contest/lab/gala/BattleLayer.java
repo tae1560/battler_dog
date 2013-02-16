@@ -1,6 +1,5 @@
 package contest.lab.gala;
 
-import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCFiniteTimeAction;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.instant.CCCallFuncN;
@@ -575,7 +574,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 			this.addChild(attack_bone_opponent, 1, ACTION_ATTACK);
 			
 			coming_bone.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
-			this.addChild(going_bone, ACTION_FLYING);
+			this.addChild(coming_bone, 1, ACTION_FLYING);
 			coming_bone.runAction(opponent_attack_sequence);
 			break;
 		case 3 : 
@@ -584,7 +583,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 			this.addChild(attack_punch_opponent, 1, ACTION_ATTACK);
 			
 			coming_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
-			this.addChild(going_punch, ACTION_FLYING);
+			this.addChild(coming_punch, 1, ACTION_FLYING);
 			coming_punch.runAction(opponent_attack_sequence);
 			break;
 		}
