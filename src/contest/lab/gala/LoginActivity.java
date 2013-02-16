@@ -60,20 +60,22 @@ public class LoginActivity extends Activity implements LoginCallback{
 //		});
 		NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
 			@Override
-			public void onMatched(User enemy) {
+			public void onMatched(final User enemy) {
 				// TODO Auto-generated method stub
-				CurrentUserInformation.opponentchar = enemy.character;
-				CurrentUserInformation.opponentID = enemy.id;
-
+				
 				runOnUiThread(new Runnable() {
 
 					@Override
 					public void run() {
+						CurrentUserInformation.opponentchar = enemy.character;
+						CurrentUserInformation.opponentID = enemy.id;
+						
 						CCScene scene = GameLayer.makeScene();
 						CCDirector.sharedDirector().replaceScene(scene);
+						
+						CommonUtils.debug("onMatched " + enemy.id);
 					}
 				});
-				CommonUtils.debug("onMatched " + enemy.id);
 			}
 		});
 		
@@ -81,7 +83,7 @@ public class LoginActivity extends Activity implements LoginCallback{
 
 			@Override
 			public void run() {
-				Toast.makeText(LoginActivity.this, "·Î±×ÀÎ ¼º°ø!!!!", Toast.LENGTH_LONG).show();
+				Toast.makeText(LoginActivity.this, "ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!!!!", Toast.LENGTH_LONG).show();
 			}
 		});
 	}
