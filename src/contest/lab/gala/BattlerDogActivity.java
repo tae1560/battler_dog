@@ -3,10 +3,13 @@ package contest.lab.gala;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
+import org.cocos2d.sound.SoundEngine;
 
 import contest.lab.gala.interfaces.LifeCycleInterface;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
@@ -74,7 +77,35 @@ public class BattlerDogActivity extends Activity {
 	}
 	
 	public static LifeCycleInterface current_lifecycle_callback = null;
-	
+	public void exit(){
+		super.onBackPressed();
+	}
+	public void onBackPressed(){
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			CCDirector.sharedDirector().pause();
+			SoundEngine.sharedEngine().pauseSound();
+			builder.setMessage("������� �������� ���ư��ðڽ��ϱ�?")
+			.setCancelable(false)
+			.setPositiveButton("Ȯ��", new DialogInterface.OnClickListener() {
+
+				//	@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					//						Toast.makeText(getApplicationContext(),"ID value is "+Integer.toString(id), Toast.LENGTH_SHORT).show();
+					Intent intent = new Intent(BattlerDogActivity.this, MainActivity.class);
+					startActivity(intent);
+				}
+			})
+			.setNegativeButton("���", new DialogInterface.OnClickListener() {
+				//@Override
+				public void onClick(DialogInterface dialog, int which) {
+					CCDirector.sharedDirector().resume();
+					dialog.dismiss();
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+	}
+
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
