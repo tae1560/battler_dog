@@ -53,5 +53,11 @@ public class GameActivity extends Activity {
 		});
 //		showFriendList();
 	}
+	
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+	}
 
 }

@@ -4,16 +4,16 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
-import contest.lab.gala.interfaces.LifeCycleInterface;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
-public class MainActivity extends Activity{
-protected CCGLSurfaceView _glSurfaceView;
+public class BattlerDogActivity extends Activity {
+	//** 공격 정보를 받았을 때, SkillGageLayer.getDamaged(int kindOfAttack);
+	protected CCGLSurfaceView _glSurfaceView;
 	
 	
 	/** Called when the activity is first created. */
@@ -44,38 +44,29 @@ protected CCGLSurfaceView _glSurfaceView;
 
 		Manager.setRatioes();
 //		CCScene scene = GameLayer.makeScene();
-		CCScene scene = MainAnimationLayer.makeScene();
+		CCScene scene = ReadyToFightLayer.makeScene();
 		CCDirector.sharedDirector().runWithScene(scene);
 //		showFriendList();
-		
-		if (current_lifecycle_callback != null) {
-			current_lifecycle_callback.onStart();
-		}
 	}
 
-	public void goLoginPage()
+	public void showFriendList()
 	{
-		Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-		startActivity(intent);
-//		CCScene scene = GameLayer.makeScene();
-//		CCDirector.sharedDirector().replaceScene(scene);
-	}
-	public void goJoinPage()
-	{
-		Intent intent = new Intent(MainActivity.this, JoinActivity.class);
-		startActivity(intent);
-		finish();
+		CCScene scene = ReadyToFightLayer.makeScene();
+		CCDirector.sharedDirector().runWithScene(scene);
 	}
 	
-	public static LifeCycleInterface current_lifecycle_callback = null;
-
-	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		if (current_lifecycle_callback != null) {
-			current_lifecycle_callback.onStop();
-		}
-		
-		super.onStop();
+	public static void makeToast(final int kindOfAttack)
+	{
+		CCDirector.sharedDirector().getActivity().runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				Toast.makeText(CCDirector.sharedDirector().getActivity().getApplicationContext(), "조현정 짱 : " + kindOfAttack, Toast.LENGTH_LONG).show();
+			}
+		});
 	}
+	
+	
+	
 }

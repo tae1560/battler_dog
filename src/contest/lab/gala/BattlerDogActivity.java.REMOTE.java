@@ -3,13 +3,11 @@ package contest.lab.gala;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
-import org.cocos2d.sound.SoundEngine;
 
 import contest.lab.gala.interfaces.LifeCycleInterface;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -56,6 +54,7 @@ public class BattlerDogActivity extends Activity {
 			current_lifecycle_callback.onStart();
 		}
 	}
+
 	public void showFriendList()
 	{
 		CCScene scene = ReadyToFightLayer.makeScene();
@@ -73,38 +72,6 @@ public class BattlerDogActivity extends Activity {
 			}
 		});
 	}
-<<<<<<< HEAD
-	public void exit(){
-		super.onBackPressed();
-	}
-	public void onBackPressed(){
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		CCDirector.sharedDirector().pause();
-		SoundEngine.sharedEngine().pauseSound();
-		builder.setMessage("블루투스 설정으로 돌아가시겠습니까?")
-		.setCancelable(false)
-		.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-
-			//	@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				//						Toast.makeText(getApplicationContext(),"ID value is "+Integer.toString(id), Toast.LENGTH_SHORT).show();
-				exit();
-				SoundEngine.sharedEngine().realesAllSounds();
-			}
-		})
-		.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-			//@Override
-			public void onClick(DialogInterface dialog, int which) {
-				CCDirector.sharedDirector().resume();
-				dialog.dismiss();
-			}
-		});
-		AlertDialog alert = builder.create();
-		alert.show();
-}
-
-	
-=======
 	
 	public static LifeCycleInterface current_lifecycle_callback = null;
 	
@@ -117,5 +84,4 @@ public class BattlerDogActivity extends Activity {
 		
 		super.onStop();
 	}
->>>>>>> 65fdde54117c0942a2eae292e090c8dc5848fae8
 }
