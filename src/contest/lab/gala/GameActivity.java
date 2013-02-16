@@ -47,7 +47,8 @@ public class GameActivity extends Activity {
 			
 			@Override
 			public void onGameEnded(boolean isWin) {
-				
+				// isWin => 1 => win the game
+				Manager.resultOfGame = isWin;
 			}
 		});
 //		showFriendList();

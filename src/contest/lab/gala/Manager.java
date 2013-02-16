@@ -39,6 +39,10 @@ public class Manager {
 	public static ArrayList<User> friendList;
 	
 	public static boolean resultOfGame;
+	public static int numOfGames;
+	public static int numOfWins;
+	public static int numOfLoses;
+	public static int numOfSuccessiveWins;
 	
 	public static void setRatioes()
 	{
