@@ -4,6 +4,8 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
+import contest.lab.gala.interfaces.LifeCycleInterface;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,6 +47,10 @@ protected CCGLSurfaceView _glSurfaceView;
 		CCScene scene = MainAnimationLayer.makeScene();
 		CCDirector.sharedDirector().runWithScene(scene);
 //		showFriendList();
+		
+		if (current_lifecycle_callback != null) {
+			current_lifecycle_callback.onStart();
+		}
 	}
 
 	public void goLoginPage()
@@ -59,5 +65,17 @@ protected CCGLSurfaceView _glSurfaceView;
 		Intent intent = new Intent(MainActivity.this, JoinActivity.class);
 		startActivity(intent);
 		finish();
+	}
+	
+	public static LifeCycleInterface current_lifecycle_callback = null;
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		if (current_lifecycle_callback != null) {
+			current_lifecycle_callback.onStop();
+		}
+		
+		super.onStop();
 	}
 }

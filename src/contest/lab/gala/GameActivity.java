@@ -42,5 +42,11 @@ public class GameActivity extends Activity {
 		CCDirector.sharedDirector().runWithScene(scene);
 //		showFriendList();
 	}
+	
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+	}
 
 }

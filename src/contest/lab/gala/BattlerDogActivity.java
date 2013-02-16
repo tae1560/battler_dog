@@ -4,6 +4,8 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
+import contest.lab.gala.interfaces.LifeCycleInterface;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +14,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 public class BattlerDogActivity extends Activity {
-	//** °ø°Ý Á¤º¸¸¦ ¹Þ¾ÒÀ» ¶§, SkillGageLayer.getDamaged(int kindOfAttack);
+	//** ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾ï¿½ï¿½ï¿½ ï¿½ï¿½, SkillGageLayer.getDamaged(int kindOfAttack);
 	protected CCGLSurfaceView _glSurfaceView;
 	
 	
@@ -47,6 +49,10 @@ public class BattlerDogActivity extends Activity {
 		CCScene scene = ReadyToFightLayer.makeScene();
 		CCDirector.sharedDirector().runWithScene(scene);
 //		showFriendList();
+		
+		if (current_lifecycle_callback != null) {
+			current_lifecycle_callback.onStart();
+		}
 	}
 
 	public void showFriendList()
@@ -62,11 +68,20 @@ public class BattlerDogActivity extends Activity {
 			@Override
 			public void run() {
 				
-				Toast.makeText(CCDirector.sharedDirector().getActivity().getApplicationContext(), "Á¶ÇöÁ¤ Â¯ : " + kindOfAttack, Toast.LENGTH_LONG).show();
+				Toast.makeText(CCDirector.sharedDirector().getActivity().getApplicationContext(), "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Â¯ : " + kindOfAttack, Toast.LENGTH_LONG).show();
 			}
 		});
 	}
 	
+	public static LifeCycleInterface current_lifecycle_callback = null;
 	
-	
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		if (current_lifecycle_callback != null) {
+			current_lifecycle_callback.onStop();
+		}
+		
+		super.onStop();
+	}
 }

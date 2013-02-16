@@ -11,41 +11,41 @@ import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.nodes.CCTextureCache;
 
 import android.content.Intent;
-
 import contest.lab.gala.callback.OnMatchedCallback;
 import contest.lab.gala.data.CurrentUserInformation;
 import contest.lab.gala.data.User;
+import contest.lab.gala.interfaces.LifeCycleInterface;
 import contest.lab.gala.util.CommonUtils;
 
-public class ReadyToFightLayer extends CCLayer{
+public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 	int numOfEntryPerOnePage = 4;
 	int numOfTotalEntries;
 	int currentPageNum = 0;   // 0���� ����  currentPageNum * 4, +1, +2, +3 �� ���� ������
 
-	CCSprite bg_readyLayer = CCSprite.sprite("ranking/bg_ranking.png");
-	CCSprite bg_myEntry = CCSprite.sprite("ranking/bg_myentry.png");
+	CCSprite bg_readyLayer = null;
+	CCSprite bg_myEntry = null;
 
-	CCSprite btn_next_clicked = CCSprite.sprite("ranking/btn_next_clicked.png");
-	CCSprite btn_next_unclicked = CCSprite.sprite("ranking/btn_next_unclicked.png");
-	CCSprite btn_before_clicked = CCSprite.sprite("ranking/btn_before_clicked.png");
-	CCSprite btn_before_unclicked = CCSprite.sprite("ranking/btn_before_unclicked.png");
+	CCSprite btn_next_clicked = null;
+	CCSprite btn_next_unclicked = null;
+	CCSprite btn_before_clicked = null;
+	CCSprite btn_before_unclicked = null;
 
-	CCSprite btn_goRandomGame_unclicked = CCSprite.sprite("ranking/btn_goRandomGame_unclicked.png");
-	CCSprite btn_goRandomGame_clicked = CCSprite.sprite("ranking/btn_goRandomGame_clicked.png");
+	CCSprite btn_goRandomGame_unclicked = null;
+	CCSprite btn_goRandomGame_clicked = null;
 
-	CCSprite btn_setting_unclicked = CCSprite.sprite("ranking/btn_setting_unclicked.png");
-	CCSprite btn_setting_clicked = CCSprite.sprite("ranking/btn_setting_clicked.png");
+	CCSprite btn_setting_unclicked = null;
+	CCSprite btn_setting_clicked = null;
 
 	// characters[user][0] = character 0 �̹���, 
 	// characters[user][1] = character 1 �̹���, ...
-	CCSprite[] characters;
-	CCLabel[] userIDs;
-	CCLabel[] userNumOfWins;
+	CCSprite[] characters = null;
+	CCLabel[] userIDs = null;
+	CCLabel[] userNumOfWins = null;
 //	CCLabelAtlas[] ranking;
-	CCLabel[] ranking;
+	CCLabel[] ranking = null;
 	
 	// btn_challenge[user][0] = offline, btn_challenge[user][1] = online
-	CCMenu[] btn_challenge;
+	CCMenu[] btn_challenge = null;
 
 
 	public static CCScene makeScene()
@@ -58,6 +58,9 @@ public class ReadyToFightLayer extends CCLayer{
 		CCScene scene = CCScene.node();
 		CCLayer layer = new ReadyToFightLayer();
 		scene.addChild(layer);
+		
+		BattlerDogActivity.current_lifecycle_callback = (LifeCycleInterface) layer;
+		BattlerDogActivity.current_lifecycle_callback.onStart();
 		
 		NetworkManager.getInstance().setOnMatchedCallback(new OnMatchedCallback() {
 			@Override
@@ -77,113 +80,6 @@ public class ReadyToFightLayer extends CCLayer{
 	public ReadyToFightLayer()
 	{
 		this.setIsTouchEnabled(true);
-
-		numOfTotalEntries = Manager.friendList.size();
-
-		bg_readyLayer.setPosition(360 * Manager.ratio_width, 640 * Manager.ratio_height);
-		bg_readyLayer.setScaleX(Manager.ratio_width);
-		bg_readyLayer.setScaleY(Manager.ratio_height);
-		this.addChild(bg_readyLayer);
-		
-		characters = new CCSprite[numOfTotalEntries];
-		userIDs = new CCLabel[numOfTotalEntries];
-		userNumOfWins = new CCLabel[numOfTotalEntries];
-		btn_challenge = new CCMenu[numOfTotalEntries];
-		ranking = new CCLabel[numOfTotalEntries];
-		// ĳ���� ��������Ʈ ���� 
-		for(int i = 0; i < numOfTotalEntries; i++)
-		{
-			if(Manager.friendList.get(i).id.equals(CurrentUserInformation.userID))
-			{
-				bg_myEntry.setPosition(366 * Manager.ratio_width, (1123 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
-				bg_myEntry.setVisible(false);
-				bg_myEntry.setScaleX(Manager.ratio_width);
-				bg_myEntry.setScaleY(Manager.ratio_height);
-				this.addChild(bg_myEntry);
-			}
-			characters[i] = CCSprite.sprite(String.format("ranking/icon_char%d.png", Manager.friendList.get(i).character));
-			characters[i].setPosition(240 * Manager.ratio_width, (1123 - (i % numOfEntryPerOnePage) * 160)*Manager.ratio_height);
-			characters[i].setScaleX(Manager.ratio_width);
-			characters[i].setScaleY(Manager.ratio_height);
-			characters[i].setVisible(false);
-			this.addChild(characters[i]);
-
-			//ranking[i] = CCLabelAtlas.label(i + "", "ranking/ranking_font.png", 10, 10, '0');
-			ranking[i] = CCLabel.makeLabel(i + "", "Arial", 40);
-			ranking[i].setPosition(95 * Manager.ratio_width, (1123 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
-			ranking[i].setVisible(false);
-			ranking[i].setScaleX(Manager.ratio_width);
-			ranking[i].setScaleY(Manager.ratio_height);
-			addChild(ranking[i]);
-			
-			userIDs[i] = CCLabel.makeLabel(Manager.friendList.get(i).id, "Arial", 40);
-			userIDs[i].setPosition(331 * Manager.ratio_width, (1171 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
-			userIDs[i].setVisible(false);
-			userIDs[i].setScaleX(Manager.ratio_width);
-			userIDs[i].setScaleY(Manager.ratio_height);
-			addChild(userIDs[i]);
-
-//			userNumOfWins[i] = CCLabelAtlas.label(Manager.friendList.get(i).number_of_wins + "", "ranking/win_font.png", 10, 10, '0');
-			userNumOfWins[i] = CCLabel.makeLabel(Manager.friendList.get(i).number_of_wins + "", "Arial", 20);
-			userNumOfWins[i].setPosition(356 * Manager.ratio_width, (1090 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
-			userNumOfWins[i].setVisible(false);
-			userNumOfWins[i].setScaleX(Manager.ratio_width);
-			userNumOfWins[i].setScaleY(Manager.ratio_height);
-			addChild(userNumOfWins[i]);
-		}
-
-		// on, offline ��ư ����
-		for(int i = 0; i < numOfTotalEntries; i++)
-		{
-			if(!Manager.friendList.get(i).id.equals(CurrentUserInformation.userID))
-			{
-				// ���� ���̶��
-				if(Manager.friendList.get(i).is_logon)
-				{
-					CCSprite btn_challenge_unclick = CCSprite.sprite("ranking/btn_challenge_unclicked.png");
-					CCSprite btn_challenge_click = CCSprite.sprite("ranking/btn_challenge_clicked.png");
-					CCMenuItemSprite menu_challenge = CCMenuItemSprite.item(btn_challenge_unclick, btn_challenge_click, this, "requestMatchWithFriend");
-					menu_challenge.setTag(i);
-					CCMenu newMenu = CCMenu.menu(menu_challenge);
-					newMenu.setVisible(false);
-					newMenu.setScaleX(Manager.ratio_width);
-					newMenu.setScaleY(Manager.ratio_height);
-					newMenu.alignItemsHorizontally(30 * Manager.ratio_width);
-					this.addChild(newMenu);
-					btn_challenge[i] = newMenu;
-				}
-				// ���� ���� �ƴ϶��
-				else
-				{
-					CCSprite btn_challenge_unclick = CCSprite.sprite("ranking/btn_challenge_notactivated.png");
-					CCSprite btn_challenge_click = CCSprite.sprite("ranking/btn_challenge_notactivated.png");
-					CCMenuItemSprite menu_challenge = CCMenuItemSprite.item(btn_challenge_unclick, btn_challenge_click);
-					CCMenu newMenu = CCMenu.menu(menu_challenge);
-					newMenu.setVisible(false);
-					newMenu.setScaleX(Manager.ratio_width);
-					newMenu.setScaleY(Manager.ratio_height);
-					newMenu.setPosition(581 * Manager.ratio_width, (1120 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
-					this.addChild(newMenu);
-					btn_challenge[i] = newMenu;
-				}
-			}
-		}
-
-		CCMenuItemSprite btn_next = CCMenuItemSprite.item(btn_next_unclicked, btn_next_clicked, this, "clickedNextButton");
-		CCMenuItemSprite btn_before = CCMenuItemSprite.item(btn_before_unclicked, btn_before_clicked, this, "clickedBeforeButton");
-		CCMenu controlPage = CCMenu.menu(btn_before, btn_next);
-		controlPage.alignItemsHorizontally(50 * Manager.ratio_width);
-		controlPage.setPosition(240 * Manager.ratio_width, 320 * Manager.ratio_height);
-		this.addChild(controlPage);
-
-		updatePage();
-
-		CCMenuItemSprite btn_random_game = CCMenuItemSprite.item(btn_goRandomGame_unclicked, btn_goRandomGame_clicked, this, "clickedRandomGameButton");
-		CCMenuItemSprite btn_setting = CCMenuItemSprite.item(btn_setting_unclicked, btn_setting_clicked, this, "clickedSettingButton");
-		CCMenu otherMenu = CCMenu.menu(btn_random_game, btn_setting);
-		otherMenu.alignItemsHorizontally(50 * Manager.ratio_width);
-		otherMenu.setPosition(240 * Manager.ratio_width, 100 * Manager.ratio_height);
-		this.addChild(otherMenu);
 	}
 	
 	public void requestMatchWithFriend(Object sender)
@@ -278,5 +174,171 @@ public class ReadyToFightLayer extends CCLayer{
 				ranking[i].setVisible(false);
 			}
 		}
+	}
+	
+	// >0 : alive
+	// 0 : not alive
+	private int layer_state = 0;
+	@Override
+	public void onStart() {		
+		if (layer_state == 0) {
+			layer_state ++;
+			
+			// initialize static variables
+			bg_readyLayer = CCSprite.sprite("ranking/bg_ranking.png");
+			bg_myEntry = CCSprite.sprite("ranking/bg_myentry.png");
+
+			btn_next_clicked = CCSprite.sprite("ranking/btn_next_clicked.png");
+			btn_next_unclicked = CCSprite.sprite("ranking/btn_next_unclicked.png");
+			btn_before_clicked = CCSprite.sprite("ranking/btn_before_clicked.png");
+			btn_before_unclicked = CCSprite.sprite("ranking/btn_before_unclicked.png");
+
+			btn_goRandomGame_unclicked = CCSprite.sprite("ranking/btn_goRandomGame_unclicked.png");
+			btn_goRandomGame_clicked = CCSprite.sprite("ranking/btn_goRandomGame_clicked.png");
+
+			btn_setting_unclicked = CCSprite.sprite("ranking/btn_setting_unclicked.png");
+			btn_setting_clicked = CCSprite.sprite("ranking/btn_setting_clicked.png");
+			
+			
+			// initialize on constructor
+			numOfTotalEntries = Manager.friendList.size();
+
+			bg_readyLayer.setPosition(360 * Manager.ratio_width, 640 * Manager.ratio_height);
+			bg_readyLayer.setScaleX(Manager.ratio_width);
+			bg_readyLayer.setScaleY(Manager.ratio_height);
+			this.addChild(bg_readyLayer);
+			
+			characters = new CCSprite[numOfTotalEntries];
+			userIDs = new CCLabel[numOfTotalEntries];
+			userNumOfWins = new CCLabel[numOfTotalEntries];
+			btn_challenge = new CCMenu[numOfTotalEntries];
+			ranking = new CCLabel[numOfTotalEntries];
+			// ĳ���� ��������Ʈ ���� 
+			for(int i = 0; i < numOfTotalEntries; i++)
+			{
+				if(Manager.friendList.get(i).id.equals(CurrentUserInformation.userID))
+				{
+					bg_myEntry.setPosition(366 * Manager.ratio_width, (1123 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
+					bg_myEntry.setVisible(false);
+					bg_myEntry.setScaleX(Manager.ratio_width);
+					bg_myEntry.setScaleY(Manager.ratio_height);
+					this.addChild(bg_myEntry);
+				}
+				characters[i] = CCSprite.sprite(String.format("ranking/icon_char%d.png", Manager.friendList.get(i).character));
+				characters[i].setPosition(240 * Manager.ratio_width, (1123 - (i % numOfEntryPerOnePage) * 160)*Manager.ratio_height);
+				characters[i].setScaleX(Manager.ratio_width);
+				characters[i].setScaleY(Manager.ratio_height);
+				characters[i].setVisible(false);
+				this.addChild(characters[i]);
+
+				//ranking[i] = CCLabelAtlas.label(i + "", "ranking/ranking_font.png", 10, 10, '0');
+				ranking[i] = CCLabel.makeLabel(i + "", "Arial", 40);
+				ranking[i].setPosition(95 * Manager.ratio_width, (1123 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
+				ranking[i].setVisible(false);
+				ranking[i].setScaleX(Manager.ratio_width);
+				ranking[i].setScaleY(Manager.ratio_height);
+				addChild(ranking[i]);
+				
+				userIDs[i] = CCLabel.makeLabel(Manager.friendList.get(i).id, "Arial", 40);
+				userIDs[i].setPosition(331 * Manager.ratio_width, (1171 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
+				userIDs[i].setVisible(false);
+				userIDs[i].setScaleX(Manager.ratio_width);
+				userIDs[i].setScaleY(Manager.ratio_height);
+				addChild(userIDs[i]);
+
+//				userNumOfWins[i] = CCLabelAtlas.label(Manager.friendList.get(i).number_of_wins + "", "ranking/win_font.png", 10, 10, '0');
+				userNumOfWins[i] = CCLabel.makeLabel(Manager.friendList.get(i).number_of_wins + "", "Arial", 20);
+				userNumOfWins[i].setPosition(356 * Manager.ratio_width, (1090 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
+				userNumOfWins[i].setVisible(false);
+				userNumOfWins[i].setScaleX(Manager.ratio_width);
+				userNumOfWins[i].setScaleY(Manager.ratio_height);
+				addChild(userNumOfWins[i]);
+			}
+
+			// on, offline ��ư ����
+			for(int i = 0; i < numOfTotalEntries; i++)
+			{
+				if(!Manager.friendList.get(i).id.equals(CurrentUserInformation.userID))
+				{
+					// ���� ���̶��
+					if(Manager.friendList.get(i).is_logon)
+					{
+						CCSprite btn_challenge_unclick = CCSprite.sprite("ranking/btn_challenge_unclicked.png");
+						CCSprite btn_challenge_click = CCSprite.sprite("ranking/btn_challenge_clicked.png");
+						CCMenuItemSprite menu_challenge = CCMenuItemSprite.item(btn_challenge_unclick, btn_challenge_click, this, "requestMatchWithFriend");
+						menu_challenge.setTag(i);
+						CCMenu newMenu = CCMenu.menu(menu_challenge);
+						newMenu.setVisible(false);
+						newMenu.setScaleX(Manager.ratio_width);
+						newMenu.setScaleY(Manager.ratio_height);
+						newMenu.alignItemsHorizontally(30 * Manager.ratio_width);
+						this.addChild(newMenu);
+						btn_challenge[i] = newMenu;
+					}
+					// ���� ���� �ƴ϶��
+					else
+					{
+						CCSprite btn_challenge_unclick = CCSprite.sprite("ranking/btn_challenge_notactivated.png");
+						CCSprite btn_challenge_click = CCSprite.sprite("ranking/btn_challenge_notactivated.png");
+						CCMenuItemSprite menu_challenge = CCMenuItemSprite.item(btn_challenge_unclick, btn_challenge_click);
+						CCMenu newMenu = CCMenu.menu(menu_challenge);
+						newMenu.setVisible(false);
+						newMenu.setScaleX(Manager.ratio_width);
+						newMenu.setScaleY(Manager.ratio_height);
+						newMenu.setPosition(581 * Manager.ratio_width, (1120 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
+						this.addChild(newMenu);
+						btn_challenge[i] = newMenu;
+					}
+				}
+			}
+
+			CCMenuItemSprite btn_next = CCMenuItemSprite.item(btn_next_unclicked, btn_next_clicked, this, "clickedNextButton");
+			CCMenuItemSprite btn_before = CCMenuItemSprite.item(btn_before_unclicked, btn_before_clicked, this, "clickedBeforeButton");
+			CCMenu controlPage = CCMenu.menu(btn_before, btn_next);
+			controlPage.alignItemsHorizontally(50 * Manager.ratio_width);
+			controlPage.setPosition(240 * Manager.ratio_width, 320 * Manager.ratio_height);
+			this.addChild(controlPage);
+
+			updatePage();
+
+			CCMenuItemSprite btn_random_game = CCMenuItemSprite.item(btn_goRandomGame_unclicked, btn_goRandomGame_clicked, this, "clickedRandomGameButton");
+			CCMenuItemSprite btn_setting = CCMenuItemSprite.item(btn_setting_unclicked, btn_setting_clicked, this, "clickedSettingButton");
+			CCMenu otherMenu = CCMenu.menu(btn_random_game, btn_setting);
+			otherMenu.alignItemsHorizontally(50 * Manager.ratio_width);
+			otherMenu.setPosition(240 * Manager.ratio_width, 100 * Manager.ratio_height);
+			this.addChild(otherMenu);
+		}
+	}
+	@Override
+	public void onStop() {
+		if (layer_state > 0) {
+			layer_state = 0;
+			
+			bg_readyLayer = null;
+			bg_myEntry = null;
+
+			btn_next_clicked = null;
+			btn_next_unclicked = null;
+			btn_before_clicked = null;
+			btn_before_unclicked = null;
+
+			btn_goRandomGame_unclicked = null;
+			btn_goRandomGame_clicked = null;
+
+			btn_setting_unclicked = null;
+			btn_setting_clicked = null;
+
+			characters = null;
+			userIDs = null;
+			userNumOfWins = null;
+//			CCLabelAtlas[] ranking;
+			ranking = null;
+			
+			// btn_challenge[user][0] = offline, btn_challenge[user][1] = online
+			btn_challenge = null;
+			
+			System.gc();
+		}
+		
 	}
 }

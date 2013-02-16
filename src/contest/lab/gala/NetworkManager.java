@@ -29,14 +29,6 @@ import contest.lab.gala.data.SkillType;
 import contest.lab.gala.data.User;
 
 public class NetworkManager {
-	
-	public static int requestLogin = 1;
-	public static int requestJoin = 2;
-	public static int requestRanking = 3;
-	
-	public static int messageMatching = 11;
-	public static int messageAttack = 12;
-	
 	public static NetworkManager getInstance() {
 		if (_instance == null) {
 			_instance = new NetworkManager();
@@ -57,26 +49,6 @@ public class NetworkManager {
 		map.put("id", id);
 		map.put("password", password);
 		sendJSONWithSocket(map);
-//		new Thread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				String result = CommonUtils.requestWithGet(loginPath + "?id=" + id + "&password=" + password);
-//				debug("result : " + result);
-//				if (result != null) {
-//					try {
-//						JSONObject jsonResult = new JSONObject(result);
-//						if (jsonResult.getString("status").equalsIgnoreCase("success")) {
-//							callback.didSuccessLogin();
-//						} else {
-//							debug("login failed");
-//						}		
-//					} catch (JSONException e) {
-//						e.printStackTrace();
-//					}
-//				}				
-//			}
-//		}).start();
 	}
 	
 	public void doJoin(final String id, final String password, final int selected_character, final JoinCallback callback) {
