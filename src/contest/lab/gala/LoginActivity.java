@@ -63,19 +63,21 @@ public class LoginActivity extends Activity implements LoginCallback{
 			public void onMatched(final User enemy) {
 				// TODO Auto-generated method stub
 				
-				runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						CurrentUserInformation.opponentchar = enemy.character;
-						CurrentUserInformation.opponentID = enemy.id;
-						
-						CCScene scene = GameLayer.makeScene();
-						CCDirector.sharedDirector().replaceScene(scene);
-						
-						CommonUtils.debug("onMatched " + enemy.id);
-					}
-				});
+				CurrentUserInformation.opponentchar = enemy.character;
+				CurrentUserInformation.opponentID = enemy.id;
+				
+				CCScene scene = GameLayer.makeScene();
+				CCDirector.sharedDirector().replaceScene(scene);
+				
+				CommonUtils.debug("onMatched " + enemy.id);
+				
+//				runOnUiThread(new Runnable() {
+//
+//					@Override
+//					public void run() {
+//						
+//					}
+//				});
 			}
 		});
 		
@@ -83,7 +85,7 @@ public class LoginActivity extends Activity implements LoginCallback{
 
 			@Override
 			public void run() {
-				Toast.makeText(LoginActivity.this, "�α��� ����!!!!", Toast.LENGTH_LONG).show();
+				Toast.makeText(LoginActivity.this, "로그인 성공!!!!", Toast.LENGTH_LONG).show();
 			}
 		});
 	}
