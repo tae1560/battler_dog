@@ -38,6 +38,8 @@ public class Manager {
 	
 	public static ArrayList<User> friendList;
 	
+	public static boolean resultOfGame;
+	
 	public static void setRatioes()
 	{
 		ratio_width = CCDirector.sharedDirector().displaySize().width / 720;
