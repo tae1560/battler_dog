@@ -4,13 +4,13 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
-import contest.lab.gala.callback.OnGameEndedCallback;
-import contest.lab.gala.data.User;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import contest.lab.gala.callback.OnGameEndedCallback;
+import contest.lab.gala.data.User;
 
 public class GameActivity extends Activity {
 	protected CCGLSurfaceView _glSurfaceView;
@@ -54,6 +54,9 @@ public class GameActivity extends Activity {
 				Manager.numOfLoses = user.total_loses;
 				Manager.numOfSuccessiveWins = user.number_of_wins;
 				Manager.numOfGames = Manager.numOfLoses + Manager.numOfWins;
+				
+				Intent intent = new Intent(GameActivity.this, ResultActivity.class);
+				startActivity(intent);
 			}
 		});
 //		showFriendList();
