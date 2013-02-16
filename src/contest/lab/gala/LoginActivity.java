@@ -7,8 +7,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import contest.lab.gala.callback.LoginCallback;
 import contest.lab.gala.callback.OnMatchedCallback;
@@ -31,16 +31,18 @@ public class LoginActivity extends Activity implements LoginCallback{
 	@Override
 	protected void onStart() {
 
-//		ImageButton btn_login = (ImageButton)findViewById(R.id.btn_login);
-//
-//		btn_login.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				NetworkManager.getInstance().doLogin(et_id.getText().toString(), et_pw.getText().toString(), LoginActivity.this);
-//			}
-//		});
+		ImageButton btn_login = (ImageButton)findViewById(R.id.btn_join);
+		et_id = (EditText)findViewById(R.id.userIDEntry);
+		et_pw = (EditText)findViewById(R.id.passwordEntry);
+		
+		btn_login.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				NetworkManager.getInstance().doLogin(et_id.getText().toString(), et_pw.getText().toString(), LoginActivity.this);
+			}
+		});
 		super.onStart();
 	}
 	@Override

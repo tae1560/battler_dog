@@ -4,7 +4,13 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 import contest.lab.gala.callback.JoinCallback;
 import contest.lab.gala.callback.RequestFriendsCallback;
@@ -19,47 +25,48 @@ public class JoinActivity extends Activity implements JoinCallback{
 	//////////////////////////////////////////////
 	protected void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+
 		setContentView(R.layout.main);
-//
-//		requestWindowFeature(Window.FEATURE_NO_TITLE);
-//		
-//		et_id = (EditText)findViewById(R.id.editText1);
-//		et_pw = (EditText)findViewById(R.id.editText2);
-//		
-//
-//		RadioGroup group_characters = (RadioGroup)findViewById(R.id.rbgroup_characters);
-//		final RadioButton rb_char1 = (RadioButton)findViewById(R.id.rb_char1);
-//		final RadioButton rb_char2 = (RadioButton)findViewById(R.id.rb_char2);
-//		final RadioButton rb_char3 = (RadioButton)findViewById(R.id.rb_char3);
-//		final RadioButton rb_char4 = (RadioButton)findViewById(R.id.rb_char4);
-//
-//		
-//		Button btn_join = (Button)findViewById(R.id.btn_join);
-//		btn_join.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				if(rb_char1.isChecked())
-//				{
-//					selected_character = 1;
-//				}
-//				else if(rb_char2.isChecked())
-//				{
-//					selected_character = 2;
-//				}
-//				else if(rb_char3.isChecked())
-//				{
-//					selected_character = 3;
-//				}
-//				else
-//				{
-//					selected_character = 4;
-//				}
-//				
-//				if (selected_character >= 0) {
-//					NetworkManager.getInstance().doJoin(et_id.getText().toString(), et_pw.getText().toString(), selected_character, JoinActivity.this);					
-//				}				
-//			}
-//		});
+
+		
+		et_id = (EditText)findViewById(R.id.userIDEntry);
+		et_pw = (EditText)findViewById(R.id.passwordEntry);
+		
+
+		RadioGroup group_characters = (RadioGroup)findViewById(R.id.rbgroup_characters);
+		final RadioButton rb_char1 = (RadioButton)findViewById(R.id.rb_char1);
+		final RadioButton rb_char2 = (RadioButton)findViewById(R.id.rb_char2);
+		final RadioButton rb_char3 = (RadioButton)findViewById(R.id.rb_char3);
+		final RadioButton rb_char4 = (RadioButton)findViewById(R.id.rb_char4);
+
+		
+		Button btn_join = (Button)findViewById(R.id.btn_join);
+		btn_join.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(rb_char1.isChecked())
+				{
+					selected_character = 0;
+				}
+				else if(rb_char2.isChecked())
+				{
+					selected_character = 1;
+				}
+				else if(rb_char3.isChecked())
+				{
+					selected_character = 2;
+				}
+				else
+				{
+					selected_character = 3;
+				}
+				
+				if (selected_character >= 0) {
+					NetworkManager.getInstance().doJoin(et_id.getText().toString(), et_pw.getText().toString(), selected_character, JoinActivity.this);					
+				}				
+			}
+		});
 	}
 	@Override
 	public void didSuccessJoin(User user) {
