@@ -10,6 +10,8 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.nodes.CCTextureCache;
 
+import android.content.Intent;
+
 import contest.lab.gala.callback.OnMatchedCallback;
 import contest.lab.gala.data.CurrentUserInformation;
 import contest.lab.gala.data.User;
@@ -18,7 +20,7 @@ import contest.lab.gala.util.CommonUtils;
 public class ReadyToFightLayer extends CCLayer{
 	int numOfEntryPerOnePage = 4;
 	int numOfTotalEntries;
-	int currentPageNum = 0;   // 0ºÎÅÍ ½ÃÀÛ  currentPageNum * 4, +1, +2, +3 ¹ø ±îÁö º¸¿©ÁÜ
+	int currentPageNum = 0;   // 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½  currentPageNum * 4, +1, +2, +3 ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	CCSprite bg_readyLayer = CCSprite.sprite("ranking/bg_ranking.png");
 	CCSprite bg_myEntry = CCSprite.sprite("ranking/bg_myentry.png");
@@ -34,8 +36,8 @@ public class ReadyToFightLayer extends CCLayer{
 	CCSprite btn_setting_unclicked = CCSprite.sprite("ranking/btn_setting_unclicked.png");
 	CCSprite btn_setting_clicked = CCSprite.sprite("ranking/btn_setting_clicked.png");
 
-	// characters[user][0] = character 0 ÀÌ¹ÌÁö, 
-	// characters[user][1] = character 1 ÀÌ¹ÌÁö, ...
+	// characters[user][0] = character 0 ï¿½Ì¹ï¿½ï¿½ï¿½, 
+	// characters[user][1] = character 1 ï¿½Ì¹ï¿½ï¿½ï¿½, ...
 	CCSprite[] characters;
 	CCLabel[] userIDs;
 	CCLabel[] userNumOfWins;
@@ -88,7 +90,7 @@ public class ReadyToFightLayer extends CCLayer{
 		userNumOfWins = new CCLabel[numOfTotalEntries];
 		btn_challenge = new CCMenu[numOfTotalEntries];
 		ranking = new CCLabel[numOfTotalEntries];
-		// Ä³¸¯ÅÍ ½ºÇÁ¶óÀÌÆ® ¼¼ÆÃ 
+		// Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ 
 		for(int i = 0; i < numOfTotalEntries; i++)
 		{
 			if(Manager.friendList.get(i).id.equals(CurrentUserInformation.userID))
@@ -130,12 +132,12 @@ public class ReadyToFightLayer extends CCLayer{
 			addChild(userNumOfWins[i]);
 		}
 
-		// on, offline ¹öÆ° ¼¼ÆÃ
+		// on, offline ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½
 		for(int i = 0; i < numOfTotalEntries; i++)
 		{
 			if(!Manager.friendList.get(i).id.equals(CurrentUserInformation.userID))
 			{
-				// Á¢¼Ó ÁßÀÌ¶ó¸é
+				// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½
 				if(Manager.friendList.get(i).is_logon)
 				{
 					CCSprite btn_challenge_unclick = CCSprite.sprite("ranking/btn_challenge_unclicked.png");
@@ -150,7 +152,7 @@ public class ReadyToFightLayer extends CCLayer{
 					this.addChild(newMenu);
 					btn_challenge[i] = newMenu;
 				}
-				// Á¢¼Ó ÁßÀÌ ¾Æ´Ï¶ó¸é
+				// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï¶ï¿½ï¿½
 				else
 				{
 					CCSprite btn_challenge_unclick = CCSprite.sprite("ranking/btn_challenge_notactivated.png");
@@ -197,8 +199,10 @@ public class ReadyToFightLayer extends CCLayer{
 				
 				CCDirector.sharedDirector().purgeCachedData();
 				
-				CCScene scene = GameLayer.makeScene();
-				CCDirector.sharedDirector().replaceScene(scene);	
+//				CCScene scene = GameLayer.makeScene();
+//				CCDirector.sharedDirector().replaceScene(scene);
+				Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), GameActivity.class);
+				CCDirector.sharedDirector().getActivity().startActivity(intent);
 			}
 		});
 	}
@@ -235,9 +239,9 @@ public class ReadyToFightLayer extends CCLayer{
 	}
 	public void clickedSettingButton(Object sender)
 	{
-		// ¼¼ÆÃ ·¹ÀÌ¾î·Î °¡±â
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	}
-	// ÇØ´ç userÀÇ ¼³Á¤µÈ Ä³¸¯ÅÍ¸¦ º¸¿©ÁÜ
+	// ï¿½Ø´ï¿½ userï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public void updatePage()
 	{
 		for(int i = 0; i < numOfTotalEntries; i++)
