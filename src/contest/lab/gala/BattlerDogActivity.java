@@ -93,6 +93,7 @@ public class BattlerDogActivity extends Activity {
 					//						Toast.makeText(getApplicationContext(),"ID value is "+Integer.toString(id), Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent(BattlerDogActivity.this, MainActivity.class);
 					startActivity(intent);
+					
 				}
 			})
 			.setNegativeButton("���", new DialogInterface.OnClickListener() {

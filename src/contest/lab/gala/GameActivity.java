@@ -50,6 +50,10 @@ public class GameActivity extends Activity {
 			public void onGameEnded(boolean isWin, User user) {
 				// isWin => 1 => win the game
 				Manager.resultOfGame = isWin;
+				Manager.numOfWins = user.total_wins;
+				Manager.numOfLoses = user.total_loses;
+				Manager.numOfSuccessiveWins = user.number_of_wins;
+				Manager.numOfGames = Manager.numOfLoses + Manager.numOfWins;
 			}
 		});
 //		showFriendList();
