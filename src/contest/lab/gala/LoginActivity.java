@@ -31,7 +31,7 @@ public class LoginActivity extends Activity implements LoginCallback{
 	@Override
 	protected void onStart() {
 
-		ImageButton btn_login = (ImageButton)findViewById(R.id.btn_join);
+		ImageButton btn_login = (ImageButton)findViewById(R.id.btn_login);
 		et_id = (EditText)findViewById(R.id.userIDEntry);
 		et_pw = (EditText)findViewById(R.id.passwordEntry);
 		
