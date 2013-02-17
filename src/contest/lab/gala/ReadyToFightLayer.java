@@ -6,6 +6,7 @@ import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
+import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.nodes.CCTextureCache;
@@ -40,9 +41,8 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 	// characters[user][1] = character 1 �̹���, ...
 	CCSprite[] characters = null;
 	CCLabel[] userIDs = null;
-	CCLabel[] userNumOfWins = null;
-//	CCLabelAtlas[] ranking;
-	CCLabel[] ranking = null;
+	CCLabelAtlas[] userNumOfWins = null;
+	CCLabelAtlas[] ranking = null;
 	
 	// btn_challenge[user][0] = offline, btn_challenge[user][1] = online
 	CCMenu[] btn_challenge = null;
@@ -210,9 +210,9 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 			
 			characters = new CCSprite[numOfTotalEntries];
 			userIDs = new CCLabel[numOfTotalEntries];
-			userNumOfWins = new CCLabel[numOfTotalEntries];
+			userNumOfWins = new CCLabelAtlas[numOfTotalEntries];
 			btn_challenge = new CCMenu[numOfTotalEntries];
-			ranking = new CCLabel[numOfTotalEntries];
+			ranking = new CCLabelAtlas[numOfTotalEntries];
 			// ĳ���� ��������Ʈ ���� 
 			for(int i = 0; i < numOfTotalEntries; i++)
 			{
@@ -231,8 +231,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 				characters[i].setVisible(false);
 				this.addChild(characters[i]);
 
-				//ranking[i] = CCLabelAtlas.label(i + "", "ranking/ranking_font.png", 10, 10, '0');
-				ranking[i] = CCLabel.makeLabel(i + "", "Arial", 40);
+				ranking[i] = CCLabelAtlas.label(String.valueOf(i), "ranking/ranking_font.png", 30*(int)Manager.ratio_width, 30 * (int)Manager.ratio_height, '0');
 				ranking[i].setPosition(95 * Manager.ratio_width, (1123 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
 				ranking[i].setVisible(false);
 				ranking[i].setScaleX(Manager.ratio_width);
@@ -246,8 +245,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 				userIDs[i].setScaleY(Manager.ratio_height);
 				addChild(userIDs[i]);
 
-//				userNumOfWins[i] = CCLabelAtlas.label(Manager.friendList.get(i).number_of_wins + "", "ranking/win_font.png", 10, 10, '0');
-				userNumOfWins[i] = CCLabel.makeLabel(Manager.friendList.get(i).number_of_wins + "", "Arial", 20);
+				userNumOfWins[i] = CCLabelAtlas.label(Manager.friendList.get(i).number_of_wins + "", "ranking/win_font.png", 30 * (int)Manager.ratio_width, 30 * (int)Manager.ratio_height, '0');
 				userNumOfWins[i].setPosition(356 * Manager.ratio_width, (1090 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
 				userNumOfWins[i].setVisible(false);
 				userNumOfWins[i].setScaleX(Manager.ratio_width);
@@ -272,6 +270,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 						newMenu.setScaleX(Manager.ratio_width);
 						newMenu.setScaleY(Manager.ratio_height);
 						newMenu.alignItemsHorizontally(30 * Manager.ratio_width);
+						newMenu.setPosition(581 * Manager.ratio_width, (1120 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
 						this.addChild(newMenu);
 						btn_challenge[i] = newMenu;
 					}
