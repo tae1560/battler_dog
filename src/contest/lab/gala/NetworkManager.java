@@ -27,6 +27,7 @@ import contest.lab.gala.callback.OnMatchedCallback;
 import contest.lab.gala.callback.RequestFriendsCallback;
 import contest.lab.gala.data.SkillType;
 import contest.lab.gala.data.User;
+import contest.lab.gala.util.CommonUtils;
 
 public class NetworkManager {
 	public static NetworkManager getInstance() {
@@ -331,10 +332,12 @@ public class NetworkManager {
 				} else if(dataTypeString.equalsIgnoreCase(TYPE_GAME_END_CHECK)) {
 					gameEndRequest();
 				} else if(dataTypeString.equalsIgnoreCase(TYPE_GAME_END)) {
+					CommonUtils.debug("dataTypeString.equalsIgnoreCase game_end");
 					if (this.onGameEndedCallback != null) {
+						CommonUtils.debug("dataTypeString.equalsIgnoreCase in if");
 						boolean isWin = jsonObject.getString("status").equalsIgnoreCase("win");
 						this.onGameEndedCallback.onGameEnded(isWin, User.parseJson(jsonObject.getJSONObject("user_information")));
-						this.onGameEndedCallback = null;
+//						this.onGameEndedCallback = null;
 					}
 				}
 			}

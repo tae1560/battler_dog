@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import contest.lab.gala.callback.OnGameEndedCallback;
 import contest.lab.gala.data.User;
+import contest.lab.gala.util.CommonUtils;
 
 public class GameActivity extends Activity {
 	protected CCGLSurfaceView _glSurfaceView;
@@ -43,11 +44,12 @@ public class GameActivity extends Activity {
 		CCScene scene = GameLayer.makeScene();
 		CCDirector.sharedDirector().runWithScene(scene);
 		
-		NetworkManager.getInstance().setGameEndedCallback(new OnGameEndedCallback() {
+		OnGameEndedCallback callback = new OnGameEndedCallback() {
 			
 			@Override
 			public void onGameEnded(boolean isWin, User user) {
 				// isWin => 1 => win the game
+				CommonUtils.debug("onGameEnded");
 				Manager.resultOfGame = isWin;
 				Manager.numOfWins = user.total_wins;
 				Manager.numOfLoses = user.total_loses;
@@ -57,7 +59,10 @@ public class GameActivity extends Activity {
 				Intent intent = new Intent(GameActivity.this, ResultActivity.class);
 				startActivity(intent);
 			}
-		});
+		}; 
+		
+		CommonUtils.debug("OnGameEndedCallback : " + callback);
+		NetworkManager.getInstance().setGameEndedCallback(callback);
 //		showFriendList();
 	}
 	
