@@ -8,7 +8,7 @@ import contest.lab.gala.data.User;
 
 public class Manager {
 	
-	// Galaxy 3 ÇØ»óµµ¿¡ ´ëÇÑ º» È­¸éÀÇ ÇØ»óµµÀÇ ºñÀ²
+	// Galaxy 3 ï¿½Ø»óµµ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ ï¿½Ø»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	public static float ratio_width;	
 	public static float ratio_height;
 	
@@ -38,11 +38,15 @@ public class Manager {
 	
 	public static ArrayList<User> friendList;
 	
-	public static boolean resultOfGame;
-	public static int numOfGames;
-	public static int numOfWins;
-	public static int numOfLoses;
-	public static int numOfSuccessiveWins;
+	public static boolean resultOfGame = false;
+	public static int maxNumOfCombo = 0;
+	
+	public static int numOfGames = 10;
+	public static int numOfWins = 3;
+	public static int numOfLoses = 7;
+	public static int numOfSuccessiveWins = 2;
+	
+	public static boolean isFirstTime = false;
 	
 	public static void setRatioes()
 	{

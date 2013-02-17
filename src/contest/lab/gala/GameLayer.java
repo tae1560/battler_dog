@@ -22,19 +22,19 @@ import contest.lab.gala.item.Item;
 import contest.lab.gala.item.Redbull;
 
 public class GameLayer extends CCLayer{
-	// È­¸é¿¡ º¸ÀÌ´Â ¾ÆÀÌÅÛÀÇ ¸®½ºÆ®
+	// È­ï¿½é¿¡ ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
 	ArrayList<Item> itemList;			
-	// itemÀÇ positionµéÀ» ÀúÀå
+	// itemï¿½ï¿½ positionï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	ArrayList<CGPoint> itemPositions;	
 	
-	// °¡·Î ¼¼·Î ºñÀ² ÁöÁ¤À» À§ÇÑ ¸Å´ÏÀú °´Ã¼ 
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å´ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ 
 	// Manager.ratio_x; , Manager.ratio_y;
 
 	
-	// ÇÑ È­¸é¿¡ º¸ÀÌ´Â ¾ÆÀÌÅÛÀÇ °³¼ö
+	// ï¿½ï¿½ È­ï¿½é¿¡ ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	int numOfItems = 4;
 	
-	// °ÔÀÓ ¹öÆ° ¸Þ´º
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° ï¿½Þ´ï¿½
 	CCMenuItemSprite btn_bone;
 	CCMenuItemSprite btn_gum;
 	CCMenuItemSprite btn_redbull;
@@ -78,15 +78,15 @@ public class GameLayer extends CCLayer{
 		bg_gamelayer.setPosition(360 * Manager.ratio_width, 640 * Manager.ratio_height);
 		this.addChild(bg_gamelayer);		
 		
-		// itemµéÀÇ positionµéÀ» ¸®½ºÆ®·Î ÀúÀå
+		// itemï¿½ï¿½ï¿½ï¿½ positionï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		itemPositions = new ArrayList<CGPoint>();
 		for(int i = 0; i < numOfItems; i++)
 		{
-			CGPoint cgpoint = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(360 * Manager.ratio_width, (920 - i * 135) * Manager.ratio_height));	//* ÀçÁ¶Á¤ ÇÊ¿ä
+			CGPoint cgpoint = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(360 * Manager.ratio_width, (920 - i * 135) * Manager.ratio_height));	//* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
 			itemPositions.add(cgpoint);
 		}
 		
-		// itemµéÀÇ positionÀ» ¼³Á¤, addchild
+		// itemï¿½ï¿½ï¿½ï¿½ positionï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, addchild
 		itemList = new ArrayList<Item>();
 		for(int i = 0; i < numOfItems; i++)
 		{
@@ -98,7 +98,7 @@ public class GameLayer extends CCLayer{
 			this.addChild(newItem.image);
 		}
 		
-		// buttonµé ¸Þ´º·Î addchild
+		// buttonï¿½ï¿½ ï¿½Þ´ï¿½ï¿½ï¿½ addchild
 		btn_bone = CCMenuItemSprite.item(btn_bone_unclick, btn_bone_click, this, "clickedBone");
 		btn_gum = CCMenuItemSprite.item(btn_gum_unclick, btn_gum_click, this, "clickedGum");
 		btn_redbull = CCMenuItemSprite.item(btn_redbull_unclick, btn_redbull_click, this, "clickedRedbull");
@@ -159,25 +159,25 @@ public class GameLayer extends CCLayer{
 	{
 		ComboLayer.showCombo();
 		
-		// ¼±ÅÃµÈ ¾ÆÀÌÅÛ¿¡ ÀÇÇÑ °ÔÀÌÁö È¹µæ(°ÔÀÌÁö ¹Ù ¾÷µ¥ÀÌÆ® Æ÷ÇÔ)
+		// ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¹ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½)
 		itemList.get(0).acquireGage();
 		
-		// ¼±ÅÃµÈ ¾ÆÀÌÅÛÀ» ·¹ÀÌ¾î¿¡¼­ Á¦°Å
+		// ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾î¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		this.removeChild(itemList.get(0).image, true);
-		// ¾ÆÀÌÅÛ ¸®½ºÆ®¿¡¼­ Á¦°Å
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		itemList.remove(0);
-		// »õ·Î¿î ¾ÆÀÌÅÛÀ» ¸®½ºÆ®¿¡ Ãß°¡
+		// ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ß°ï¿½
 		Item newItem = createNewItem();
 		newItem.image.setScaleX(Manager.ratio_width);
 		newItem.image.setScaleY(Manager.ratio_height);
 		
 		itemList.add(newItem);
-		// ¾ÆÀÌÅÛµéÀÇ Æ÷Áö¼Ç ÀçÁ¶Á¤
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Ûµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		for(int i = 0; i < numOfItems; i++)
 		{
 			itemList.get(i).image.setPosition(itemPositions.get(i));
 		}
-		// »õ·Î¿î ¾ÆÀÌÅÛ(¸®½ºÆ®ÀÇ ¸¶Áö¸·)À» ·¹ÀÌ¾î¿¡ Ãß°¡
+		// ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾î¿¡ ï¿½ß°ï¿½
 		this.addChild(itemList.get(numOfItems - 1).image);
 	}
 	void clickedWrongOne()

@@ -42,7 +42,11 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 	CCSprite[] characters = null;
 	CCLabel[] userIDs = null;
 	CCLabelAtlas[] userNumOfWins = null;
+	CCSprite[] successiveWins = null;
 	CCLabelAtlas[] ranking = null;
+	
+	CCLabel currentPage = null;
+	CCLabel totalPage = null;
 	
 	// btn_challenge[user][0] = offline, btn_challenge[user][1] = online
 	CCMenu[] btn_challenge = null;
@@ -142,6 +146,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 	// �ش� user�� ������ ĳ���͸� ������
 	public void updatePage()
 	{
+		currentPage.setString((currentPageNum + 1) + "");
 		for(int i = 0; i < numOfTotalEntries; i++)
 		{
 			if((i >= currentPageNum * 4) && (i < (currentPageNum + 1) * 4))
@@ -157,7 +162,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 				{
 					btn_challenge[i].setVisible(true);
 				}
-				
+				successiveWins[i].setVisible(true);
 				ranking[i].setVisible(true);
 			}
 			else
@@ -173,6 +178,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 				{
 					btn_challenge[i].setVisible(false);
 				}
+				successiveWins[i].setVisible(false);
 				ranking[i].setVisible(false);
 			}
 		}
@@ -215,6 +221,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 			userNumOfWins = new CCLabelAtlas[numOfTotalEntries];
 			btn_challenge = new CCMenu[numOfTotalEntries];
 			ranking = new CCLabelAtlas[numOfTotalEntries];
+			successiveWins = new CCSprite[numOfTotalEntries];
 			// ĳ���� ��������Ʈ ���� 
 			for(int i = 0; i < numOfTotalEntries; i++)
 			{
@@ -227,32 +234,40 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 					this.addChild(bg_myEntry);
 				}
 				characters[i] = CCSprite.sprite(String.format("ranking/icon_char%d.png", Manager.friendList.get(i).character));
-				characters[i].setPosition(240 * Manager.ratio_width, (1123 - (i % numOfEntryPerOnePage) * 160)*Manager.ratio_height);
+				characters[i].setPosition(290 * Manager.ratio_width, (1123 - (i % numOfEntryPerOnePage) * 160)*Manager.ratio_height);
 				characters[i].setScaleX(Manager.ratio_width);
 				characters[i].setScaleY(Manager.ratio_height);
 				characters[i].setVisible(false);
 				this.addChild(characters[i]);
 
-				ranking[i] = CCLabelAtlas.label(String.valueOf(i), "ranking/ranking_font.png", 30*(int)Manager.ratio_width, 30 * (int)Manager.ratio_height, '0');
-				ranking[i].setPosition(95 * Manager.ratio_width, (1123 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
+				ranking[i] = CCLabelAtlas.label(String.valueOf(i+1), "ranking/ranking_font.png", 70, 88, '0');
+				ranking[i].setPosition(95 * Manager.ratio_width, (1090 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
 				ranking[i].setVisible(false);
 				ranking[i].setScaleX(Manager.ratio_width);
 				ranking[i].setScaleY(Manager.ratio_height);
 				addChild(ranking[i]);
 				
 				userIDs[i] = CCLabel.makeLabel(Manager.friendList.get(i).id, "Arial", 40);
-				userIDs[i].setPosition(331 * Manager.ratio_width, (1171 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
+				userIDs[i].setPosition(430 * Manager.ratio_width, (1171 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
 				userIDs[i].setVisible(false);
 				userIDs[i].setScaleX(Manager.ratio_width);
 				userIDs[i].setScaleY(Manager.ratio_height);
 				addChild(userIDs[i]);
 
-				userNumOfWins[i] = CCLabelAtlas.label(Manager.friendList.get(i).number_of_wins + "", "ranking/win_font.png", 30 * (int)Manager.ratio_width, 30 * (int)Manager.ratio_height, '0');
-				userNumOfWins[i].setPosition(356 * Manager.ratio_width, (1090 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
+				userNumOfWins[i] = CCLabelAtlas.label(Manager.friendList.get(i).number_of_wins + "", "ranking/win_font.png", 28, 38, '0');
+				userNumOfWins[i].setPosition(406 * Manager.ratio_width, (1090 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
 				userNumOfWins[i].setVisible(false);
 				userNumOfWins[i].setScaleX(Manager.ratio_width);
 				userNumOfWins[i].setScaleY(Manager.ratio_height);
 				addChild(userNumOfWins[i]);
+
+				successiveWins[i] = CCSprite.sprite("ranking/successive_wins.png");
+				successiveWins[i].setPosition(480 * Manager.ratio_width, (1110 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
+				successiveWins[i].setScaleX(Manager.ratio_width);
+				successiveWins[i].setScaleY(Manager.ratio_height);
+				successiveWins[i].setVisible(false);
+				addChild(successiveWins[i]);	
+				
 			}
 
 			// on, offline ��ư ����
@@ -273,6 +288,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 						newMenu.setScaleY(Manager.ratio_height);
 						newMenu.alignItemsHorizontally(30 * Manager.ratio_width);
 						newMenu.setPosition(581 * Manager.ratio_width, (1120 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
+						newMenu.setAnchorPoint(0f, 0f);
 						this.addChild(newMenu);
 						btn_challenge[i] = newMenu;
 					}
@@ -287,6 +303,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 						newMenu.setScaleX(Manager.ratio_width);
 						newMenu.setScaleY(Manager.ratio_height);
 						newMenu.setPosition(581 * Manager.ratio_width, (1120 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
+						newMenu.setAnchorPoint(0f, 0f);
 						this.addChild(newMenu);
 						btn_challenge[i] = newMenu;
 					}
@@ -296,18 +313,36 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 			CCMenuItemSprite btn_next = CCMenuItemSprite.item(btn_next_unclicked, btn_next_clicked, this, "clickedNextButton");
 			CCMenuItemSprite btn_before = CCMenuItemSprite.item(btn_before_unclicked, btn_before_clicked, this, "clickedBeforeButton");
 			CCMenu controlPage = CCMenu.menu(btn_before, btn_next);
-			controlPage.alignItemsHorizontally(50 * Manager.ratio_width);
-			controlPage.setPosition(240 * Manager.ratio_width, 320 * Manager.ratio_height);
+			controlPage.setScaleX(Manager.ratio_width);
+			controlPage.setScaleY(Manager.ratio_height);
+			controlPage.alignItemsHorizontally(170 * Manager.ratio_width);
+			controlPage.setPosition(360 * Manager.ratio_width, 484 * Manager.ratio_height);
+			controlPage.setAnchorPoint(0f, 0f);
 			this.addChild(controlPage);
 
-			updatePage();
 
 			CCMenuItemSprite btn_random_game = CCMenuItemSprite.item(btn_goRandomGame_unclicked, btn_goRandomGame_clicked, this, "clickedRandomGameButton");
 			CCMenuItemSprite btn_setting = CCMenuItemSprite.item(btn_setting_unclicked, btn_setting_clicked, this, "clickedSettingButton");
 			CCMenu otherMenu = CCMenu.menu(btn_random_game, btn_setting);
-			otherMenu.alignItemsHorizontally(50 * Manager.ratio_width);
-			otherMenu.setPosition(240 * Manager.ratio_width, 100 * Manager.ratio_height);
+			otherMenu.alignItemsHorizontally(100 * Manager.ratio_width);
+			otherMenu.setPosition(360 * Manager.ratio_width, 100 * Manager.ratio_height);
+			otherMenu.setScaleX(Manager.ratio_width);
+			otherMenu.setScaleY(Manager.ratio_height);
+			otherMenu.setAnchorPoint(0f, 0f);
 			this.addChild(otherMenu);
+			
+			currentPage = CCLabel.makeLabel("" + 1, "Arial", 45);
+			currentPage.setScaleX(Manager.ratio_width);
+			currentPage.setScaleY(Manager.ratio_height);
+			currentPage.setPosition(330 * Manager.ratio_width, 484 * Manager.ratio_height);
+			this.addChild(currentPage);
+			
+			totalPage = CCLabel.makeLabel("" + (1 + numOfTotalEntries/numOfEntryPerOnePage), "Arial", 45);
+			totalPage.setScaleX(Manager.ratio_width);
+			totalPage.setScaleY(Manager.ratio_height);
+			totalPage.setPosition(390 * Manager.ratio_width, 484 * Manager.ratio_height);
+			this.addChild(totalPage);
+			updatePage();
 		}
 	}
 	@Override
@@ -337,7 +372,9 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 			
 			// btn_challenge[user][0] = offline, btn_challenge[user][1] = online
 			btn_challenge = null;
-			
+			currentPage = null;
+			totalPage = null;
+			successiveWins = null;
 			System.gc();
 		}
 		

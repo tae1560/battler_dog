@@ -9,9 +9,7 @@ import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
-import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCSprite;
-import org.cocos2d.types.CGPoint;
 
 import contest.lab.gala.interfaces.LifeCycleInterface;
 
@@ -84,15 +82,12 @@ public class MainAnimationLayer extends CCLayer implements LifeCycleInterface{
 		if (layer_state == 0) {
 			layer_state ++;
 			
-			
 			loginButton_unclicked = CCSprite.sprite("main_animation/btn_login_unclicked.png");
 			loginButton_clicked = CCSprite.sprite("main_animation/btn_login_clicked.png");
 			joinButton_unclicked = CCSprite.sprite("main_animation/btn_join_unclicked.png");
 			joinButton_clicked = CCSprite.sprite("main_animation/btn_join_clicked.png");
 			btn_login = CCMenuItemSprite.item(loginButton_unclicked, loginButton_clicked, this, "goLogin");
 			btn_join = CCMenuItemSprite.item(joinButton_unclicked, joinButton_clicked, this, "goJoin");
-			
-			
 			
 			Manager.setRatioes();
 			
@@ -131,21 +126,13 @@ public class MainAnimationLayer extends CCLayer implements LifeCycleInterface{
 			
 			menu_login_join = CCMenu.menu(btn_login, btn_join);
 			menu_login_join.setPosition(360* Manager.ratio_width, 96 * Manager.ratio_height);
-			menu_login_join.alignItemsHorizontally();
+			menu_login_join.alignItemsHorizontally(30);
 			
 			loginButton_unclicked.setVisible(false);
 			loginButton_clicked.setVisible(false);
 			joinButton_unclicked.setVisible(false);
 			joinButton_clicked.setVisible(false);
-			
-//			btn_login.setVisible(false);
-//			btn_join.setVisible(false);
 			menu_login_join.setVisible(false);
-//			this.addChild(menu_login_join);
-			
-			CCLabelAtlas labelAtlas = CCLabelAtlas.label("123456789", "minigame/bg_gamelayer.png", 20, 20, '0');
-			labelAtlas.setPosition(CGPoint.ccp(100,100));
-			this.addChild(labelAtlas);
 		}
 	}
 	@Override

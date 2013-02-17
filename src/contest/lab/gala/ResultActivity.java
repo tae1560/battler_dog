@@ -10,7 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public class ResultActivity extends Activity {
-	protected CCGLSurfaceView _glSurfaceView;
+	protected CCGLSurfaceView _glSurfaceView1;
 	
 	
 	/** Called when the activity is first created. */
@@ -20,9 +20,9 @@ public class ResultActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 //		setContentView(R.layout.main);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		_glSurfaceView = new CCGLSurfaceView(this);
+		_glSurfaceView1 = new CCGLSurfaceView(this);
 
-		setContentView(_glSurfaceView);
+		setContentView(_glSurfaceView1);
 		
 		
 	}
@@ -31,7 +31,7 @@ public class ResultActivity extends Activity {
 
 		super.onStart();
 		
-		CCDirector.sharedDirector().attachInView(_glSurfaceView);
+		CCDirector.sharedDirector().attachInView(_glSurfaceView1);
 
 		CCDirector.sharedDirector().setDeviceOrientation(CCDirector.kCCDeviceOrientationPortrait);
 

@@ -8,7 +8,7 @@ public class ComboLayer extends CCLayer{
 	Manager m;
 	
 	static CCLabel combo;
-	public static float numOfCombo = 0;
+	public static int numOfCombo = 0;
 	public ComboLayer()
 	{
 		m = new Manager();
@@ -24,7 +24,9 @@ public class ComboLayer extends CCLayer{
 	}
 	static void resetCombo()
 	{
+		if(numOfCombo > Manager.maxNumOfCombo)
+			Manager.maxNumOfCombo = numOfCombo;
 		numOfCombo = 0;
-		combo.setString("¹Ùº¸ ¹Ùº¸ Æ²·È¾î");
+		combo.setString("ë°”ë³´ë°”ë³´ í‹€ë ¸ì–´");
 	}
 }

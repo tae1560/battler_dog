@@ -7,6 +7,7 @@ import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.types.CGPoint;
 
 import contest.lab.gala.data.CurrentUserInformation;
 
@@ -21,6 +22,7 @@ public class ResultLayer extends CCLayer {
 	
 	CCSprite myCharacter;
 	
+	CCLabelAtlas maxNumOfCombos;
 	CCLabelAtlas numOfGames;
 	CCLabelAtlas numOfWins;
 	CCLabelAtlas numOfLoses;
@@ -52,29 +54,50 @@ public class ResultLayer extends CCLayer {
 		this.addChild(result);
 		
 		CCMenuItemSprite btn_back = CCMenuItemSprite.item(btn_back_unclicked, btn_back_clicked, this, "goToFriendList");
+//		btn_back.setPosition(633 * Manager.ratio_width, 81 * Manager.ratio_height);
+		btn_back.setScaleX(Manager.ratio_width);
+		btn_back.setScaleY(Manager.ratio_height);
 		CCMenu backMenu = CCMenu.menu(btn_back);
-		backMenu.setScaleX(Manager.ratio_width);
-		backMenu.setScaleY(Manager.ratio_height);
 		backMenu.setPosition(633 * Manager.ratio_width, 81 * Manager.ratio_height);
+		backMenu.setAnchorPoint(0f, 0f);
 		this.addChild(backMenu);
 		
-		numOfGames = CCLabelAtlas.label(""+Manager.numOfGames, "result/numbers_results", 30 * (int)Manager.ratio_width, 30 * (int)Manager.ratio_height,'0');
-		numOfGames.setPosition(160 * Manager.ratio_width, 360 * Manager.ratio_height);
+		numOfGames = CCLabelAtlas.label(""+Manager.numOfGames, "result/numbers_result.png", 28, 38, '0');
+		numOfGames.setPosition(CGPoint.ccp(125 * Manager.ratio_width, 325 * Manager.ratio_height));
+		numOfGames.setAnchorPoint(1.0f, 0.5f);
+		numOfGames.setScaleX(Manager.ratio_width);
+		numOfGames.setScaleY(Manager.ratio_height);
 		this.addChild(numOfGames);
 		
-		numOfWins =  CCLabelAtlas.label(""+Manager.numOfWins, "result/numbers_results", 30 * (int)Manager.ratio_width, 30 * (int)Manager.ratio_height,'0');
-		numOfWins.setPosition(360 * Manager.ratio_width, 360 * Manager.ratio_height);
+		numOfWins =  CCLabelAtlas.label(""+Manager.numOfWins, "result/numbers_result.png", 28, 38,'0');
+		numOfWins.setPosition(325 * Manager.ratio_width, 325 * Manager.ratio_height);
+		numOfWins.setAnchorPoint(1.0f, 0.5f);
+		numOfWins.setScaleX(Manager.ratio_width);
+		numOfWins.setScaleY(Manager.ratio_height);
 		this.addChild(numOfWins);
 		
-		numOfLoses = CCLabelAtlas.label(""+Manager.numOfLoses, "result/numbers_results", 30 * (int)Manager.ratio_width, 30 * (int)Manager.ratio_height,'0');
-		numOfLoses.setPosition(520 * Manager.ratio_width, 360 * Manager.ratio_height);
+		numOfLoses = CCLabelAtlas.label(""+Manager.numOfLoses, "result/numbers_result.png", 28, 38,'0');
+		numOfLoses.setPosition(485 * Manager.ratio_width, 325 * Manager.ratio_height);
+		numOfLoses.setAnchorPoint(1.0f, 0.5f);
+		numOfLoses.setScaleX(Manager.ratio_width);
+		numOfLoses.setScaleY(Manager.ratio_height);
 		this.addChild(numOfLoses);
 		
-		numOfSuccessiveWins  = CCLabelAtlas.label(""+Manager.numOfSuccessiveWins, "result/numbers_results", 30 * (int)Manager.ratio_width, 30 * (int)Manager.ratio_height,'0');
-		numOfSuccessiveWins.setPosition(430 * Manager.ratio_width, 630 * Manager.ratio_height);
+		numOfSuccessiveWins  = CCLabelAtlas.label(""+Manager.numOfSuccessiveWins, "result/numbers_wins.png", 70, 88, '0');
+		numOfSuccessiveWins.setPosition(350 * Manager.ratio_width, 585 * Manager.ratio_height);
+		numOfSuccessiveWins.setAnchorPoint(1.0f, 0.5f);
+		numOfSuccessiveWins.setScaleX(Manager.ratio_width);
+		numOfSuccessiveWins.setScaleY(Manager.ratio_height);
 		this.addChild(numOfSuccessiveWins);
 		
-		myCharacter = CCSprite.sprite(String.format("char%d_normal1.png", CurrentUserInformation.userChar));
+		maxNumOfCombos  = CCLabelAtlas.label(""+Manager.maxNumOfCombo, "result/numbers_combo.png", 50, 70, '0');
+		maxNumOfCombos.setPosition(545 * Manager.ratio_width, 810 * Manager.ratio_height);
+		maxNumOfCombos.setAnchorPoint(1.0f, 0.5f);
+		maxNumOfCombos.setScaleX(Manager.ratio_width);
+		maxNumOfCombos.setScaleY(Manager.ratio_height);
+		this.addChild(maxNumOfCombos);
+		
+		myCharacter = CCSprite.sprite(String.format("character/char%d_normal1.png", CurrentUserInformation.userChar));
 		myCharacter.setScaleX(-1 * Manager.ratio_width);
 		myCharacter.setScaleY(Manager.ratio_height);
 		myCharacter.setPosition(210 * Manager.ratio_width, 730 * Manager.ratio_height);

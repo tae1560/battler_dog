@@ -60,7 +60,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	CCSprite coming_punch;
 	CCSprite going_punch;
 
-	// °ø°ÝÁßÀÎ Ä³¸¯ÅÍ ÀÌ¹ÌÁö
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½
 	CCSprite attack_bark_opponent;
 	CCSprite attack_bark_mine;
 
@@ -70,15 +70,15 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	CCSprite attack_punch_opponent;
 	CCSprite attack_punch_mine;
 
-	CCFiniteTimeAction damagedAction;	// ³¯¾Æ¿À±â
+	CCFiniteTimeAction damagedAction;	// ï¿½ï¿½ï¿½Æ¿ï¿½ï¿½ï¿½
 
-	CCFiniteTimeAction attackAction;	// ³¯¾Æ°¡±â
+	CCFiniteTimeAction attackAction;	// ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½
 
-	CCSequence damagedSequence_bark;	// ³¯¾Æ¿À°í ³ª¼­ ³»°¡ ¸Â´Â ¾Ö´Ï¸ÅÀÌ¼Ç
+	CCSequence damagedSequence_bark;	// ï¿½ï¿½ï¿½Æ¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Â´ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
 	//	CCSequence damagedSequence_bone;
 	//	CCSequence damagedSequence_punch;
 
-	CCSequence attackSequence_bark;		// ³¯¾Æ°¡°í ³ª¼­ »ó´ë¹æÀÌ ¸Â´Â ¾Ö´Ï¸ÅÀÌ¼Ç
+	CCSequence attackSequence_bark;		// ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â´ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
 	//	CCSequence attackSequence_bone;
 	//	CCSequence attackSequence_punch;
 
@@ -102,7 +102,6 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	CCSprite myCharacter_hurted;
 	CCSprite opponentCharacter_hurted;
 
-	
 	public void makeNormalAnimation()
 	{
 		normalAnimation_mine = CCAnimation.animation("animation1", 0.15f);
@@ -236,13 +235,13 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 		gage_bar_black.setScaleY(Manager.ratio_height);
 		this.addChild(gage_bar_black);
 		
-		// ½ºÅ³ ¹öÆ° À§Ä¡ ¼³Á¤, ·¹ÀÌ¾î¿¡ Ãß°¡
+		// ï¿½ï¿½Å³ ï¿½ï¿½Æ° ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½Ì¾î¿¡ ï¿½ß°ï¿½
 		btn_skill_bark_activated.setPosition(631 * Manager.ratio_width, 733 * Manager.ratio_height);
-		btn_skill_bark_activated.setScaleX(Manager.ratio_width);	//* È®ÀÎ ÇÊ¿ä
+		btn_skill_bark_activated.setScaleX(Manager.ratio_width);	//* È®ï¿½ï¿½ ï¿½Ê¿ï¿½
 		btn_skill_bark_activated.setScaleY(Manager.ratio_height);
 		this.addChild(btn_skill_bark_activated);
 		btn_skill_bark_normal.setPosition(631 * Manager.ratio_width, 733 * Manager.ratio_height);
-		btn_skill_bark_normal.setScaleX(Manager.ratio_width);	//* È®ÀÎ ÇÊ¿ä
+		btn_skill_bark_normal.setScaleX(Manager.ratio_width);	//* È®ï¿½ï¿½ ï¿½Ê¿ï¿½
 		btn_skill_bark_normal.setScaleY(Manager.ratio_height);
 		this.addChild(btn_skill_bark_normal);
 		
@@ -372,14 +371,14 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 
 
 	@Override
-	///* ¼­¹ö¿¡°Ô¼­ °ø°Ý Á¤º¸¸¦ ¹Þ¾ÒÀ» ¶§, Activity¿¡¼­ È£ÃâÇÏ´Â ÇÔ¼ö
+	///* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾ï¿½ï¿½ï¿½ ï¿½ï¿½, Activityï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 	public void didGetDamaged(SkillType kindOfAttack) {
 		switch(kindOfAttack.toInteger())
 		{
 		case 1 : 
 			hp -= Manager.damaged_gage_per_attack_bark;
 			updateGageBar();
-			//* µ¥¹ÌÁö È¿°ú ¾Ö´Ï¸ÞÀÌ¼Ç
+			//* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
 			runAttackAnimation_opponent(1);
 //			BattlerDogActivity.makeToast(1);
 			break;
@@ -387,13 +386,13 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 			hp -= Manager.damaged_gage_per_attack_bone;
 			updateGageBar();
 			runAttackAnimation_opponent(2);
-			//* µ¥¹ÌÁö È¿°ú ¾Ö´Ï¸ÞÀÌ¼Ç
+			//* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
 //			BattlerDogActivity.makeToast(2);
 			break;
 		case 3 :
 			hp -= Manager.damaged_gage_per_attack_punch;
 			updateGageBar();
-			//* µ¥¹ÌÁö È¿°ú ¾Ö´Ï¸ÞÀÌ¼Ç
+			//* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
 			runAttackAnimation_opponent(3);
 //			BattlerDogActivity.makeToast(3);
 			break;
@@ -475,11 +474,11 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 		}
 	}
 	/*
-	 * ½ºÅ³ ¹öÆ°ÀÇ È°¼º, ºñÈ°¼º »óÅÂ ¾÷µ¥ÀÌÆ®
+	 * ï¿½ï¿½Å³ ï¿½ï¿½Æ°ï¿½ï¿½ È°ï¿½ï¿½, ï¿½ï¿½È°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 	 */
 	public static void updateSkillBtns()
 	{
-		// ½ºÅ³ ¹öÆ° È°¼ºÈ­ ==> normal imageÀÇ visibility¸¦  false·Î
+		// ï¿½ï¿½Å³ ï¿½ï¿½Æ° È°ï¿½ï¿½È­ ==> normal imageï¿½ï¿½ visibilityï¿½ï¿½  falseï¿½ï¿½
 		if(gage >= Manager.required_gage_for_skill_punch)
 		{
 			btn_skill_bark_normal.setVisible(false);
@@ -506,7 +505,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 		}
 	}
 	/*
-	 * °ÔÀÌÁö¿¡ µû¸¥ °ÔÀÌÁö ¹Ù ±æÀÌ ¾÷µ¥ÀÌÆ®
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 	 */
 	public static void updateGageBar()
 	{
@@ -531,7 +530,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 			updateGageBar();
 			runAttackAnimation_mine(2);
 			NetworkManager.getInstance().sendAttack(SkillType.BONE);
-			///* ¼­¹ö¿¡°Ô °ø°Ý Á¤º¸ Àü¼Û
+			///* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		}
 		else if(btn_skill_punch_normal.getBoundingBox().contains(touchPoint.x, touchPoint.y) && gage >= Manager.required_gage_for_skill_punch)
 		{
@@ -540,7 +539,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 			updateGageBar();
 			runAttackAnimation_mine(3);
 			NetworkManager.getInstance().sendAttack(SkillType.PUNCH);
-			///* ¼­¹ö¿¡°Ô °ø°Ý Á¤º¸ Àü¼Û
+			///* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		}
 		return super.ccTouchesBegan(event);
 	}

@@ -78,6 +78,7 @@ public class JoinActivity extends Activity implements JoinCallback{
 			
 			@Override
 			public void didGetFriends(ArrayList<User> friends) {
+				Manager.isFirstTime = true;
 				Manager.friendList = (ArrayList<User>) friends.clone();
 				Intent intent = new Intent(JoinActivity.this, BattlerDogActivity.class);
 				startActivity(intent);
