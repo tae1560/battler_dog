@@ -16,7 +16,6 @@ import contest.lab.gala.util.CommonUtils;
 public class GameActivity extends Activity {
 	protected CCGLSurfaceView _glSurfaceView;
 	
-	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
