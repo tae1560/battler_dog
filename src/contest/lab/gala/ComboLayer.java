@@ -4,7 +4,9 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.types.ccColor3B;
 
-public class ComboLayer extends CCLayer{
+import contest.lab.gala.interfaces.LifeCycleInterface;
+
+public class ComboLayer extends CCLayer implements LifeCycleInterface{
 	Manager m;
 	
 	static CCLabel combo;
@@ -28,5 +30,10 @@ public class ComboLayer extends CCLayer{
 			Manager.maxNumOfCombo = numOfCombo;
 		numOfCombo = 0;
 		combo.setString("바보바보 틀렸어");
+	}
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		combo = null;
 	}
 }

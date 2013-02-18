@@ -5,7 +5,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,79 +25,16 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.cocos2d.utils.Base64.InputStream;
 
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.LinearLayout;
 
 public class CommonUtils {
 	
-	//////// UI builder module
-	public static void arrangeView(View view, float _x, float _y, float width, float height, float standWidth, float standHeight) {
-        
-        ViewGroup parent = (ViewGroup) view.getParent();
-        //float width, float height,
-        float x = _x;
-        float y = _y;
-        
-        parent.removeView(view);
-        
-        // set base layout
-        LinearLayout baseLayout = new LinearLayout(parent.getContext());
-        baseLayout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams base_layout_params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1);
-        baseLayout.setLayoutParams(base_layout_params);
-        
-        // add top layout
-        LinearLayout topLayout = new LinearLayout(parent.getContext());
-        LinearLayout.LayoutParams top_layout_params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0, y);
-        topLayout.setLayoutParams(top_layout_params);
-        baseLayout.addView(topLayout);
-        
-        // add mid layout
-        LinearLayout midLayout = new LinearLayout(parent.getContext());
-        midLayout.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams mid_layout_params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0, height);
-        midLayout.setLayoutParams(mid_layout_params);
-        baseLayout.addView(midLayout);
-        
-        // add bottom layout
-        LinearLayout botLayout = new LinearLayout(parent.getContext());
-        LinearLayout.LayoutParams bot_layout_params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0, standHeight - y - height);
-        botLayout.setLayoutParams(bot_layout_params);
-        baseLayout.addView(botLayout);
-        
-        // add left layout
-        LinearLayout leftLayout = new LinearLayout(parent.getContext());
-        LinearLayout.LayoutParams left_layout_params = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, x);
-        leftLayout.setLayoutParams(left_layout_params);
-        midLayout.addView(leftLayout);
-        
-        // add center layout
-        LinearLayout centerLayout = new LinearLayout(parent.getContext());
-        centerLayout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams center_layout_params = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, width);
-        centerLayout.setLayoutParams(center_layout_params);
-        midLayout.addView(centerLayout);
-        
-        // add right layout
-        LinearLayout rightLayout = new LinearLayout(parent.getContext());
-        LinearLayout.LayoutParams right_layout_params = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, standWidth - x - width);
-        rightLayout.setLayoutParams(right_layout_params);
-        midLayout.addView(rightLayout);
-        
-        centerLayout.addView(view);
-        
-        parent.addView(baseLayout);
-	}
-	
-	//////// ??? ?µì? ëª¨ë?
 	private static final int timeoutConnection = 3000;
 	private static final int timeoutSocket = 3000;
 	
@@ -179,7 +115,7 @@ public class CommonUtils {
 		        
 		        if (resEntityGet != null)
 		        {  
-		                // ê²°ê³¼ë¥?ì²?¦¬?©ë???
+		                // ê²°ê³¼ï¿½?ï¿½?ï¿½ï¿½?ï¿½ï¿½???
 		        	String result = EntityUtils.toString(resEntityGet);
 		        	Log.d("NETWORK_RESULT", result);
 		            return result;
@@ -201,14 +137,14 @@ public class CommonUtils {
 	}
 	
 	/**
-	* Wi-Fiê°??°ê²°??? ???ê°?	* @return true=?°ê²°??	*/
+	* Wi-Fiï¿½??ï¿½ê²°??? ???ï¿½?	* @return true=?ï¿½ê²°??	*/
 	public static boolean isConnectedWiFi(Context context)
 	{
 	ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 	return manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
 	}
 	/**
-	* 3Gê°??°ê²°??? ???ê°?	* @return true=?°ê²°??	*/
+	* 3Gï¿½??ï¿½ê²°??? ???ï¿½?	* @return true=?ï¿½ê²°??	*/
 	public static boolean isConnected3G(Context context)
 	{
 	boolean kResult = false;
@@ -233,10 +169,10 @@ public class CommonUtils {
 		try {
 			InputStream is;
 			URL url = new URL(strURL);
-			is = url.openStream();
+			is = (InputStream) url.openStream();
 			BufferedInputStream bis = new BufferedInputStream(is);
  
-			// ë§????????????ë©?ì§??ê³??¤ì? ???
+			// ï¿½????????????ï¿½?ï¿½??ï¿½??ï¿½ï¿½? ???
 			if (f.exists()) {
 				f.delete();
 				f.createNewFile();

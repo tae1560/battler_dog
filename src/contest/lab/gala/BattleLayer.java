@@ -16,27 +16,29 @@ import android.view.MotionEvent;
 import contest.lab.gala.callback.GetDamagedCallback;
 import contest.lab.gala.data.CurrentUserInformation;
 import contest.lab.gala.data.SkillType;
+import contest.lab.gala.interfaces.LifeCycleInterface;
+import contest.lab.gala.util.LayerDestroyManager;
 
-public class BattleLayer extends CCLayer implements GetDamagedCallback{
-	public static CCSprite btn_skill_bark_activated = CCSprite.sprite("minigame/btn_skill_bark_activated.png");
-	public static CCSprite btn_skill_bark_normal = CCSprite.sprite("minigame/btn_skill_bark_normal.png");
-	public static CCSprite btn_skill_bone_activated = CCSprite.sprite("minigame/btn_skill_bone_activated.png");
-	public static CCSprite btn_skill_bone_normal = CCSprite.sprite("minigame/btn_skill_bone_normal.png");
-	public static CCSprite btn_skill_punch_activated = CCSprite.sprite("minigame/btn_skill_punch_activated.png");
-	public static CCSprite btn_skill_punch_normal = CCSprite.sprite("minigame/btn_skill_punch_normal.png");
+public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycleInterface{
+	private static CCSprite btn_skill_bark_activated = null;
+	private static CCSprite btn_skill_bark_normal = null;
+	private static CCSprite btn_skill_bone_activated = null;
+	private static CCSprite btn_skill_bone_normal = null;
+	private static CCSprite btn_skill_punch_activated = null;
+	private static CCSprite btn_skill_punch_normal = null;
 	
-	public static CCSprite gage_bar = CCSprite.sprite("minigame/gage_bar.png");
-	public static CCSprite gage_bar_black = CCSprite.sprite("minigame/bg_gage_bar.png");
+	private static CCSprite gage_bar = null;
+	private static CCSprite gage_bar_black = null;
 	
 	
 	public static float gage;
 	
 	////////////////////////////////////////////////////////////////////////////
-	CCSprite bg_battlelayer = CCSprite.sprite("battle/bg_battlelayer.png");
-	CCSprite bg_hp_bar = CCSprite.sprite("battle/bg_hp_bar.png");
-	CCSprite hp_bar_mine = CCSprite.sprite("battle/hp_bar.png");
-	CCSprite hp_bar_opponent = CCSprite.sprite("battle/hp_bar.png");
-	CCSprite title = CCSprite.sprite("battle/title.png");
+	private CCSprite bg_battlelayer = null;
+	private CCSprite bg_hp_bar = null;
+	private CCSprite hp_bar_mine = null;
+	private CCSprite hp_bar_opponent = null;
+	private CCSprite title = null;
 
 	static float hp;
 	
@@ -216,11 +218,29 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 		opponentCharacter_normal.setVisible(true);	
 	}
 
-
+	private void init_statics() {
+		btn_skill_bark_activated = CCSprite.sprite("minigame/btn_skill_bark_activated.png");
+		btn_skill_bark_normal = CCSprite.sprite("minigame/btn_skill_bark_normal.png");
+		btn_skill_bone_activated = CCSprite.sprite("minigame/btn_skill_bone_activated.png");
+		btn_skill_bone_normal = CCSprite.sprite("minigame/btn_skill_bone_normal.png");
+		btn_skill_punch_activated = CCSprite.sprite("minigame/btn_skill_punch_activated.png");
+		btn_skill_punch_normal = CCSprite.sprite("minigame/btn_skill_punch_normal.png");
+		
+		gage_bar = CCSprite.sprite("minigame/gage_bar.png");
+		gage_bar_black = CCSprite.sprite("minigame/bg_gage_bar.png");
+		
+		bg_battlelayer = CCSprite.sprite("battle/bg_battlelayer.png");
+		bg_hp_bar = CCSprite.sprite("battle/bg_hp_bar.png");
+		hp_bar_mine = CCSprite.sprite("battle/hp_bar.png");
+		hp_bar_opponent = CCSprite.sprite("battle/hp_bar.png");
+		title = CCSprite.sprite("battle/title.png");
+	}
 
 	public BattleLayer()
 	{
 		this.setIsTouchEnabled(true);
+		
+		init_statics();
 		
 		gage = 0;
 		gage_bar.setPosition(86 * Manager.ratio_width, 570 * Manager.ratio_height);
@@ -543,5 +563,72 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 		}
 		return super.ccTouchesBegan(event);
 	}
+	@Override
+	public void onDestroy() {
+		btn_skill_bark_activated = null;
+		btn_skill_bark_normal = null;
+		btn_skill_bone_activated = null;
+		btn_skill_bone_normal = null;
+		btn_skill_punch_activated = null;
+		btn_skill_punch_normal = null;
+		
+		gage_bar = null;
+		gage_bar_black = null;
+		
+		bg_battlelayer = null;
+		bg_hp_bar = null;
+		hp_bar_mine = null;
+		hp_bar_opponent = null;
+		title = null;
+		
+		returnToNormalMode = null;
+		damagedAndReturnToNormal_mine = null;
+		damagedAndReturnToNormal_opponent = null;
+		
+		coming_bark = null;
+		going_bark = null;
+		coming_bone = null;
+		going_bone = null;
+		coming_punch = null;
+		going_punch = null;
+
+		attack_bark_opponent = null;
+		attack_bark_mine = null;
+
+		attack_bone_opponent = null;
+		attack_bone_mine = null;
+
+		attack_punch_opponent = null;
+		attack_punch_mine = null;
+
+		damagedAction = null;
+		attackAction = null;
+		damagedSequence_bark = null;
+		attackSequence_bark = null;
+		damagedAnimation_mine = null;
+		damagedAnimation_opponent = null;
+		damagedAnimate_mine = null;
+		damagedAnimate_opponent = null;
+
+		normalAnimation_mine = null;
+		normalAnimation_opponent = null;
+		normalAnimate_mine = null;
+		normalAnimate_opponent = null;
+
+		myCharacter_normal = null;
+		opponentCharacter_normal = null;
+		myCharacter_hurted = null;
+		opponentCharacter_hurted = null;
+
+		
+//		LayerDestroyManager.getInstance().removeLayer(this);
+	}
+	
+//	@Override
+//	protected void finalize() throws Throwable {
+//		onDestroy();
+//		
+//		super.finalize();
+//	}
 
 }

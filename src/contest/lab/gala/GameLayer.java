@@ -16,12 +16,14 @@ import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.types.CGPoint;
 
+import contest.lab.gala.interfaces.LifeCycleInterface;
 import contest.lab.gala.item.Bone;
 import contest.lab.gala.item.Gum;
 import contest.lab.gala.item.Item;
 import contest.lab.gala.item.Redbull;
+import contest.lab.gala.util.LayerDestroyManager;
 
-public class GameLayer extends CCLayer{
+public class GameLayer extends CCLayer implements LifeCycleInterface{
 	// ȭ�鿡 ���̴� �������� ����Ʈ
 	ArrayList<Item> itemList;			
 	// item�� position���� ����
@@ -68,6 +70,11 @@ public class GameLayer extends CCLayer{
 //		scene.addChild(layer2);
 		scene.addChild(layer3);
 		scene.addChild(layer4);
+		
+		LayerDestroyManager.getInstance().addLayer((LifeCycleInterface)layer1);
+		//LayerDestroyManager.getInstance().addLayer((LifeCycleInterface)layer2);
+		LayerDestroyManager.getInstance().addLayer((LifeCycleInterface)layer3);
+		LayerDestroyManager.getInstance().addLayer((LifeCycleInterface)layer4);
 		
 		return scene;
 	}
@@ -214,5 +221,28 @@ public class GameLayer extends CCLayer{
 				break;
 		}
 		return newItem;
+	}
+	@Override
+	public void onDestroy() {
+		itemList = null;			
+		itemPositions = null;	
+		btn_bone = null;
+		btn_gum = null;
+		btn_redbull = null;
+		buttons = null;
+		btn_bone_unclick = null;
+		btn_bone_click = null;
+		btn_gum_unclick = null;
+		btn_gum_click = null;
+		btn_redbull_unclick = null;
+		btn_redbull_click = null;
+		
+		bg_battlelayer = null;
+		bg_gamelayer = null;
+		
+		rectangle1 = null;
+		rectangle2 = null;
+		
+//		LayerDestroyManager.getInstance().removeLayer(this);
 	}	
 }

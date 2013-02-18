@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import contest.lab.gala.callback.OnGameEndedCallback;
 import contest.lab.gala.data.User;
 import contest.lab.gala.util.CommonUtils;
+import contest.lab.gala.util.LayerDestroyManager;
 
 public class GameActivity extends Activity {
 	protected CCGLSurfaceView _glSurfaceView;
@@ -26,11 +27,6 @@ public class GameActivity extends Activity {
 		_glSurfaceView = new CCGLSurfaceView(this);
 
 		setContentView(_glSurfaceView);
-	}
-	@Override
-	protected void onStart() {
-
-		super.onStart();
 		
 		CCDirector.sharedDirector().attachInView(_glSurfaceView);
 
@@ -39,6 +35,13 @@ public class GameActivity extends Activity {
 		//		CCDirector.sharedDirector().setDisplayFPS(true);
 
 		CCDirector.sharedDirector().setAnimationInterval(1.0f / 60.0f);
+	}
+	@Override
+	protected void onStart() {
+
+		super.onStart();
+		
+		
 
 		//		CCScene scene = GameLayer.makeScene();
 		CCScene scene = GameLayer.makeScene();
@@ -70,6 +73,14 @@ public class GameActivity extends Activity {
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		LayerDestroyManager.getInstance().deallocLayers();
+		
+		super.onDestroy();
 	}
 
 }
