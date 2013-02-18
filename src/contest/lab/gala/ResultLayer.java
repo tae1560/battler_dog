@@ -15,18 +15,18 @@ import android.content.Intent;
 
 public class ResultLayer extends CCLayer {
 
-	CCSprite result;
+	CCSprite result = null;
 	CCSprite bg_result = CCSprite.sprite("result/bg_result.png");
 	CCSprite btn_back_unclicked = CCSprite.sprite("result/btn_back_unclicked.png");
 	CCSprite btn_back_clicked = CCSprite.sprite("result/btn_back_clicked.png");
 	
-	CCSprite myCharacter;
+	CCSprite myCharacter = null;
 	
-	CCLabelAtlas maxNumOfCombos;
-	CCLabelAtlas numOfGames;
-	CCLabelAtlas numOfWins;
-	CCLabelAtlas numOfLoses;
-	CCLabelAtlas numOfSuccessiveWins;
+	CCLabelAtlas maxNumOfCombos = null;
+	CCLabelAtlas numOfGames = null;
+	CCLabelAtlas numOfWins = null;
+	CCLabelAtlas numOfLoses = null;
+	CCLabelAtlas numOfSuccessiveWins = null;
 	static CCScene makeScene()
 	{
 		CCScene scene = CCScene.node();
@@ -90,7 +90,7 @@ public class ResultLayer extends CCLayer {
 		numOfSuccessiveWins.setScaleY(Manager.ratio_height);
 		this.addChild(numOfSuccessiveWins);
 		
-		maxNumOfCombos  = CCLabelAtlas.label(""+Manager.maxNumOfCombo, "result/numbers_combo.png", 50, 70, '0');
+		maxNumOfCombos  = CCLabelAtlas.label(""+Manager.maxNumOfCombo, "result/numbers_combo.png", 46, 70, '0');
 		maxNumOfCombos.setPosition(545 * Manager.ratio_width, 810 * Manager.ratio_height);
 		maxNumOfCombos.setAnchorPoint(1.0f, 0.5f);
 		maxNumOfCombos.setScaleX(Manager.ratio_width);

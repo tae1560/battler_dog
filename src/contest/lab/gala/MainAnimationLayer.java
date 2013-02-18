@@ -120,9 +120,11 @@ public class MainAnimationLayer extends CCLayer implements LifeCycleInterface{
 //			btn_join = CCMenuItemSprite.item(joinButton_unclicked, joinButton_clicked, this, "goJoin");
 			
 			btn_login.setScaleX(Manager.ratio_width);
+			btn_login.setScaleX(1.05f* Manager.ratio_width);
 			btn_login.setScaleY(Manager.ratio_height);
 			btn_join.setScaleX(Manager.ratio_width);
 			btn_join.setScaleY(Manager.ratio_height);
+			btn_join.setScaleX(1.05f * Manager.ratio_width);
 			
 			menu_login_join = CCMenu.menu(btn_login, btn_join);
 			menu_login_join.setPosition(360* Manager.ratio_width, 96 * Manager.ratio_height);

@@ -171,6 +171,7 @@ public class SettingLayer extends CCLayer{
 		initBgLevel();
 		initEfLevel();
 		
+		// for test
 		SoundEngine.sharedEngine().setSoundVolume(Manager.backgroundLevel * 0.25f);
 		SoundEngine.sharedEngine().playSound(CCDirector.sharedDirector().getActivity(), R.raw.test_background, true);
 	}

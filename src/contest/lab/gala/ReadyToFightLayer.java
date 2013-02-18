@@ -239,7 +239,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 				characters[i].setVisible(false);
 				this.addChild(characters[i]);
 
-				ranking[i] = CCLabelAtlas.label(String.valueOf(i+1), "ranking/ranking_font.png", 70, 88, '0');
+				ranking[i] = CCLabelAtlas.label(String.valueOf(i+1), "ranking/ranking_font.png", 63, 88, '0');
 				ranking[i].setPosition(95 * Manager.ratio_width, (1090 - (i % numOfEntryPerOnePage) * 160) * Manager.ratio_height);
 				ranking[i].setVisible(false);
 				ranking[i].setScaleX(Manager.ratio_width);

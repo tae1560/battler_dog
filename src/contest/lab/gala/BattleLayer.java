@@ -18,19 +18,18 @@ import contest.lab.gala.data.CurrentUserInformation;
 import contest.lab.gala.data.SkillType;
 
 public class BattleLayer extends CCLayer implements GetDamagedCallback{
-	public static CCSprite btn_skill_bark_activated = CCSprite.sprite("minigame/btn_skill_bark_activated.png");
-	public static CCSprite btn_skill_bark_normal = CCSprite.sprite("minigame/btn_skill_bark_normal.png");
-	public static CCSprite btn_skill_bone_activated = CCSprite.sprite("minigame/btn_skill_bone_activated.png");
-	public static CCSprite btn_skill_bone_normal = CCSprite.sprite("minigame/btn_skill_bone_normal.png");
-	public static CCSprite btn_skill_punch_activated = CCSprite.sprite("minigame/btn_skill_punch_activated.png");
-	public static CCSprite btn_skill_punch_normal = CCSprite.sprite("minigame/btn_skill_punch_normal.png");
+	public static CCSprite btn_skill_bark_activated = null;
+	public static CCSprite btn_skill_bark_normal = null;
+	public static CCSprite btn_skill_bone_activated = null;
+	public static CCSprite btn_skill_bone_normal = null;
+	public static CCSprite btn_skill_punch_activated = null;
+	public static CCSprite btn_skill_punch_normal = null;
 	
-	public static CCSprite gage_bar = CCSprite.sprite("minigame/gage_bar.png");
-	public static CCSprite gage_bar_black = CCSprite.sprite("minigame/bg_gage_bar.png");
-	
+	public static CCSprite gage_bar = null;
+	public static CCSprite gage_bar_black = null;
 	
 	public static float gage;
-	
+	public static float thresholdOfHP = 30;
 	////////////////////////////////////////////////////////////////////////////
 	CCSprite bg_battlelayer = CCSprite.sprite("battle/bg_battlelayer.png");
 	CCSprite bg_hp_bar = CCSprite.sprite("battle/bg_hp_bar.png");
@@ -49,58 +48,49 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	static int numOfCurrentActions_mine = 0;
 	static int numOfCurrentActions_opponent = 0;
 	
-	CCCallFuncN returnToNormalMode;
-	CCSequence damagedAndReturnToNormal_mine;
-	CCSequence damagedAndReturnToNormal_opponent;
+	CCCallFuncN returnToNormalMode= null;
+	CCSequence damagedAndReturnToNormal_mine= null;
+	CCSequence damagedAndReturnToNormal_opponent= null;
 	
-	CCSprite coming_bark;
-	CCSprite going_bark;
-	CCSprite coming_bone;
-	CCSprite going_bone;
-	CCSprite coming_punch;
-	CCSprite going_punch;
+	CCSprite coming_bark= null;
+	CCSprite going_bark= null;
+	CCSprite coming_bone= null;
+	CCSprite going_bone= null;
+	CCSprite coming_punch= null;
+	CCSprite going_punch= null;
 
 	// ������� ĳ���� �̹���
-	CCSprite attack_bark_opponent;
-	CCSprite attack_bark_mine;
+	CCSprite attack_bark_opponent= null;
+	CCSprite attack_bark_mine= null;
 
-	CCSprite attack_bone_opponent;
-	CCSprite attack_bone_mine;
+	CCSprite attack_bone_opponent= null;
+	CCSprite attack_bone_mine= null;
 
-	CCSprite attack_punch_opponent;
-	CCSprite attack_punch_mine;
+	CCSprite attack_punch_opponent= null;
+	CCSprite attack_punch_mine= null;
 
-	CCFiniteTimeAction damagedAction;	// ���ƿ���
+	CCFiniteTimeAction damagedAction= null;	// ���ƿ���
 
-	CCFiniteTimeAction attackAction;	// ���ư���
+	CCFiniteTimeAction attackAction= null;	// ���ư���
 
-	CCSequence damagedSequence_bark;	// ���ƿ��� ���� ���� �´� �ִϸ��̼�
-	//	CCSequence damagedSequence_bone;
-	//	CCSequence damagedSequence_punch;
+	CCSequence damagedSequence_bark= null;	// ���ƿ��� ���� ���� �´� �ִϸ��̼�
 
-	CCSequence attackSequence_bark;		// ���ư��� ���� ������ �´� �ִϸ��̼�
-	//	CCSequence attackSequence_bone;
-	//	CCSequence attackSequence_punch;
+	CCSequence attackSequence_bark= null;		// ���ư��� ���� ������ �´� �ִϸ��̼�
 
-//	CCAnimation attackAnimation_mine;
-//	CCAnimation attackAnimation_opponent;
-//	CCAnimate attackAnimate_mine;
-//	CCAnimate attackAnimate_opponent;
+	CCAnimation damagedAnimation_mine= null;
+	CCAnimation damagedAnimation_opponent= null;
+	CCAnimate damagedAnimate_mine= null;
+	CCAnimate damagedAnimate_opponent= null;
 
-	CCAnimation damagedAnimation_mine;
-	CCAnimation damagedAnimation_opponent;
-	CCAnimate damagedAnimate_mine;
-	CCAnimate damagedAnimate_opponent;
+	CCAnimation normalAnimation_mine= null;
+	CCAnimation normalAnimation_opponent= null;
+	CCAnimate normalAnimate_mine= null;
+	CCAnimate normalAnimate_opponent= null;
 
-	CCAnimation normalAnimation_mine;
-	CCAnimation normalAnimation_opponent;
-	CCAnimate normalAnimate_mine;
-	CCAnimate normalAnimate_opponent;
-
-	CCSprite myCharacter_normal;
-	CCSprite opponentCharacter_normal;
-	CCSprite myCharacter_hurted;
-	CCSprite opponentCharacter_hurted;
+	CCSprite myCharacter_normal= null;
+	CCSprite opponentCharacter_normal= null;
+	CCSprite myCharacter_hurted= null;
+	CCSprite opponentCharacter_hurted= null;
 
 	public void makeNormalAnimation()
 	{
@@ -221,6 +211,17 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 	public BattleLayer()
 	{
 		this.setIsTouchEnabled(true);
+
+		btn_skill_bark_activated = CCSprite.sprite("minigame/btn_skill_bark_activated.png");
+		btn_skill_bark_normal = CCSprite.sprite("minigame/btn_skill_bark_normal.png");
+		btn_skill_bone_activated = CCSprite.sprite("minigame/btn_skill_bone_activated.png");
+		btn_skill_bone_normal = CCSprite.sprite("minigame/btn_skill_bone_normal.png");
+		btn_skill_punch_activated = CCSprite.sprite("minigame/btn_skill_punch_activated.png");
+		btn_skill_punch_normal = CCSprite.sprite("minigame/btn_skill_punch_normal.png");
+		
+		gage_bar = CCSprite.sprite("minigame/gage_bar.png");
+		gage_bar_black = CCSprite.sprite("minigame/bg_gage_bar.png");
+		
 		
 		gage = 0;
 		gage_bar.setPosition(86 * Manager.ratio_width, 570 * Manager.ratio_height);
@@ -543,5 +544,16 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback{
 		}
 		return super.ccTouchesBegan(event);
 	}
-
+	public void updateHPBar()
+	{
+		if(hp < thresholdOfHP)
+		{
+			this.schedule("playDangerAnimation", 0.5f);
+		}
+	}
+	public void playDangerAnimation(float dt)
+	{
+		
+	}
+	
 }

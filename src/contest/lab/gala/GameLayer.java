@@ -22,35 +22,29 @@ import contest.lab.gala.item.Item;
 import contest.lab.gala.item.Redbull;
 
 public class GameLayer extends CCLayer{
-	// ȭ�鿡 ���̴� �������� ����Ʈ
 	ArrayList<Item> itemList;			
-	// item�� position���� ����
-	ArrayList<CGPoint> itemPositions;	
+	ArrayList<CGPoint> itemPositions = null;	
 	
-	// ���� ���� ���� ������ ���� �Ŵ��� ��ü 
-	// Manager.ratio_x; , Manager.ratio_y;
 
-	
-	// �� ȭ�鿡 ���̴� �������� ����
 	int numOfItems = 4;
 	
-	// ���� ��ư �޴�
-	CCMenuItemSprite btn_bone;
-	CCMenuItemSprite btn_gum;
-	CCMenuItemSprite btn_redbull;
-	CCMenu buttons;
-	CCSprite btn_bone_unclick;
-	CCSprite btn_bone_click;
-	CCSprite btn_gum_unclick;
-	CCSprite btn_gum_click;
-	CCSprite btn_redbull_unclick;
-	CCSprite btn_redbull_click;
+	CCMenuItemSprite btn_bone= null;
+	CCMenuItemSprite btn_gum= null;
+	CCMenuItemSprite btn_redbull= null;
+	CCMenu buttons= null;
+	CCSprite btn_bone_unclick= null;
+	CCSprite btn_bone_click= null;
+	CCSprite btn_gum_unclick= null;
+	CCSprite btn_gum_click= null;
+	CCSprite btn_redbull_unclick= null;
+	CCSprite btn_redbull_click= null;
 	
-	CCSprite bg_battlelayer;
-	CCSprite bg_gamelayer;
+	CCSprite bg_battlelayer= null;
+	CCSprite bg_gamelayer= null;
 	
-	CCSprite rectangle1;
-	CCSprite rectangle2;
+	CCSprite rectangle1= null;
+	CCSprite rectangle2= null;
+
 	static CCScene makeScene()
 	{
 		CCDirector.sharedDirector().purgeCachedData();
@@ -60,12 +54,10 @@ public class GameLayer extends CCLayer{
 		
 		CCScene scene = CCScene.node();
 		CCLayer layer1 = new GameLayer();
-//		CCLayer layer2 = new SkillGageLayer();
 		CCLayer layer3 = new BattleLayer();
 		CCLayer layer4 = new ComboLayer();
 		
 		scene.addChild(layer1);
-//		scene.addChild(layer2);
 		scene.addChild(layer3);
 		scene.addChild(layer4);
 		
@@ -78,7 +70,6 @@ public class GameLayer extends CCLayer{
 		bg_gamelayer.setPosition(360 * Manager.ratio_width, 640 * Manager.ratio_height);
 		this.addChild(bg_gamelayer);		
 		
-		// item���� position���� ����Ʈ�� ����
 		itemPositions = new ArrayList<CGPoint>();
 		for(int i = 0; i < numOfItems; i++)
 		{
@@ -86,7 +77,6 @@ public class GameLayer extends CCLayer{
 			itemPositions.add(cgpoint);
 		}
 		
-		// item���� position�� ����, addchild
 		itemList = new ArrayList<Item>();
 		for(int i = 0; i < numOfItems; i++)
 		{
