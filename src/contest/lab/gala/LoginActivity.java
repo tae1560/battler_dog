@@ -54,6 +54,7 @@ public class LoginActivity extends Activity implements LoginCallback{
 			public void didGetFriends(ArrayList<User> friends) {
 				Manager.friendList = (ArrayList<User>) friends.clone();
 				Intent intent = new Intent(LoginActivity.this, BattlerDogActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(intent);
 			}
 		});

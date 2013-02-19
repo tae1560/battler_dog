@@ -8,9 +8,12 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.sound.SoundEngine;
 
+import contest.lab.gala.interfaces.LifeCycleInterface;
+import contest.lab.gala.util.LayerDestroyManager;
+
 import android.content.Intent;
 
-public class SettingLayer extends CCLayer{
+public class SettingLayer extends CCLayer implements LifeCycleInterface{
 	CCSprite[] volumeLevels_bg = null;
 	CCSprite[] volumeLevels_ef = null;
 	
@@ -51,6 +54,7 @@ public class SettingLayer extends CCLayer{
 		CCScene scene = CCScene.node();
 		CCLayer layer = new SettingLayer();
 		scene.addChild(layer);
+		LayerDestroyManager.getInstance().addLayer((LifeCycleInterface)layer);
 		return scene;
 	}
 	SettingLayer()
@@ -270,5 +274,42 @@ public class SettingLayer extends CCLayer{
 		////// 서버에게 로그아웃 메시지 보내기
 		Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), MainActivity.class);
 		CCDirector.sharedDirector().getActivity().startActivity(intent);
+	}
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		
+		volumeLevels_bg = null;
+		volumeLevels_ef = null;
+		
+		bg_setting = null;
+		
+		btn_next_bg = null;
+		menu_next_bg = null;
+		btn_next_ef = null;
+		menu_next_ef = null;
+		btn_before_bg = null;
+		menu_before_bg = null;
+		btn_before_ef = null;
+		menu_before_ef = null;
+		bg_btn_next_unclicked = null;
+		bg_btn_next_clicked = null;
+		bg_btn_before_unclicked = null;
+		bg_btn_before_clicked = null;
+		ef_btn_next_unclicked = null;
+		ef_btn_next_clicked = null;
+		ef_btn_before_unclicked = null;
+		ef_btn_before_clicked = null;
+		
+		btn_cancel = null;
+		menu_cancel = null;
+		btn_cancel_clicked = null;
+		btn_cancel_unclicked = null;
+		
+		btn_logout = null;
+		menu_logout = null;
+		btn_logout_clicked = null;
+		btn_logout_unclicked = null;
+		
 	}
 }

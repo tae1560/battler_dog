@@ -10,15 +10,17 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
 import contest.lab.gala.data.CurrentUserInformation;
+import contest.lab.gala.interfaces.LifeCycleInterface;
+import contest.lab.gala.util.LayerDestroyManager;
 
 import android.content.Intent;
 
-public class ResultLayer extends CCLayer {
+public class ResultLayer extends CCLayer implements LifeCycleInterface {
 
-	CCSprite result = null;
-	CCSprite bg_result = CCSprite.sprite("result/bg_result.png");
-	CCSprite btn_back_unclicked = CCSprite.sprite("result/btn_back_unclicked.png");
-	CCSprite btn_back_clicked = CCSprite.sprite("result/btn_back_clicked.png");
+	CCSprite result;
+	CCSprite bg_result;
+	CCSprite btn_back_unclicked;
+	CCSprite btn_back_clicked;
 	
 	CCSprite myCharacter = null;
 	
@@ -32,11 +34,16 @@ public class ResultLayer extends CCLayer {
 		CCScene scene = CCScene.node();
 		CCLayer layer = new ResultLayer();
 		scene.addChild(layer);
+		LayerDestroyManager.getInstance().addLayer((LifeCycleInterface)layer);
 		return scene;
 	}
 	public ResultLayer()
 	{
 		this.setIsTouchEnabled(true);
+		
+		bg_result = CCSprite.sprite("result/bg_result.png");
+		btn_back_unclicked = CCSprite.sprite("result/btn_back_unclicked.png");
+		btn_back_clicked = CCSprite.sprite("result/btn_back_clicked.png");
 		
 		bg_result.setScaleX(Manager.ratio_width);
 		bg_result.setScaleY(Manager.ratio_height);
@@ -106,6 +113,23 @@ public class ResultLayer extends CCLayer {
 	public void goToFriendList(Object sender)
 	{
 		Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), BattlerDogActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		CCDirector.sharedDirector().getActivity().startActivity(intent);
+	}
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		result = null;
+		bg_result = null;
+		btn_back_unclicked = null;
+		btn_back_clicked = null;
+		
+		myCharacter = null;
+		
+		maxNumOfCombos = null;
+		numOfGames = null;
+		numOfWins = null;
+		numOfLoses = null;
+		numOfSuccessiveWins = null;
 	}
 }

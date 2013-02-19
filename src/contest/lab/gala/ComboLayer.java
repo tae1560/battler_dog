@@ -4,8 +4,9 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCSprite;
 
-public class ComboLayer extends CCLayer{
-	
+import contest.lab.gala.interfaces.LifeCycleInterface;
+
+public class ComboLayer extends CCLayer implements LifeCycleInterface{
 	static CCLabelAtlas combo = null;
 	static CCSprite comboLetter = null;
 	public static int numOfCombo = 0;
@@ -38,5 +39,10 @@ public class ComboLayer extends CCLayer{
 		numOfCombo = 0;
 		comboLetter.setVisible(false);
 		combo.setVisible(false);
+	}
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		combo = null;
 	}
 }

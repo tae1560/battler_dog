@@ -2,8 +2,8 @@ package contest.lab.gala.item;
 
 import org.cocos2d.nodes.CCSprite;
 
-import contest.lab.gala.Manager;
 import contest.lab.gala.BattleLayer;
+import contest.lab.gala.Manager;
 
 public class Redbull extends Item{
 	public Redbull()

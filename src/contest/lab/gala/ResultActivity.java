@@ -4,6 +4,8 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
+import contest.lab.gala.util.LayerDestroyManager;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
@@ -44,5 +46,12 @@ public class ResultActivity extends Activity {
 		CCScene scene = ResultLayer.makeScene();
 		CCDirector.sharedDirector().runWithScene(scene);
 //		showFriendList();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		LayerDestroyManager.getInstance().deallocLayers();
+		super.onDestroy();
 	}
 }
