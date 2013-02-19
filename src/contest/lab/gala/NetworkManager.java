@@ -356,6 +356,7 @@ public class NetworkManager {
 					if (this.onLogout != null) {
 						if (jsonObject.getString("status").equalsIgnoreCase("success")) {
 							this.onLogout.onLogoutSuccess();
+							closeSocketConnection();
 						} else {
 							this.onLogout.onLogoutFailed();
 						}

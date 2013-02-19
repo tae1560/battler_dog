@@ -44,9 +44,9 @@ public class ComboLayer extends CCLayer implements LifeCycleInterface{
 		comboLetter.setScaleX(Manager.ratio_width * 0.5f);
 		comboLetter.setScaleY(Manager.ratio_height * 0.5f);
 		comboLetter.setPosition(160 * Manager.ratio_width, 150 * Manager.ratio_height);
-		CCFiniteTimeAction action_goUp_letter = CCMoveTo.action(0.5f, CGPoint.ccp(142 * Manager.ratio_width, 258* Manager.ratio_height));
-		CCFiniteTimeAction action_scale_letter = CCScaleTo.action(0.5f, 2f);
-		CCFiniteTimeAction action_delay_for2secs_letter = CCMoveTo.action(1.5f, CGPoint.ccp(142 * Manager.ratio_width, 258* Manager.ratio_height));
+		CCFiniteTimeAction action_goUp_letter = CCMoveTo.action(0.3f, CGPoint.ccp(142 * Manager.ratio_width, 258* Manager.ratio_height));
+		CCFiniteTimeAction action_scale_letter = CCScaleTo.action(Manager.ratio_width, Manager.ratio_height);
+		CCFiniteTimeAction action_delay_for2secs_letter = CCMoveTo.action(0.5f, CGPoint.ccp(142 * Manager.ratio_width, 258* Manager.ratio_height));
 		CCSpawn spawn_letter = CCSpawn.actions(action_goUp_letter, action_scale_letter);
 		CCCallFuncN deleteLetter = CCCallFuncN.action(this, "deleteLetter");
 		CCSequence sequence_letter = CCSequence.actions(spawn_letter, action_delay_for2secs_letter, deleteLetter);
@@ -57,9 +57,9 @@ public class ComboLayer extends CCLayer implements LifeCycleInterface{
 		combo.setScaleX(Manager.ratio_width * 0.5f);
 		combo.setScaleY(Manager.ratio_height * 0.5f);
 		combo.setPosition(240 * Manager.ratio_width, 120 * Manager.ratio_height);
-		CCFiniteTimeAction action_goUp_number = CCMoveTo.action(0.5f, CGPoint.ccp(262 * Manager.ratio_width, 228* Manager.ratio_height));
-		CCFiniteTimeAction action_scale_number = CCScaleTo.action(0.5f, 2f);
-		CCFiniteTimeAction action_delay_for2secs_number = CCMoveTo.action(1.5f, CGPoint.ccp(262 * Manager.ratio_width, 228* Manager.ratio_height));
+		CCFiniteTimeAction action_goUp_number = CCMoveTo.action(0.3f, CGPoint.ccp(262 * Manager.ratio_width, 228* Manager.ratio_height));
+		CCFiniteTimeAction action_scale_number = CCScaleTo.action(Manager.ratio_width, Manager.ratio_height);
+		CCFiniteTimeAction action_delay_for2secs_number = CCMoveTo.action(0.5f, CGPoint.ccp(262 * Manager.ratio_width, 228* Manager.ratio_height));
 		CCSpawn spawn_number = CCSpawn.actions(action_goUp_number, action_scale_number);
 		CCCallFuncN deleteNumber = CCCallFuncN.action(this, "deleteNumber");
 		CCSequence sequence_number = CCSequence.actions(spawn_number, action_delay_for2secs_number, deleteNumber);

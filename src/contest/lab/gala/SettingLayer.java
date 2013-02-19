@@ -11,8 +11,6 @@ import org.cocos2d.sound.SoundEngine;
 import contest.lab.gala.interfaces.LifeCycleInterface;
 import contest.lab.gala.util.LayerDestroyManager;
 
-import android.content.Intent;
-
 public class SettingLayer extends CCLayer implements LifeCycleInterface{
 	CCSprite[] volumeLevels_bg = null;
 	CCSprite[] volumeLevels_ef = null;

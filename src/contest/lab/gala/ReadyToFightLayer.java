@@ -333,7 +333,6 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 		settingMenu.setAnchorPoint(0f, 0f);
 		this.addChild(settingMenu);
 
-		
 		currentPage = CCLabel.makeLabel("" + 1, "Arial", 45);
 		currentPage.setScaleX(Manager.ratio_width);
 		currentPage.setScaleY(Manager.ratio_height);
