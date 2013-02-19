@@ -91,9 +91,9 @@ public class MainAnimationLayer extends CCLayer implements LifeCycleInterface{
 		animationFirstFrame.setPosition(360 * Manager.ratio_width, 640 * Manager.ratio_height);
 		this.addChild(animationFirstFrame);
 		
-		animationFrames = new CCSprite[21];
+		animationFrames = new CCSprite[30];
 		
-		for(int i = 0; i < 21; i++)
+		for(int i = 0; i < 30; i++)
 		{
 			animationFrames[i] = CCSprite.sprite(String.format("main_animation/main_frame%d.png", i+1));
 			animationFrames[i].setScaleX(Manager.ratio_width);

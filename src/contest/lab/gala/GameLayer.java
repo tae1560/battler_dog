@@ -120,7 +120,7 @@ public class GameLayer extends CCLayer implements LifeCycleInterface{
 		rectangle2.setScaleX(Manager.ratio_width);
 		rectangle2.setScaleY(Manager.ratio_height);
 		
-		CCAnimation rectAnimation = CCAnimation.animation("animation", 0.5f);
+		CCAnimation rectAnimation = CCAnimation.animation("animation", 0.2f);
 		rectAnimation.addFrame(rectangle1.getTexture());
 		rectAnimation.addFrame(rectangle2.getTexture());
 		
@@ -154,7 +154,7 @@ public class GameLayer extends CCLayer implements LifeCycleInterface{
 	}
 	void clickedCorrectOne()
 	{
-		ComboLayer.showCombo();
+		ComboLayer.runningLayer.showCombo();
 		
 		// ���õ� �����ۿ� ���� ������ ȹ��(������ �� ������Ʈ ����)
 		itemList.get(0).acquireGage();

@@ -9,8 +9,11 @@ import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.nodes.CCLabel;
+import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
+import org.cocos2d.types.ccColor3B;
 
 import android.view.MotionEvent;
 import contest.lab.gala.callback.GetDamagedCallback;
@@ -38,7 +41,8 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 	private CCSprite hp_bar_opponent = null;
 	private CCSprite title = null;
 
-	static float hp;
+	static float hp_mine = 100;
+	static float hp_opponent = 100;
 	
 	int ACTION_FLYING_MINE = 100;
 	int ACTION_DAMAGED_MINE= 200;
@@ -185,6 +189,8 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 	}
 	public void returnToNormalMode(Object o)
 	{
+		updateHPBar();
+		
 		int mine, opponent;
 		for(mine = 0; mine < numOfCurrentActions_mine; mine++)
 		{
@@ -321,20 +327,33 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		bg_hp_bar.setScaleY(Manager.ratio_height);
 		this.addChild(bg_hp_bar);
 
-		hp_bar_mine.setPosition(174 * Manager.ratio_width, 1249 * Manager.ratio_height);
+		hp_bar_mine.setPosition(321 * Manager.ratio_width, 1240 * Manager.ratio_height);
 		hp_bar_mine.setScaleX(Manager.ratio_width);
 		hp_bar_mine.setScaleY(Manager.ratio_height);
+		hp_bar_mine.setAnchorPoint(1f, 0.5f);
 		this.addChild(hp_bar_mine);
 
-		hp_bar_opponent.setPosition(546 * Manager.ratio_width, 1249 * Manager.ratio_height);
+		hp_bar_opponent.setPosition(400 * Manager.ratio_width, 1240	* Manager.ratio_height);
 		hp_bar_opponent.setScaleX(Manager.ratio_width);
 		hp_bar_opponent.setScaleY(Manager.ratio_height);
+		hp_bar_opponent.setAnchorPoint(0f, 0.5f);
 		this.addChild(hp_bar_opponent);
-
-		title.setPosition(360 * Manager.ratio_width, 1238 * Manager.ratio_height);
+		
+		title.setPosition(360 * Manager.ratio_width, 1235 * Manager.ratio_height);
 		title.setScaleX(Manager.ratio_width);
 		title.setScaleY(Manager.ratio_height);
 		this.addChild(title);
+
+		CCLabel x = CCLabel.makeLabel("400, 1247", "Arial", 30);
+		x.setColor(ccColor3B.ccBLACK);
+		x.setPosition(176, 1243);
+		this.addChild(x);
+		CCLabel l = CCLabel.makeLabel("176, 1243", "Arial", 20);
+		l.setPosition(176, 1243);
+		x.setColor(ccColor3B.ccBLACK);
+		this.addChild(l);
+		
+		
 
 		attack_bark_opponent = CCSprite.sprite(String.format("character/attack_bark%d.png", CurrentUserInformation.opponentchar));
 		attack_bark_opponent.setScaleX(Manager.ratio_width);
@@ -396,21 +415,21 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		switch(kindOfAttack.toInteger())
 		{
 		case 1 : 
-			hp -= Manager.damaged_gage_per_attack_bark;
+			hp_mine -= Manager.damaged_gage_per_attack_bark;
 			updateGageBar();
 			//* ������ ȿ�� �ִϸ��̼�
 			runAttackAnimation_opponent(1);
 //			BattlerDogActivity.makeToast(1);
 			break;
 		case 2 :
-			hp -= Manager.damaged_gage_per_attack_bone;
+			hp_mine -= Manager.damaged_gage_per_attack_bone;
 			updateGageBar();
 			runAttackAnimation_opponent(2);
 			//* ������ ȿ�� �ִϸ��̼�
 //			BattlerDogActivity.makeToast(2);
 			break;
 		case 3 :
-			hp -= Manager.damaged_gage_per_attack_punch;
+			hp_mine -= Manager.damaged_gage_per_attack_punch;
 			updateGageBar();
 			//* ������ ȿ�� �ִϸ��̼�
 			runAttackAnimation_opponent(3);
@@ -538,7 +557,8 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		if(btn_skill_bark_normal.getBoundingBox().contains(touchPoint.x, touchPoint.y) && gage >= Manager.required_gage_for_skill_bark)
 		{
 			gage -= Manager.required_gage_for_skill_bark;
-			updateSkillBtns();
+			hp_opponent -= Manager.damaged_gage_per_attack_bark;
+			updateSkillBtns();			
 			updateGageBar();
 			runAttackAnimation_mine(1);
 			NetworkManager.getInstance().sendAttack(SkillType.BARK);
@@ -546,6 +566,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		else if(btn_skill_bone_normal.getBoundingBox().contains(touchPoint.x, touchPoint.y) && gage >= Manager.required_gage_for_skill_bone)
 		{
 			gage -= Manager.required_gage_for_skill_bone;
+			hp_opponent -= Manager.damaged_gage_per_attack_bone;
 			updateSkillBtns();
 			updateGageBar();
 			runAttackAnimation_mine(2);
@@ -555,6 +576,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		else if(btn_skill_punch_normal.getBoundingBox().contains(touchPoint.x, touchPoint.y) && gage >= Manager.required_gage_for_skill_punch)
 		{
 			gage -= Manager.required_gage_for_skill_punch;
+			hp_opponent -= Manager.damaged_gage_per_attack_punch;
 			updateSkillBtns();
 			updateGageBar();
 			runAttackAnimation_mine(3);
@@ -566,7 +588,9 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 
 	public void updateHPBar()
 	{
-		if(hp < thresholdOfHP)
+		hp_bar_mine.setScaleX(hp_mine/Manager.full_hp * Manager.ratio_width);
+		hp_bar_opponent.setScaleX(hp_opponent/Manager.full_hp * Manager.ratio_width);
+		if(hp_mine < thresholdOfHP)
 		{
 			this.schedule("playDangerAnimation", 0.5f);
 		}
