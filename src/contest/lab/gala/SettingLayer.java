@@ -276,8 +276,13 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 	public void clickedLogout(Object sender)
 	{
 		////// 서버에게 로그아웃 메시지 보내기
-		Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), MainActivity.class);
-		CCDirector.sharedDirector().getActivity().startActivity(intent);
+//		Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), MainActivity.class);
+//		CCDirector.sharedDirector().getActivity().startActivity(intent);
+		
+		if (CCDirector.sharedDirector().getActivity() instanceof BattlerDogActivity) {
+			BattlerDogActivity act = (BattlerDogActivity)CCDirector.sharedDirector().getActivity();
+			act.doLogout();
+		}
 	}
 	@Override
 	public void onDestroy() {

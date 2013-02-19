@@ -23,6 +23,7 @@ import contest.lab.gala.callback.GetDamagedCallback;
 import contest.lab.gala.callback.JoinCallback;
 import contest.lab.gala.callback.LoginCallback;
 import contest.lab.gala.callback.OnGameEndedCallback;
+import contest.lab.gala.callback.OnLogout;
 import contest.lab.gala.callback.OnMatchedCallback;
 import contest.lab.gala.callback.RequestFriendsCallback;
 import contest.lab.gala.data.SkillType;
@@ -60,6 +61,14 @@ public class NetworkManager {
 		map.put("id", id);
 		map.put("password", password);
 		map.put("character", Integer.toString(selected_character));
+		sendJSONWithSocket(map);
+	}
+	
+	public void doLogout(final OnLogout callback) {
+		this.onLogout = callback;
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(KEY_TYPE, TYPE_LOGOUT);
 		sendJSONWithSocket(map);
 	}
 	
@@ -140,6 +149,7 @@ public class NetworkManager {
 	private static final String TYPE_REQUEST_MATCHING = "request_matching";
 	private static final String TYPE_GAME_END_CHECK = "game_end_check";
 	private static final String TYPE_GAME_END = "game_end";
+	private static final String TYPE_LOGOUT = "logout";
 	
 	// SEND
 	private static final String TYPE_SEND_ATTACK = "attack_skill";
@@ -153,6 +163,7 @@ public class NetworkManager {
 	private GetDamagedCallback getDamagedCallback = null;
 	private OnGameEndedCallback onGameEndedCallback = null;
 	private RequestFriendsCallback requestFriendsCallback = null;
+	private OnLogout onLogout = null;
 	
 	private static NetworkManager _instance = null;
 	private Socket socket = null;
@@ -292,7 +303,8 @@ public class NetworkManager {
 							this.loginCallback.didSuccessLogin(new User(id, character, number_of_wins, is_logon, total_wins, total_loses));
 						} else {
 							this.loginCallback.didFailedLogin(jsonObject.getString("message"));
-						}						
+						}		
+						this.loginCallback = null;
 					}
 				} else if(dataTypeString.equalsIgnoreCase(TYPE_JOIN)) {
 					if (this.joinCallback != null) {
@@ -310,6 +322,7 @@ public class NetworkManager {
 						} else {
 							this.joinCallback.didFailedJoin(jsonObject.getString("message"));
 						}
+						this.joinCallback = null;
 					}
 				} else if(dataTypeString.equalsIgnoreCase(TYPE_REQUEST_FRIENDS)) {
 					if (this.requestFriendsCallback != null) {
@@ -321,7 +334,9 @@ public class NetworkManager {
 							friends.add(User.parseJson(friend));
 						}
 						
-						this.requestFriendsCallback.didGetFriends(friends);						
+						this.requestFriendsCallback.didGetFriends(friends);
+						
+						this.requestFriendsCallback = null;
 					}
 				} else if(dataTypeString.equalsIgnoreCase(TYPE_REQUEST_MATCHING)) {
 					if (this.onMatchedCallback != null) {
@@ -332,12 +347,19 @@ public class NetworkManager {
 				} else if(dataTypeString.equalsIgnoreCase(TYPE_GAME_END_CHECK)) {
 					gameEndRequest();
 				} else if(dataTypeString.equalsIgnoreCase(TYPE_GAME_END)) {
-					CommonUtils.debug("dataTypeString.equalsIgnoreCase game_end");
 					if (this.onGameEndedCallback != null) {
-						CommonUtils.debug("dataTypeString.equalsIgnoreCase in if");
 						boolean isWin = jsonObject.getString("status").equalsIgnoreCase("win");
 						this.onGameEndedCallback.onGameEnded(isWin, User.parseJson(jsonObject.getJSONObject("user_information")));
-//						this.onGameEndedCallback = null;
+						this.onGameEndedCallback = null;
+					}
+				} else if(dataTypeString.equalsIgnoreCase(TYPE_LOGOUT)) {
+					if (this.onLogout != null) {
+						if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+							this.onLogout.onLogoutSuccess();
+						} else {
+							this.onLogout.onLogoutFailed();
+						}
+						this.onLogout = null;
 					}
 				}
 			}
