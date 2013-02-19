@@ -59,7 +59,7 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 	}
 	SettingLayer()
 	{
-		levelOfBg = Manager.backgroundLevel;
+		levelOfBg = Sound.backgroundLevel;
 		
 		
 		this.setIsTouchEnabled(true);
@@ -75,9 +75,10 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 		btn_next_bg = CCMenuItemSprite.item(bg_btn_next_unclicked, bg_btn_next_clicked, this, "clickedBgNext");
 		btn_next_bg.setScaleX(Manager.ratio_width);
 		btn_next_bg.setScaleY(Manager.ratio_height);
+		btn_next_bg.setScale(1.2f);
 		menu_next_bg = CCMenu.menu(btn_next_bg);
 		menu_next_bg.setAnchorPoint(0f, 0f);
-		menu_next_bg.setPosition(519 * Manager.ratio_width, 1006 * Manager.ratio_height);
+		menu_next_bg.setPosition(540 * Manager.ratio_width, 1006 * Manager.ratio_height);
 		this.addChild(menu_next_bg);
 		
 		bg_btn_before_unclicked = CCSprite.sprite("setting/btn_before_unclicked.png");
@@ -85,9 +86,10 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 		btn_before_bg = CCMenuItemSprite.item(bg_btn_before_unclicked, bg_btn_before_clicked, this, "clickedBgBefore");
 		btn_before_bg.setScaleX(Manager.ratio_width);
 		btn_before_bg.setScaleY(Manager.ratio_height);
+		btn_before_bg.setScale(1.2f);
 		menu_before_bg = CCMenu.menu(btn_before_bg);
 		menu_before_bg.setAnchorPoint(0f, 0f);
-		menu_before_bg.setPosition(175 * Manager.ratio_width, 1006 * Manager.ratio_height);
+		menu_before_bg.setPosition(154 * Manager.ratio_width, 1006 * Manager.ratio_height);
 		this.addChild(menu_before_bg);
 		
 		ef_btn_next_unclicked = CCSprite.sprite("setting/btn_next_unclicked.png");
@@ -95,9 +97,10 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 		btn_next_ef = CCMenuItemSprite.item(ef_btn_next_unclicked, ef_btn_next_clicked, this, "clickedEfNext");
 		btn_next_ef.setScaleX(Manager.ratio_width);
 		btn_next_ef.setScaleY(Manager.ratio_height);
+		btn_next_ef.setScale(1.2f);
 		menu_next_ef = CCMenu.menu(btn_next_ef);
 		menu_next_ef.setAnchorPoint(0f, 0f);
-		menu_next_ef.setPosition(519 * Manager.ratio_width, 870 * Manager.ratio_height);
+		menu_next_ef.setPosition(540 * Manager.ratio_width, 870 * Manager.ratio_height);
 		this.addChild(menu_next_ef);
 		
 		ef_btn_before_unclicked = CCSprite.sprite("setting/btn_before_unclicked.png");
@@ -105,9 +108,10 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 		btn_before_ef = CCMenuItemSprite.item(ef_btn_before_unclicked, ef_btn_before_clicked, this, "clickedEfBefore");
 		btn_before_ef.setScaleX(Manager.ratio_width);
 		btn_before_ef.setScaleY(Manager.ratio_height);
+		btn_before_ef.setScale(1.2f);
 		menu_before_ef = CCMenu.menu(btn_before_ef);
 		menu_before_ef.setAnchorPoint(0f, 0f);
-		menu_before_ef.setPosition(175 * Manager.ratio_width, 870 * Manager.ratio_height);
+		menu_before_ef.setPosition(154 * Manager.ratio_width, 870 * Manager.ratio_height);
 		this.addChild(menu_before_ef);
 		
 		btn_cancel_clicked = CCSprite.sprite("setting/btn_cancel_clicked.png");
@@ -176,7 +180,7 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 		initEfLevel();
 		
 		// for test
-		SoundEngine.sharedEngine().setSoundVolume(Manager.backgroundLevel * 0.25f);
+		SoundEngine.sharedEngine().setSoundVolume(Sound.backgroundLevel * 0.25f);
 		SoundEngine.sharedEngine().playSound(CCDirector.sharedDirector().getActivity(), R.raw.test_background, true);
 	}
 	
@@ -212,8 +216,8 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 				else
 					volumeLevels_bg[i].setVisible(false);
 			}
-			Manager.backgroundLevel = levelOfBg;
-			SoundEngine.sharedEngine().setSoundVolume(Manager.backgroundLevel * 0.25f);
+			Sound.backgroundLevel = levelOfBg;
+			SoundEngine.sharedEngine().setSoundVolume(Sound.backgroundLevel * 0.25f);
 		}
 	}
 	public void clickedBgNext(Object sender)
@@ -228,8 +232,8 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 				else
 					volumeLevels_bg[i].setVisible(false);
 			}
-			Manager.backgroundLevel = levelOfBg;
-			SoundEngine.sharedEngine().setSoundVolume(Manager.backgroundLevel * 0.25f);
+			Sound.backgroundLevel = levelOfBg;
+			SoundEngine.sharedEngine().setSoundVolume(Sound.backgroundLevel * 0.25f);
 		}
 	}
 	public void clickedEfBefore(Object sender)
@@ -244,8 +248,8 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 				else
 					volumeLevels_ef[i].setVisible(false);
 			}
-			Manager.effectLevel = levelOfEf;
-			SoundEngine.sharedEngine().setEffectsVolume(Manager.effectLevel * 0.25f);
+			Sound.effectLevel = levelOfEf;
+			SoundEngine.sharedEngine().setEffectsVolume(Sound.effectLevel * 0.25f);
 		}
 	}
 	public void clickedEfNext(Object sender)
@@ -260,14 +264,14 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 				else
 					volumeLevels_ef[i].setVisible(false);
 			}
-			Manager.effectLevel = levelOfEf;
-			SoundEngine.sharedEngine().setEffectsVolume(Manager.effectLevel * 0.25f);
+			Sound.effectLevel = levelOfEf;
+			SoundEngine.sharedEngine().setEffectsVolume(Sound.effectLevel * 0.25f);
 		}
 	}
 	public void clickedCancel(Object sender)
 	{
-//		CCScene scene = ReadyToFightLayer.makeScene();
-//		CCDirector.sharedDirector().replaceScene(scene);
+		CCScene scene = ReadyToFightLayer.makeScene();
+		CCDirector.sharedDirector().replaceScene(scene);
 	}
 	public void clickedLogout(Object sender)
 	{
