@@ -53,6 +53,7 @@ protected CCGLSurfaceView _glSurfaceView;
 	{
 		Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 		startActivity(intent);
+		finish();
 //		CCScene scene = GameLayer.makeScene();
 //		CCDirector.sharedDirector().replaceScene(scene);
 	}

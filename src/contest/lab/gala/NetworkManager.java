@@ -252,21 +252,26 @@ public class NetworkManager {
 //				String text = "";
                 while (true) {
                 	try {
-						line = networkReader.readLine();
-//						text += line;
-						
-						if (line != null && line.length() > 0) {
-							debug("line : " + line);
-							try {
-								JSONObject receivedData = new JSONObject(line);
-								
-								parseReceivedData(receivedData);
-							} catch (JSONException e) {
-								e.printStackTrace();
-							} 
+                		if (networkReader != null) {
+                			line = networkReader.readLine();
+//    						text += line;
+    						
+    						if (line != null && line.length() > 0) {
+    							debug("line : " + line);
+    							try {
+    								JSONObject receivedData = new JSONObject(line);
+    								
+    								parseReceivedData(receivedData);
+    							} catch (JSONException e) {
+    								e.printStackTrace();
+    							} 
+    						}							
+						} else {
+							break;
 						}
 					} catch (IOException e) {
 						e.printStackTrace();
+						break;
 					}
                 }
 				
@@ -429,10 +434,6 @@ public class NetworkManager {
 			if (socket != null) {
 				socket.close();
 				socket = null;
-			}
-			if (readingThread != null) {
-				readingThread.stop();
-				readingThread = null;
 			}
 				
 		} catch (IOException e) {
