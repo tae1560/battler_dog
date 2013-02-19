@@ -240,8 +240,9 @@ public class NetworkManager {
 	}
 	
 	
+	Thread readingThread = null;
 	private void startReadingThread() {
-		new Thread(new Runnable() {
+		readingThread = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -270,7 +271,8 @@ public class NetworkManager {
                 }
 				
 			}
-		}).start();
+		});
+		readingThread.start();
 	}
 	
 	private void parseReceivedData(JSONObject jsonObject) {
@@ -416,14 +418,22 @@ public class NetworkManager {
 	private void closeSocketConnection() {
 		try {
 			if (networkWriter != null) {
-				networkWriter.close();				
+				networkWriter.close();
+				networkWriter = null;
 			}
 			if (networkReader != null) {
-				networkReader.close();				
+				networkReader.close();
+				networkReader = null;
 			}
 			if (socket != null) {
-				socket.close();				
+				socket.close();
+				socket = null;
 			}
+			if (readingThread != null) {
+				readingThread.stop();
+				readingThread = null;
+			}
+				
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
