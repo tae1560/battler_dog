@@ -44,8 +44,10 @@ public class GameActivity extends Activity {
 		super.onStart();
 		
 		ctxt = this;
-		SoundEngine.sharedEngine().preloadEffect(ctxt, R.raw.fight);
+		SoundEngine.sharedEngine().preloadEffect(ctxt, R.raw.fight2);
 		SoundEngine.sharedEngine().preloadEffect(ctxt, R.raw.effect_danger);
+		SoundEngine.sharedEngine().preloadEffect(ctxt, R.raw.effect_punch);
+		SoundEngine.sharedEngine().preloadEffect(ctxt, R.raw.effect_item);
 		
 		SoundEngine.sharedEngine().preloadSound(ctxt, Sound.background_game);
 

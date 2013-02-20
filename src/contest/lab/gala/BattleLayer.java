@@ -434,8 +434,8 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		CCFiniteTimeAction action_delayFight = CCMoveTo.action(0.5f, CGPoint.ccp(360 * Manager.ratio_width, 826 * Manager.ratio_height));
 		CCFiniteTimeAction action_outgoingFight = CCMoveTo.action(0.3f, CGPoint.ccp(1080 * Manager.ratio_width, 826 * Manager.ratio_height));
 		CCCallFuncN removeFight = CCCallFuncN.action(this, "removeFight");
-		CCCallFuncN tellFight = CCCallFuncN.action(this, "tellFight");
-		CCSequence sequence_fight = CCSequence.actions(action_waitFight, action_incomingFight, tellFight, action_delayFight, action_outgoingFight, removeFight);
+		
+		CCSequence sequence_fight = CCSequence.actions(action_waitFight, action_incomingFight, action_delayFight, action_outgoingFight, removeFight);
 		fight = CCSprite.sprite("minigame/fight.png");
 		fight.setPosition(-360, 826);
 		fight.setScaleX(Manager.ratio_width);
@@ -443,6 +443,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		fight.runAction(sequence_fight);
 		this.addChild(fight);
 
+		SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.fight2);
 		NetworkManager.getInstance().setGetDamagedCallback(this);
 	}
 
@@ -509,6 +510,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 			going_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(going_punch, 500, ACTION_FLYING_MINE);
 			going_punch.runAction(my_attack_sequence);
+			SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.effect_punch);
 			break;
 		}
 	}
@@ -548,6 +550,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 			coming_punch.setPosition(495 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(coming_punch, 500, ACTION_FLYING_OPPONENT);
 			coming_punch.runAction(opponent_attack_sequence);
+			SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.effect_punch);
 			break;
 		}
 	}
@@ -706,11 +709,5 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		//		LayerDestroyManager.getInstance().removeLayer(this);
 	}
 
-	//	@Override
-	//	protected void finalize() throws Throwable {
-	//		onDestroy();
-	//		
-	//		super.finalize();
-	//	}
 
 }
