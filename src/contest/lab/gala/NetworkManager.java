@@ -28,7 +28,6 @@ import contest.lab.gala.callback.OnMatchedCallback;
 import contest.lab.gala.callback.RequestFriendsCallback;
 import contest.lab.gala.data.SkillType;
 import contest.lab.gala.data.User;
-import contest.lab.gala.util.CommonUtils;
 
 public class NetworkManager {
 	public static NetworkManager getInstance() {
@@ -65,11 +64,16 @@ public class NetworkManager {
 	}
 	
 	public void doLogout(final OnLogout callback) {
-		this.onLogout = callback;
-		
-		Map<String, String> map = new HashMap<String, String>();
-		map.put(KEY_TYPE, TYPE_LOGOUT);
-		sendJSONWithSocket(map);
+		if (socket.isConnected()) {
+			this.onLogout = callback;
+			
+			Map<String, String> map = new HashMap<String, String>();
+			map.put(KEY_TYPE, TYPE_LOGOUT);
+			sendJSONWithSocket(map);			
+		} else {
+			callback.onLogoutSuccess();
+			closeSocketConnection();			
+		}
 	}
 	
 	public void requestRandomMatching(OnMatchedCallback callback) {
@@ -193,7 +197,7 @@ public class NetworkManager {
 	
 
 	private boolean checkIfSocketUnabled() {
-		if (socket == null || socket.isClosed() || networkWriter == null) {
+		if (socket == null || socket.isClosed() || networkWriter == null || !socket.isConnected()) {
 			return false;
 		}
 		debug("socket.isInputShutdown() : " + socket.isInputShutdown());
@@ -212,6 +216,8 @@ public class NetworkManager {
 	Queue<String> messageQueue = new LinkedList<String>();
 	private void startSocket(String message) {
 		debug("startSocket");
+		
+		closeSocketConnection();
 		
 		if (message != null) {
 			messageQueue.offer(message);
@@ -420,7 +426,6 @@ public class NetworkManager {
 			
 	}
 	
-	@SuppressWarnings("unused")
 	private void closeSocketConnection() {
 		try {
 			if (networkWriter != null) {
