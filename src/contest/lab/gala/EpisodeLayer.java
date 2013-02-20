@@ -1,6 +1,5 @@
 package contest.lab.gala;
 
-import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCFiniteTimeAction;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.interval.CCMoveBy;
@@ -20,6 +19,13 @@ public class EpisodeLayer extends CCLayer {
 	CCMenu menu_next = null;
 	CCSprite btn_next_clicked = null;
 	CCSprite btn_next_unclicked = null;
+	
+	CCMenuItemSprite btn_skip = null;
+	CCMenu menu_skip = null;
+	CCSprite btn_skip_clicked = null;
+	CCSprite btn_skip_unclicked = null;
+	
+	
 	CCSprite cloud = null;
 	CCSprite[] episodeList = null;
 	
@@ -28,6 +34,7 @@ public class EpisodeLayer extends CCLayer {
 	CCSequence moveOfCloudSequence = null;
 	
 	int currentPageNum = 0;
+	int currentPage = 1;	// 1이면 episode, 2이면 게임 설명
 	
 	public static CCScene makeScene()
 	{
@@ -56,14 +63,17 @@ public class EpisodeLayer extends CCLayer {
 		cloud.runAction(CCRepeatForever.action(moveOfCloudSequence));
 		this.addChild(cloud);
 		
-		episodeList = new CCSprite[6];
+		episodeList = new CCSprite[9];
 		
-		for(int i = 0 ; i < 6; i++)
+		for(int i = 0 ; i < 9; i++)
 		{
 			episodeList[i] = CCSprite.sprite(String.format("episode/episode%d.png", i + 1));
 			episodeList[i].setScaleX(Manager.ratio_width);
 			episodeList[i].setScaleY(Manager.ratio_height);
-			episodeList[i].setPosition(360 * Manager.ratio_width, 793 * Manager.ratio_height);
+			if(i >= 6)
+				episodeList[i].setPosition(360 * Manager.ratio_width, 640 * Manager.ratio_height);
+			else
+				episodeList[i].setPosition(360 * Manager.ratio_width, 793 * Manager.ratio_height);
 			episodeList[i].setVisible(false);
 			this.addChild(episodeList[i]);
 		}
@@ -82,17 +92,39 @@ public class EpisodeLayer extends CCLayer {
 		menu_next.setScaleY(Manager.ratio_height);
 		this.addChild(menu_next);
 		
-		
+		btn_skip_clicked = CCSprite.sprite("episode/btn_skip_clicked.png");
+		btn_skip_unclicked = CCSprite.sprite("episode/btn_skip_unclicked.png");
+		btn_skip = CCMenuItemSprite.item(btn_skip_unclicked, btn_skip_clicked, this, "clickedSkip");
+		menu_skip = CCMenu.menu(btn_skip);
+		menu_skip.setAnchorPoint(0f,0f);
+		menu_skip.setPosition(136 * Manager.ratio_width, 1200 * Manager.ratio_height);
+		menu_skip.setScaleX(Manager.ratio_width);
+		menu_skip.setScaleY(Manager.ratio_height);
+		this.addChild(menu_skip);
+	}
+	public void clickedSkip(Object sender)
+	{
+		if(currentPage == 1)
+		{
+			currentPageNum = 6;
+			currentPage = 2;
+			updatePage(sender);
+		}
+		else
+		{
+			CCScene scene = ReadyToFightLayer.makeScene();
+			CCDirector.sharedDirector().replaceScene(scene);
+		}
 	}
 	public void updatePage(Object sender)
 	{
-		if(currentPageNum == 5)
+		if(currentPageNum == 8)
 		{
 			CCScene scene = ReadyToFightLayer.makeScene();
 			CCDirector.sharedDirector().replaceScene(scene);
 		}
 		currentPageNum++;
-		for(int i = 0; i < 6; i++)
+		for(int i = 0; i < 9; i++)
 		{
 			if(i == currentPageNum)
 				episodeList[i].setVisible(true);

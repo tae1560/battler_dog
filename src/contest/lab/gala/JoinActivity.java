@@ -3,11 +3,11 @@ package contest.lab.gala;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -23,6 +23,8 @@ public class JoinActivity extends Activity implements JoinCallback{
 	EditText et_id;
 	EditText et_pw;
 	int selected_character = -1;
+	ProgressDialog waitDlg;
+
 	//////////////////////////////////////////////
 	protected void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,6 +66,8 @@ public class JoinActivity extends Activity implements JoinCallback{
 				
 				if (selected_character >= 0) {
 					NetworkManager.getInstance().doJoin(et_id.getText().toString(), et_pw.getText().toString(), selected_character, JoinActivity.this);					
+					waitDlg = ProgressDialog.show(JoinActivity.this, "로드중...", "로드중 입니다. 잠시만 기다려주십시오", true,false);
+
 				}				
 			}
 		});
@@ -77,6 +81,7 @@ public class JoinActivity extends Activity implements JoinCallback{
 			
 			@Override
 			public void didGetFriends(ArrayList<User> friends) {
+				waitDlg.dismiss();
 				Manager.isFirstTime = true;
 				Manager.friendList = (ArrayList<User>) friends.clone();
 				Intent intent = new Intent(JoinActivity.this, BattlerDogActivity.class);
@@ -92,6 +97,7 @@ public class JoinActivity extends Activity implements JoinCallback{
 			@Override
 			public void run() {
 				Toast.makeText(JoinActivity.this, "Failed Join - " + message, Toast.LENGTH_LONG).show();
+				waitDlg.dismiss();
 			}
 		});
 		

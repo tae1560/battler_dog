@@ -26,6 +26,9 @@
 	  	android:layout_toRightOf="@id/usernameLabel"
 	  	android:layout_alignBaseline="@id/usernameLabel"
 	  	android:layout_marginLeft="15dp"
+	  	android:inputType="textEmailAddress"
+	  	android:singleLine="true"
+	  	android:hint="ID"
 	  />
 	  <ImageView
 	  	android:background="@drawable/iv_pw"
@@ -38,12 +41,17 @@
 	  /> 
 	  <EditText
 	  	android:id="@+id/passwordEntry"
+	  	android:password="true" 
+	  	android:imeOptions="actionSearch" 
 	  	android:layout_width="fill_parent"
 	  	android:layout_height="wrap_content"
 	  	android:layout_toRightOf="@id/passwordLabel"
 	  	android:layout_below="@id/userIDEntry"
 	  	android:layout_alignBaseline="@id/passwordLabel"
 	  	android:layout_marginLeft="15dp"
+	  	android:inputType="textEmailAddress"
+	  	android:singleLine="true"
+	  	android:hint="password"
 	  />  
 	  <ImageButton
 	  	android:id="@+id/btn_login"

@@ -20,6 +20,8 @@ public class ComboLayer extends CCLayer implements LifeCycleInterface{
 	public static int numOfCombo = 0;
 	public ComboLayer()
 	{
+		numOfCombo = 0;
+		
 		runningLayer = this;
 		
 		comboLetter = CCSprite.sprite("battle/combo.png");

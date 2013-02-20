@@ -8,9 +8,12 @@ import contest.lab.gala.data.User;
 
 public class Manager {
 	
-	// Galaxy 3 �ػ󵵿� ���� �� ȭ���� �ػ��� ����
+	// Galaxy 3 해상도에 대한 본 기기의 비율
 	public static float ratio_width;	
 	public static float ratio_height;
+	
+
+	public static float thresholdOfHP = 30;
 	
 	public static float acquired_gage_per_bone = 1;
 	public static float acquired_gage_per_gum = 2;
@@ -20,9 +23,9 @@ public class Manager {
 	public static float required_gage_for_skill_bone = 15;
 	public static float required_gage_for_skill_punch = 20;
 	
-	public static float damaged_gage_per_attack_bark = 10;
-	public static float damaged_gage_per_attack_bone = 20;
-	public static float damaged_gage_per_attack_punch = 30;
+	public static float damaged_hp_per_attack_bark = 10;
+	public static float damaged_hp_per_attack_bone = 20;
+	public static float damaged_hp_per_attack_punch = 30;
 	
 	public static float full_gage = 100;
 	public static float full_hp = 100;

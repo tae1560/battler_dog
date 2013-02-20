@@ -10,6 +10,7 @@ import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.nodes.CCTextureCache;
+import org.cocos2d.sound.SoundEngine;
 
 import android.content.Intent;
 import contest.lab.gala.callback.OnMatchedCallback;
@@ -60,6 +61,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 		CCSpriteFrameCache.purgeSharedSpriteFrameCache();
 		CCTextureCache.purgeSharedTextureCache();
 
+		
 		CCScene scene = CCScene.node();
 		CCLayer layer = new ReadyToFightLayer();
 		scene.addChild(layer);
@@ -129,6 +131,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 		NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
 			@Override
 			public void onMatched(User enemy) {
+				SoundEngine.sharedEngine().pauseSound();
 				// TODO Auto-generated method stub
 				CurrentUserInformation.opponentchar = enemy.character;
 				CurrentUserInformation.opponentID = enemy.id;
@@ -141,6 +144,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 	}
 	public void clickedSettingButton(Object sender)
 	{
+		SoundEngine.sharedEngine().pauseSound();
 		CCScene scene = SettingLayer.makeScene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}
