@@ -61,6 +61,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 		CCSpriteFrameCache.purgeSharedSpriteFrameCache();
 		CCTextureCache.purgeSharedTextureCache();
 
+		
 		CCScene scene = CCScene.node();
 		CCLayer layer = new ReadyToFightLayer();
 		scene.addChild(layer);
@@ -143,6 +144,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 	}
 	public void clickedSettingButton(Object sender)
 	{
+		SoundEngine.sharedEngine().pauseSound();
 		CCScene scene = SettingLayer.makeScene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}

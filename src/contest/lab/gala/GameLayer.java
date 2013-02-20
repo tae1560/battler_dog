@@ -133,13 +133,9 @@ public class GameLayer extends CCLayer implements LifeCycleInterface{
 		rectangle1.runAction(CCRepeatForever.action(rectAnimate));
 		this.addChild(rectangle1);
 		
-
+		SoundEngine.sharedEngine().playSound(GameActivity.ctxt, Sound.background_game, true);
 	}
-	public void removeFight(Object sender)
-	{
-		CCSprite fight = (CCSprite) sender;
-		this.removeChild(fight, true);
-	}
+	
 	
 	public void clickedBone(Object sender)
 	{

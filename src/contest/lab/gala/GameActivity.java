@@ -3,8 +3,10 @@ package contest.lab.gala;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
+import org.cocos2d.sound.SoundEngine;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
@@ -16,7 +18,7 @@ import contest.lab.gala.util.LayerDestroyManager;
 
 public class GameActivity extends Activity {
 	protected CCGLSurfaceView _glSurfaceView;
-	
+	public static Context ctxt;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,11 @@ public class GameActivity extends Activity {
 
 		super.onStart();
 		
+		ctxt = this;
+		SoundEngine.sharedEngine().preloadEffect(ctxt, R.raw.fight);
+		SoundEngine.sharedEngine().preloadEffect(ctxt, R.raw.effect_danger);
 		
+		SoundEngine.sharedEngine().preloadSound(ctxt, Sound.background_game);
 
 		//		CCScene scene = GameLayer.makeScene();
 		CCScene scene = GameLayer.makeScene();
@@ -69,10 +75,14 @@ public class GameActivity extends Activity {
 		NetworkManager.getInstance().setGameEndedCallback(callback);
 //		showFriendList();
 	}
-	
+	public void setVolume(int level)
+	{
+		SoundEngine.sharedEngine().setSoundVolume(level * 0.25f);
+	}
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
+		CCDirector.sharedDirector().pause();
 		super.onStop();
 	}
 	

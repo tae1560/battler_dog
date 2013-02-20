@@ -46,6 +46,8 @@ public class BattlerDogActivity extends Activity {
 
 		super.onStart();
 		
+		SoundEngine.sharedEngine().preloadSound(this, R.raw.background_main);
+		SoundEngine.sharedEngine().playSound(this, R.raw.background_main, true);
 		
 		if(Manager.isFirstTime)
 		{

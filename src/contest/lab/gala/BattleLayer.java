@@ -12,6 +12,7 @@ import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
@@ -25,19 +26,19 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 	CCSprite fight = null;
 	CCSprite danger = null;
 	CCSprite bg_danger = null;
-	
+
 	private int countForDangerAnimation = 0;
-	
+
 	private static CCSprite btn_skill_bark_activated = null;
 	private static CCSprite btn_skill_bark_normal = null;
 	private static CCSprite btn_skill_bone_activated = null;
 	private static CCSprite btn_skill_bone_normal = null;
 	private static CCSprite btn_skill_punch_activated = null;
 	private static CCSprite btn_skill_punch_normal = null;
-	
+
 	public static CCSprite gage_bar = null;
 	public static CCSprite gage_bar_black = null;
-	
+
 	public static float gage;
 	////////////////////////////////////////////////////////////////////////////
 	private CCSprite bg_battlelayer = null;
@@ -48,7 +49,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 
 	static float hp_mine;
 	static float hp_opponent;
-	
+
 	int ACTION_FLYING_MINE = 100;
 	int ACTION_DAMAGED_MINE= 200;
 	int ACTION_ATTACK_MINE= 300;
@@ -57,11 +58,11 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 	int ACTION_ATTACK_OPPONENT = 600;
 	static int numOfCurrentActions_mine = 0;
 	static int numOfCurrentActions_opponent = 0;
-	
+
 	CCCallFuncN returnToNormalMode= null;
 	CCSequence damagedAndReturnToNormal_mine= null;
 	CCSequence damagedAndReturnToNormal_opponent= null;
-	
+
 	CCSprite coming_bark= null;
 	CCSprite going_bark= null;
 	CCSprite coming_bone= null;
@@ -114,7 +115,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 			normalAnimation_mine.addFrame(frame.getTexture());
 		}
 		normalAnimate_mine = CCAnimate.action(normalAnimation_mine, false);
-		
+
 		normalAnimation_opponent = CCAnimation.animation("animation2",0.15f);
 		opponentCharacter_normal = CCSprite.sprite(String.format("character/char%d_normal1.png", CurrentUserInformation.opponentchar));
 		for(int i = 5; i >= 2; i-- )
@@ -179,7 +180,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		this.addChild(opponentCharacter_hurted, 1, ACTION_DAMAGED_OPPONENT);
 		CCCallFuncN returnToNormalMode = CCCallFuncN.action(this, "returnToNormalMode");
 		CCSequence damagedAndReturnToNormal_opponent = CCSequence.actions(damagedAnimate_opponent, returnToNormalMode);
-		
+
 		opponentCharacter_hurted.runAction(damagedAndReturnToNormal_opponent);
 		/////////////////////////////
 	}
@@ -187,7 +188,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 	{
 		CCCallFuncN returnToNormalMode = CCCallFuncN.action(this, "returnToNormalMode");
 		CCSequence damagedAndReturnToNormal_mine = CCSequence.actions(damagedAnimate_mine, returnToNormalMode);
-		
+
 		myCharacter_normal.setVisible(false);
 		this.addChild(myCharacter_hurted, 1, ACTION_DAMAGED_MINE);
 		myCharacter_hurted.runAction(damagedAndReturnToNormal_mine);
@@ -195,7 +196,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 	public void returnToNormalMode(Object o)
 	{
 		updateHPBar();
-		
+
 		int mine, opponent;
 		for(mine = 0; mine < numOfCurrentActions_mine; mine++)
 		{
@@ -205,7 +206,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		}
 		for(int j = 0; j < mine; j++)
 			numOfCurrentActions_mine--;
-		
+
 		for(opponent = 0; opponent < numOfCurrentActions_opponent; opponent++)
 		{
 			this.removeChildByTag(ACTION_FLYING_OPPONENT, true);
@@ -225,10 +226,10 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		btn_skill_bone_normal = CCSprite.sprite("minigame/btn_skill_bone_normal.png");
 		btn_skill_punch_activated = CCSprite.sprite("minigame/btn_skill_punch_activated.png");
 		btn_skill_punch_normal = CCSprite.sprite("minigame/btn_skill_punch_normal.png");
-		
+
 		gage_bar = CCSprite.sprite("minigame/gage_bar.png");
 		gage_bar_black = CCSprite.sprite("minigame/bg_gage_bar.png");
-		
+
 		bg_battlelayer = CCSprite.sprite("battle/bg_battlelayer.png");
 		bg_hp_bar = CCSprite.sprite("battle/bg_hp_bar.png");
 		hp_bar_mine = CCSprite.sprite("battle/hp_bar.png");
@@ -252,26 +253,26 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		btn_skill_bone_normal = CCSprite.sprite("minigame/btn_skill_bone_normal.png");
 		btn_skill_punch_activated = CCSprite.sprite("minigame/btn_skill_punch_activated.png");
 		btn_skill_punch_normal = CCSprite.sprite("minigame/btn_skill_punch_normal.png");
-		
+
 		gage_bar = CCSprite.sprite("minigame/gage_bar.png");
 		gage_bar_black = CCSprite.sprite("minigame/bg_gage_bar.png");
-		
-		
+
+
 		init_statics();
 		init_states();
-		
+
 		gage_bar.setPosition(86 * Manager.ratio_width, 570 * Manager.ratio_height);
 		gage_bar.setScaleX(Manager.ratio_width);
 		gage_bar.setScaleY(Manager.ratio_height);
 		this.addChild(gage_bar);
-		
+
 		gage_bar_black.setPosition(85 * Manager.ratio_width, 765 * Manager.ratio_height);
 		gage_bar_black.setAnchorPoint(0.5f, 1f);
 		gage_bar_black.setScaleX(Manager.ratio_width);
 		gage_bar_black.setScaleY(1 - gage / Manager.full_gage);
 		gage_bar_black.setScaleY(Manager.ratio_height);
 		this.addChild(gage_bar_black);
-		
+
 		// ��ų ��ư ��ġ ����, ���̾ �߰�
 		btn_skill_bark_activated.setPosition(631 * Manager.ratio_width, 733 * Manager.ratio_height);
 		btn_skill_bark_activated.setScaleX(Manager.ratio_width);	//* Ȯ�� �ʿ�
@@ -281,7 +282,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		btn_skill_bark_normal.setScaleX(Manager.ratio_width);	//* Ȯ�� �ʿ�
 		btn_skill_bark_normal.setScaleY(Manager.ratio_height);
 		this.addChild(btn_skill_bark_normal);
-		
+
 		btn_skill_bone_activated.setPosition(631 * Manager.ratio_width, 589 * Manager.ratio_height);
 		btn_skill_bone_activated.setScaleX(Manager.ratio_width);
 		btn_skill_bone_activated.setScaleY(Manager.ratio_height);
@@ -290,7 +291,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		btn_skill_bone_normal.setScaleX(Manager.ratio_width);
 		btn_skill_bone_normal.setScaleY(Manager.ratio_height);
 		this.addChild(btn_skill_bone_normal);
-		
+
 		btn_skill_punch_activated.setPosition(631 * Manager.ratio_width, 439 * Manager.ratio_height);
 		btn_skill_punch_activated.setScaleX(Manager.ratio_width);
 		btn_skill_punch_activated.setScaleY(Manager.ratio_height);
@@ -349,7 +350,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		hp_bar_opponent.setScaleY(Manager.ratio_height);
 		hp_bar_opponent.setAnchorPoint(0f, 0.5f);
 		this.addChild(hp_bar_opponent);
-		
+
 		title.setPosition(360 * Manager.ratio_width, 1235 * Manager.ratio_height);
 		title.setScaleX(Manager.ratio_width);
 		title.setScaleY(Manager.ratio_height);
@@ -420,31 +421,40 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		danger.setPosition(360 * Manager.ratio_width, 833 * Manager.ratio_height);
 		danger.setVisible(false);
 		this.addChild(danger);
-		
+
 		bg_danger = CCSprite.sprite("minigame/bg_danger.png");
 		bg_danger.setScaleX(Manager.ratio_width);
 		bg_danger.setScaleY(Manager.ratio_height);
 		bg_danger.setPosition(360 * Manager.ratio_width, 640 * Manager.ratio_height);
 		bg_danger.setVisible(false);
 		this.addChild(bg_danger);
-		
-		CCFiniteTimeAction action_waitFight = CCMoveTo.action(3f, CGPoint.ccp(-360 * Manager.ratio_width, 826 * Manager.ratio_height));
+
+		CCFiniteTimeAction action_waitFight = CCMoveTo.action(2f, CGPoint.ccp(-360 * Manager.ratio_width, 826 * Manager.ratio_height));
 		CCFiniteTimeAction action_incomingFight = CCMoveTo.action(0.3f, CGPoint.ccp(360 * Manager.ratio_width, 826 * Manager.ratio_height));
 		CCFiniteTimeAction action_delayFight = CCMoveTo.action(0.5f, CGPoint.ccp(360 * Manager.ratio_width, 826 * Manager.ratio_height));
 		CCFiniteTimeAction action_outgoingFight = CCMoveTo.action(0.3f, CGPoint.ccp(1080 * Manager.ratio_width, 826 * Manager.ratio_height));
 		CCCallFuncN removeFight = CCCallFuncN.action(this, "removeFight");
-		CCSequence sequence_fight = CCSequence.actions(action_waitFight, action_incomingFight, action_delayFight, action_outgoingFight, removeFight);
+		CCCallFuncN tellFight = CCCallFuncN.action(this, "tellFight");
+		CCSequence sequence_fight = CCSequence.actions(action_waitFight, action_incomingFight, tellFight, action_delayFight, action_outgoingFight, removeFight);
 		fight = CCSprite.sprite("minigame/fight.png");
 		fight.setPosition(-360, 826);
 		fight.setScaleX(Manager.ratio_width);
 		fight.setScaleY(Manager.ratio_height);
 		fight.runAction(sequence_fight);
 		this.addChild(fight);
-		
+
 		NetworkManager.getInstance().setGetDamagedCallback(this);
 	}
 
-
+	public void tellFight(Object sender)
+	{
+		SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.fight);
+	}
+	public void removeFight(Object sender)
+	{
+		CCSprite fight = (CCSprite) sender;
+		this.removeChild(fight, true);
+	}
 	@Override
 	///* �������Լ� ��� ������ �޾��� ��, Activity���� ȣ���ϴ� �Լ�
 	public void didGetDamaged(SkillType kindOfAttack) {
@@ -454,7 +464,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 			hp_mine -= Manager.damaged_hp_per_attack_bark;
 			//* ������ ȿ�� �ִϸ��̼�
 			runAttackAnimation_opponent(1);
-//			BattlerDogActivity.makeToast(1);
+			//			BattlerDogActivity.makeToast(1);
 			break;
 		case 2 :
 			hp_mine -= Manager.damaged_hp_per_attack_bone;
@@ -469,10 +479,10 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 
 	public void runAttackAnimation_mine(int kindOfAttack) {
 		numOfCurrentActions_mine++;
-		
+
 		CCFiniteTimeAction attackAction = makeAttackAction();
 		CCSequence my_attack_sequence = makeMyAttackSequence(attackAction);
-		
+
 		myCharacter_normal.stopAction(normalAnimate_mine);
 		myCharacter_normal.setVisible(false);
 		switch(kindOfAttack)
@@ -495,21 +505,21 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		case 3 : 
 			myCharacter_normal.setVisible(false);
 			this.addChild(attack_punch_mine, 1, ACTION_ATTACK_MINE);
-			
+
 			going_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(going_punch, 500, ACTION_FLYING_MINE);
 			going_punch.runAction(my_attack_sequence);
 			break;
 		}
 	}
-	
+
 	public void runAttackAnimation_opponent(int kindOfAttack)
 	{
 		numOfCurrentActions_opponent++;
-		
+
 		CCFiniteTimeAction damagedAction = makeDamagedAction();
 		CCSequence opponent_attack_sequence = makeMyDamagedSequence(damagedAction);
-		
+
 		opponentCharacter_normal.stopAction(normalAnimate_opponent);
 		opponentCharacter_normal.setVisible(false);
 		switch(kindOfAttack)
@@ -518,7 +528,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 			opponentCharacter_normal.setVisible(false);
 
 			this.addChild(attack_bark_opponent, 1, ACTION_ATTACK_OPPONENT);
-			
+
 			coming_bark.setPosition(495 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(coming_bark, 500, ACTION_FLYING_OPPONENT);
 			coming_bark.runAction(opponent_attack_sequence);
@@ -526,7 +536,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		case 2 : 
 			opponentCharacter_normal.setVisible(false);
 			this.addChild(attack_bone_opponent, 1, ACTION_ATTACK_OPPONENT);
-			
+
 			coming_bone.setPosition(495 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(coming_bone, 500, ACTION_FLYING_OPPONENT);
 			coming_bone.runAction(opponent_attack_sequence);
@@ -534,7 +544,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		case 3 : 
 			opponentCharacter_normal.setVisible(false);
 			this.addChild(attack_punch_opponent, 1, ACTION_ATTACK_OPPONENT);
-			
+
 			coming_punch.setPosition(495 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(coming_punch, 500, ACTION_FLYING_OPPONENT);
 			coming_punch.runAction(opponent_attack_sequence);
@@ -579,7 +589,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 	{
 		gage_bar_black.setScaleY((1 - (gage / Manager.full_gage)) * Manager.ratio_height);
 	}
-	
+
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event) {
 		CGPoint touchPoint = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(event.getX(),event.getY()));
@@ -624,15 +634,17 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 			this.schedule("playDangerAnimation", 0.5f);
 		}
 	}
-	
+
 	public void playDangerAnimation(float dt)
 	{
 		countForDangerAnimation++;
+		if(countForDangerAnimation == 1)
+			SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.effect_danger);
 		if(countForDangerAnimation <= 8)
 			danger.setVisible(!danger.getVisible());
 		bg_danger.setVisible(!bg_danger.getVisible());
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		btn_skill_bark_activated = null;
@@ -641,20 +653,20 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		btn_skill_bone_normal = null;
 		btn_skill_punch_activated = null;
 		btn_skill_punch_normal = null;
-		
+
 		gage_bar = null;
 		gage_bar_black = null;
-		
+
 		bg_battlelayer = null;
 		bg_hp_bar = null;
 		hp_bar_mine = null;
 		hp_bar_opponent = null;
 		title = null;
-		
+
 		returnToNormalMode = null;
 		damagedAndReturnToNormal_mine = null;
 		damagedAndReturnToNormal_opponent = null;
-		
+
 		coming_bark = null;
 		going_bark = null;
 		coming_bone = null;
@@ -690,15 +702,15 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		myCharacter_hurted = null;
 		opponentCharacter_hurted = null;
 
-		
-//		LayerDestroyManager.getInstance().removeLayer(this);
+
+		//		LayerDestroyManager.getInstance().removeLayer(this);
 	}
-	
-//	@Override
-//	protected void finalize() throws Throwable {
-//		onDestroy();
-//		
-//		super.finalize();
-//	}
+
+	//	@Override
+	//	protected void finalize() throws Throwable {
+	//		onDestroy();
+	//		
+	//		super.finalize();
+	//	}
 
 }

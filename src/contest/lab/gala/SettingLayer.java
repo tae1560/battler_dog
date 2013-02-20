@@ -57,6 +57,9 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 	}
 	SettingLayer()
 	{
+
+		SoundEngine.sharedEngine().resumeSound();
+		
 		levelOfBg = Sound.backgroundLevel;
 		levelOfEf = Sound.effectLevel;
 		
@@ -213,6 +216,9 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 					volumeLevels_bg[i].setVisible(false);
 			}
 			Sound.backgroundLevel = levelOfBg;
+			GameActivity g = (GameActivity) CCDirector.sharedDirector().getActivity();
+			g.setVolume(Sound.backgroundLevel);
+			System.out.println(SoundEngine.sharedEngine().getEffectsVolume() % 0.25);
 			SoundEngine.sharedEngine().setSoundVolume(Sound.backgroundLevel * 0.25f);
 		}
 	}
@@ -229,6 +235,8 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 					volumeLevels_bg[i].setVisible(false);
 			}
 			Sound.backgroundLevel = levelOfBg;
+			GameActivity g = (GameActivity) CCDirector.sharedDirector().getActivity();
+			g.setVolume(Sound.backgroundLevel);
 			SoundEngine.sharedEngine().setSoundVolume(Sound.backgroundLevel * 0.25f);
 		}
 	}
@@ -280,6 +288,7 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 			act.doLogout();
 		}
 	}
+
 	@Override
 	public void onDestroy() {
 		// TODO Auto-generated method stub
