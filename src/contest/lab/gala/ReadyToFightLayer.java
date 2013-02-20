@@ -10,6 +10,7 @@ import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.nodes.CCTextureCache;
+import org.cocos2d.sound.SoundEngine;
 
 import android.content.Intent;
 import contest.lab.gala.callback.OnMatchedCallback;
@@ -129,6 +130,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 		NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
 			@Override
 			public void onMatched(User enemy) {
+				SoundEngine.sharedEngine().pauseSound();
 				// TODO Auto-generated method stub
 				CurrentUserInformation.opponentchar = enemy.character;
 				CurrentUserInformation.opponentID = enemy.id;

@@ -27,6 +27,9 @@
 	  	android:layout_toRightOf="@id/usernameLabel"
 	  	android:layout_alignBaseline="@id/usernameLabel"
 	  	android:layout_marginLeft="15dp"
+	  	android:inputType="textEmailAddress"
+	  	android:singleLine="true"
+	  	android:hint="ID"
 	  />
 	  <ImageView
 	  	android:background="@drawable/iv_pw"
@@ -45,6 +48,9 @@
 	  	android:layout_below="@id/userIDEntry"
 	  	android:layout_alignBaseline="@id/passwordLabel"
 	  	android:layout_marginLeft="15dp"
+	  	android:inputType="textEmailAddress"
+	  	android:singleLine="true"
+	  	android:hint="password"
 	  />  
 	  
 	  <RadioGroup 

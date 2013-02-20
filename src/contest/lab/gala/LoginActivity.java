@@ -3,11 +3,12 @@ package contest.lab.gala;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ public class LoginActivity extends Activity implements LoginCallback{
 
 	EditText et_id;
 	EditText et_pw;
+	ProgressDialog waitDlg;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,8 @@ public class LoginActivity extends Activity implements LoginCallback{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				NetworkManager.getInstance().doLogin(et_id.getText().toString(), et_pw.getText().toString(), LoginActivity.this);
+				waitDlg = ProgressDialog.show(LoginActivity.this, "로드중...", "로드중 입니다. 잠시만 기다려주십시오", true,false);
+
 			}
 		});
 		super.onStart();
@@ -88,6 +92,7 @@ public class LoginActivity extends Activity implements LoginCallback{
 			@Override
 			public void run() {
 				Toast.makeText(LoginActivity.this, "로그인 성공!!!!", Toast.LENGTH_LONG).show();
+				waitDlg.dismiss();
 			}
 		});
 	}
@@ -98,6 +103,7 @@ public class LoginActivity extends Activity implements LoginCallback{
 			@Override
 			public void run() {
 				Toast.makeText(LoginActivity.this, "Failed Login - " + message, Toast.LENGTH_LONG).show();
+				waitDlg.dismiss();
 			}
 		});
 	}

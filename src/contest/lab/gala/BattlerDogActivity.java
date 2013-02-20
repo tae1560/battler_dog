@@ -49,6 +49,7 @@ public class BattlerDogActivity extends Activity {
 		
 		if(Manager.isFirstTime)
 		{
+			Manager.isFirstTime = false;
 			CCScene scene = EpisodeLayer.makeScene();
 			CCDirector.sharedDirector().runWithScene(scene);
 		}

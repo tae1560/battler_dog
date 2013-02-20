@@ -3,8 +3,12 @@ package contest.lab.gala;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.cocos2d.actions.base.CCFiniteTimeAction;
 import org.cocos2d.actions.base.CCRepeatForever;
+import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.interval.CCAnimate;
+import org.cocos2d.actions.interval.CCMoveTo;
+import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.CCMenu;
@@ -14,6 +18,7 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrameCache;
 import org.cocos2d.nodes.CCTextureCache;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 
 import contest.lab.gala.interfaces.LifeCycleInterface;
@@ -27,7 +32,8 @@ public class GameLayer extends CCLayer implements LifeCycleInterface{
 	ArrayList<Item> itemList;			
 	ArrayList<CGPoint> itemPositions = null;	
 	
-
+	
+	
 	int numOfItems = 4;
 	
 	CCMenuItemSprite btn_bone= null;
@@ -72,7 +78,6 @@ public class GameLayer extends CCLayer implements LifeCycleInterface{
 	}
 	void init()
 	{
-
 		bg_gamelayer = CCSprite.sprite("minigame/bg_gamelayer.png");
 		bg_gamelayer.setPosition(360 * Manager.ratio_width, 640 * Manager.ratio_height);
 		this.addChild(bg_gamelayer);		
@@ -127,7 +132,15 @@ public class GameLayer extends CCLayer implements LifeCycleInterface{
 		CCAnimate rectAnimate = CCAnimate.action(rectAnimation);
 		rectangle1.runAction(CCRepeatForever.action(rectAnimate));
 		this.addChild(rectangle1);
+		
+
 	}
+	public void removeFight(Object sender)
+	{
+		CCSprite fight = (CCSprite) sender;
+		this.removeChild(fight, true);
+	}
+	
 	public void clickedBone(Object sender)
 	{
 		Item i = itemList.get(0);

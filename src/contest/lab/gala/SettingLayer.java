@@ -58,7 +58,7 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 	SettingLayer()
 	{
 		levelOfBg = Sound.backgroundLevel;
-		
+		levelOfEf = Sound.effectLevel;
 		
 		this.setIsTouchEnabled(true);
 		
@@ -177,9 +177,7 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 		initBgLevel();
 		initEfLevel();
 		
-		// for test
-		SoundEngine.sharedEngine().setSoundVolume(Sound.backgroundLevel * 0.25f);
-		SoundEngine.sharedEngine().playSound(CCDirector.sharedDirector().getActivity(), R.raw.test_background, true);
+		
 	}
 	
 	public void initBgLevel()
