@@ -103,7 +103,8 @@ public class BattlerDogActivity extends Activity {
 					public void run() {
 						// TODO Auto-generated method stub
 						Intent intent = new Intent(BattlerDogActivity.this, StartActivity.class);
-						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 						startActivity(intent);
 						finish();
 					}

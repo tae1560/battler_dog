@@ -223,6 +223,6 @@ public class CommonUtils {
 	}
 	
 	public static void debug(String string) {
-		Log.e("CommonUtils.debug", string);
+//		Log.e("CommonUtils.debug", string);
 	}
 }

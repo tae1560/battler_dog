@@ -246,5 +246,15 @@ public class GameLayer extends CCLayer implements LifeCycleInterface{
 		rectangle2 = null;
 		
 //		LayerDestroyManager.getInstance().removeLayer(this);
-	}	
+	}
+	
+	long _attached_time = 0;
+	@Override
+	public long getTime() {
+		return _attached_time;
+	}
+	@Override
+	public void setTime(long time) {
+		_attached_time = time;
+	}
 }

@@ -447,6 +447,6 @@ public class NetworkManager {
 	}
 	
 	private void debug(String string) {
-		Log.e("galalab", string);
+//		Log.e("galalab", string);
 	}
 }

@@ -26,6 +26,12 @@ protected CCGLSurfaceView _glSurfaceView;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 //		setContentView(R.layout.main);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
+		if (_glSurfaceView != null) {
+			CommonUtils.debug("NOT NULL");
+		} else {
+			CommonUtils.debug("NULL");
+		}
 		_glSurfaceView = new CCGLSurfaceView(this);
 
 		setContentView(_glSurfaceView);
@@ -45,13 +51,13 @@ protected CCGLSurfaceView _glSurfaceView;
 		CommonUtils.debug("MainActivity onStart");
 		super.onStart();
 		
-		
-//		CCScene scene = GameLayer.makeScene();
 		CCScene scene = MainAnimationLayer.makeScene();
 		CCDirector.sharedDirector().runWithScene(scene);
 //		showFriendList();
 		SoundEngine.sharedEngine().preloadSound(this, R.raw.background_start);
 		SoundEngine.sharedEngine().preloadEffect(this, R.raw.effect_button);
+		
+//		CCScene scene = GameLayer.makeScene();
 	}
 
 	public void goLoginPage()

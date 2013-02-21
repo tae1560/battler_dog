@@ -48,7 +48,7 @@ public class ComboLayer extends CCLayer implements LifeCycleInterface{
 		comboLetter.setPosition(160 * Manager.ratio_width, 150 * Manager.ratio_height);
 		CCFiniteTimeAction action_goUp_letter = CCMoveTo.action(0.3f, CGPoint.ccp(142 * Manager.ratio_width, 258* Manager.ratio_height));
 		CCFiniteTimeAction action_scale_letter = CCScaleTo.action(Manager.ratio_width, Manager.ratio_height);
-		CCFiniteTimeAction action_delay_for2secs_letter = CCMoveTo.action(0.5f, CGPoint.ccp(142 * Manager.ratio_width, 258* Manager.ratio_height));
+		CCFiniteTimeAction action_delay_for2secs_letter = CCMoveTo.action(0.3f, CGPoint.ccp(142 * Manager.ratio_width, 258* Manager.ratio_height));
 		CCSpawn spawn_letter = CCSpawn.actions(action_goUp_letter, action_scale_letter);
 		CCCallFuncN deleteLetter = CCCallFuncN.action(this, "deleteLetter");
 		CCSequence sequence_letter = CCSequence.actions(spawn_letter, action_delay_for2secs_letter, deleteLetter);
@@ -61,7 +61,7 @@ public class ComboLayer extends CCLayer implements LifeCycleInterface{
 		combo.setPosition(240 * Manager.ratio_width, 120 * Manager.ratio_height);
 		CCFiniteTimeAction action_goUp_number = CCMoveTo.action(0.3f, CGPoint.ccp(262 * Manager.ratio_width, 228* Manager.ratio_height));
 		CCFiniteTimeAction action_scale_number = CCScaleTo.action(Manager.ratio_width, Manager.ratio_height);
-		CCFiniteTimeAction action_delay_for2secs_number = CCMoveTo.action(0.5f, CGPoint.ccp(262 * Manager.ratio_width, 228* Manager.ratio_height));
+		CCFiniteTimeAction action_delay_for2secs_number = CCMoveTo.action(0.3f, CGPoint.ccp(262 * Manager.ratio_width, 228* Manager.ratio_height));
 		CCSpawn spawn_number = CCSpawn.actions(action_goUp_number, action_scale_number);
 		CCCallFuncN deleteNumber = CCCallFuncN.action(this, "deleteNumber");
 		CCSequence sequence_number = CCSequence.actions(spawn_number, action_delay_for2secs_number, deleteNumber);
@@ -91,5 +91,15 @@ public class ComboLayer extends CCLayer implements LifeCycleInterface{
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		combo = null;
+	}
+	
+	long _attached_time = 0;
+	@Override
+	public long getTime() {
+		return _attached_time;
+	}
+	@Override
+	public void setTime(long time) {
+		_attached_time = time;
 	}
 }

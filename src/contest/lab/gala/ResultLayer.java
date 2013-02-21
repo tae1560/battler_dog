@@ -162,4 +162,14 @@ public class ResultLayer extends CCLayer implements LifeCycleInterface {
 		numOfLoses = null;
 		numOfSuccessiveWins = null;
 	}
+	
+	long _attached_time = 0;
+	@Override
+	public long getTime() {
+		return _attached_time;
+	}
+	@Override
+	public void setTime(long time) {
+		_attached_time = time;
+	}
 }

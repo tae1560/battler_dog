@@ -21,16 +21,27 @@ public class LayerDestroyManager {
 	public void addLayer(LifeCycleInterface layer) {
 		if (! destroy_queue.contains(layer)) {
 			destroy_queue.add(layer);
+			layer.setTime(System.currentTimeMillis());
 		}
 	}
 	
 	public void removeLayer(LifeCycleInterface layer) {
 		destroy_queue.remove(layer);
+		layer.setTime(0);
 	}
 	
 	public void deallocLayers() {
+		CommonUtils.debug("deallocLayers");
 		for (LifeCycleInterface layer : destroy_queue) {
-			layer.onDestroy();
+			CommonUtils.debug(layer.toString());
+			
+			if (System.currentTimeMillis() - layer.getTime() > 15000) {
+				CommonUtils.debug("destroy");
+				layer.onDestroy();				
+			} else {
+				CommonUtils.debug("not destroy");
+			}
 		}
+		System.gc();
 	}
 }

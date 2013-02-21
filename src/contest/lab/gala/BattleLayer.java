@@ -709,5 +709,13 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		//		LayerDestroyManager.getInstance().removeLayer(this);
 	}
 
-
+	long _attached_time = 0;
+	@Override
+	public long getTime() {
+		return _attached_time;
+	}
+	@Override
+	public void setTime(long time) {
+		_attached_time = time;
+	}
 }

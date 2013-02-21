@@ -156,6 +156,16 @@ public class MainAnimationLayer extends CCLayer implements LifeCycleInterface{
 //		LayerDestroyManager.getInstance().removeLayer(this);
 	}
 	
+	long _attached_time = 0;
+	@Override
+	public long getTime() {
+		return _attached_time;
+	}
+	@Override
+	public void setTime(long time) {
+		_attached_time = time;
+	}
+	
 //	@Override
 //	protected void finalize() throws Throwable {
 //		onDestroy();

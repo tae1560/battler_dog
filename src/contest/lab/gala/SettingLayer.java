@@ -9,6 +9,7 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.sound.SoundEngine;
 
 import contest.lab.gala.interfaces.LifeCycleInterface;
+import contest.lab.gala.util.CommonUtils;
 import contest.lab.gala.util.LayerDestroyManager;
 
 public class SettingLayer extends CCLayer implements LifeCycleInterface{
@@ -221,7 +222,9 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 //			GameActivity g = (GameActivity) CCDirector.sharedDirector().getActivity();
 //			g.setVolume(Sound.backgroundLevel);
 ////			SoundEngine.sharedEngine().getSoundsVolume() % 0.25);
+			CommonUtils.debug("prev Sound.backgroundLevel : " + Sound.backgroundLevel);
 			SoundEngine.sharedEngine().setSoundVolume(Sound.backgroundLevel * 0.25f);
+			CommonUtils.debug("current sound volume : " + SoundEngine.sharedEngine().getSoundsVolume());
 		}
 	}
 	public void clickedBgNext(Object sender)
@@ -239,7 +242,9 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 					volumeLevels_bg[i].setVisible(false);
 			}
 			Sound.backgroundLevel = levelOfBg;
+			CommonUtils.debug("next Sound.backgroundLevel : " + Sound.backgroundLevel);
 			SoundEngine.sharedEngine().setSoundVolume(Sound.backgroundLevel * 0.25f);
+			CommonUtils.debug("current sound volume : " + SoundEngine.sharedEngine().getSoundsVolume());
 		}
 	}
 	public void clickedEfBefore(Object sender)
@@ -335,5 +340,15 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 		btn_logout_clicked = null;
 		btn_logout_unclicked = null;
 		
+	}
+	
+	long _attached_time = 0;
+	@Override
+	public long getTime() {
+		return _attached_time;
+	}
+	@Override
+	public void setTime(long time) {
+		_attached_time = time;
 	}
 }
