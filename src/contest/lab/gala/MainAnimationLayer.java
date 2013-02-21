@@ -47,7 +47,7 @@ public class MainAnimationLayer extends CCLayer implements LifeCycleInterface{
 	public MainAnimationLayer()
 	{
 		this.setIsTouchEnabled(true);
-		SoundEngine.sharedEngine().playSound(CCDirector.sharedDirector().getActivity(), R.raw.background_start, false);
+		SoundEngine.sharedEngine().playSound(CCDirector.sharedDirector().getActivity(), R.raw.background_start, true);
 
 		this.onCreate();
 	}

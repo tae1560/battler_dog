@@ -43,6 +43,9 @@ public class ResultActivity extends Activity {
 		CCDirector.sharedDirector().setAnimationInterval(1.0f / 60.0f);
 
 		SoundEngine.sharedEngine().preloadEffect(ResultActivity.this, R.raw.effect_button);
+		SoundEngine.sharedEngine().preloadEffect(ResultActivity.this, R.raw.effect_win);
+		SoundEngine.sharedEngine().preloadEffect(ResultActivity.this, R.raw.effect_lose);
+		
 		
 		SoundEngine.sharedEngine().preloadSound(ResultActivity.this, R.raw.background_win);
 		SoundEngine.sharedEngine().preloadSound(ResultActivity.this, R.raw.background_lose);

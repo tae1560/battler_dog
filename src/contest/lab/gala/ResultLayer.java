@@ -23,6 +23,8 @@ public class ResultLayer extends CCLayer implements LifeCycleInterface {
 	CCSprite btn_back_unclicked;
 	CCSprite btn_back_clicked;
 	
+	float delayToEffect = 2f;
+	
 	CCSprite myCharacter = null;
 	
 	CCLabelAtlas maxNumOfCombos = null;
@@ -62,7 +64,7 @@ public class ResultLayer extends CCLayer implements LifeCycleInterface {
 			result = CCSprite.sprite("result/lose.png");
 		}
 		
-		result.setPosition(360 * Manager.ratio_width, 1036 * Manager.ratio_height);
+		result.setPosition(360 * Manager.ratio_width, 986 * Manager.ratio_height);
 		result.setScaleX(Manager.ratio_width);
 		result.setScaleY(Manager.ratio_height);
 		this.addChild(result);
@@ -77,35 +79,35 @@ public class ResultLayer extends CCLayer implements LifeCycleInterface {
 		this.addChild(backMenu);
 		
 		numOfGames = CCLabelAtlas.label(""+Manager.numOfGames, "result/numbers_result.png", 28, 38, '0');
-		numOfGames.setPosition(CGPoint.ccp(125 * Manager.ratio_width, 325 * Manager.ratio_height));
+		numOfGames.setPosition(CGPoint.ccp(125 * Manager.ratio_width, 275 * Manager.ratio_height));
 		numOfGames.setAnchorPoint(1.0f, 0.5f);
 		numOfGames.setScaleX(Manager.ratio_width);
 		numOfGames.setScaleY(Manager.ratio_height);
 		this.addChild(numOfGames);
 		
 		numOfWins =  CCLabelAtlas.label(""+Manager.numOfWins, "result/numbers_result.png", 28, 38,'0');
-		numOfWins.setPosition(325 * Manager.ratio_width, 325 * Manager.ratio_height);
+		numOfWins.setPosition(325 * Manager.ratio_width, 275 * Manager.ratio_height);
 		numOfWins.setAnchorPoint(1.0f, 0.5f);
 		numOfWins.setScaleX(Manager.ratio_width);
 		numOfWins.setScaleY(Manager.ratio_height);
 		this.addChild(numOfWins);
 		
 		numOfLoses = CCLabelAtlas.label(""+Manager.numOfLoses, "result/numbers_result.png", 28, 38,'0');
-		numOfLoses.setPosition(485 * Manager.ratio_width, 325 * Manager.ratio_height);
+		numOfLoses.setPosition(485 * Manager.ratio_width, 275 * Manager.ratio_height);
 		numOfLoses.setAnchorPoint(1.0f, 0.5f);
 		numOfLoses.setScaleX(Manager.ratio_width);
 		numOfLoses.setScaleY(Manager.ratio_height);
 		this.addChild(numOfLoses);
 		
 		numOfSuccessiveWins  = CCLabelAtlas.label(""+Manager.numOfSuccessiveWins, "result/numbers_wins.png", 70, 88, '0');
-		numOfSuccessiveWins.setPosition(350 * Manager.ratio_width, 585 * Manager.ratio_height);
+		numOfSuccessiveWins.setPosition(350 * Manager.ratio_width, 535 * Manager.ratio_height);
 		numOfSuccessiveWins.setAnchorPoint(1.0f, 0.5f);
 		numOfSuccessiveWins.setScaleX(Manager.ratio_width);
 		numOfSuccessiveWins.setScaleY(Manager.ratio_height);
 		this.addChild(numOfSuccessiveWins);
 		
 		maxNumOfCombos  = CCLabelAtlas.label(""+Manager.maxNumOfCombo, "result/numbers_combo.png", 46, 70, '0');
-		maxNumOfCombos.setPosition(545 * Manager.ratio_width, 810 * Manager.ratio_height);
+		maxNumOfCombos.setPosition(545 * Manager.ratio_width, 760 * Manager.ratio_height);
 		maxNumOfCombos.setAnchorPoint(1.0f, 0.5f);
 		maxNumOfCombos.setScaleX(Manager.ratio_width);
 		maxNumOfCombos.setScaleY(Manager.ratio_height);
@@ -114,8 +116,26 @@ public class ResultLayer extends CCLayer implements LifeCycleInterface {
 		myCharacter = CCSprite.sprite(String.format("character/char%d_normal1.png", CurrentUserInformation.userChar));
 		myCharacter.setScaleX(-1 * Manager.ratio_width);
 		myCharacter.setScaleY(Manager.ratio_height);
-		myCharacter.setPosition(210 * Manager.ratio_width, 730 * Manager.ratio_height);
+		myCharacter.setPosition(210 * Manager.ratio_width, 680 * Manager.ratio_height);
 		this.addChild(myCharacter);
+		
+		this.schedule("delayForEffect", 0.1f);
+	}
+	public void delayForEffect(float dt)
+	{
+		delayToEffect -= dt;
+		if(delayToEffect < 0)
+		{
+			if(Manager.resultOfGame)
+			{
+				SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_win);
+			}
+			else
+			{
+				SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_lose);
+			}
+			this.unschedule("delayForEffect");
+		}
 	}
 	public void goToFriendList(Object sender)
 	{

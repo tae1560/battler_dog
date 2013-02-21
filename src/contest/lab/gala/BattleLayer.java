@@ -595,6 +595,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		CGPoint touchPoint = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(event.getX(),event.getY()));
 		if(btn_skill_bark_normal.getBoundingBox().contains(touchPoint.x, touchPoint.y) && gage >= Manager.required_gage_for_skill_bark)
 		{
+			SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
 			gage -= Manager.required_gage_for_skill_bark;
 			hp_opponent -= Manager.damaged_hp_per_attack_bark;
 			updateSkillBtns();			
@@ -604,6 +605,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		}
 		else if(btn_skill_bone_normal.getBoundingBox().contains(touchPoint.x, touchPoint.y) && gage >= Manager.required_gage_for_skill_bone)
 		{
+			SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
 			gage -= Manager.required_gage_for_skill_bone;
 			hp_opponent -= Manager.damaged_hp_per_attack_bone;
 			updateSkillBtns();
@@ -614,6 +616,7 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		}
 		else if(btn_skill_punch_normal.getBoundingBox().contains(touchPoint.x, touchPoint.y) && gage >= Manager.required_gage_for_skill_punch)
 		{
+			SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
 			gage -= Manager.required_gage_for_skill_punch;
 			hp_opponent -= Manager.damaged_hp_per_attack_punch;
 			updateSkillBtns();

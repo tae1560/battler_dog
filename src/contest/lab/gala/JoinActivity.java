@@ -101,7 +101,6 @@ public class JoinActivity extends Activity implements JoinCallback{
 				if (selected_character >= 0) {
 					NetworkManager.getInstance().doJoin(et_id.getText().toString(), et_pw.getText().toString(), selected_character, JoinActivity.this);					
 					waitDlg = ProgressDialog.show(JoinActivity.this, "로드중...", "로드중 입니다. 잠시만 기다려주십시오", true,false);
-
 				}				
 			}
 		});
@@ -117,7 +116,7 @@ public class JoinActivity extends Activity implements JoinCallback{
 			public void run() {
 				Toast.makeText(JoinActivity.this, "회원가입 성공!!", Toast.LENGTH_LONG).show();
 				waitDlg.dismiss();
-				
+				Manager.isFirstTime = true;
 				Intent intent = new Intent(JoinActivity.this, FriendLoadingActivity.class);
 				startActivity(intent);
 				finish();

@@ -91,6 +91,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface, On
 	}
 	public void clickedNo(Object sender)
 	{
+		this.removeChild(popup, true);
 		this.removeChild(menu_popup, true);
 	}
 	public void clickedYes(Object sender)

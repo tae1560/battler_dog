@@ -139,10 +139,10 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 		volumeLevels_bg = new CCSprite[5];
 		volumeLevels_ef = new CCSprite[5];
 		
-		volumeLevels_bg[0] = CCSprite.sprite("setting/selected.png");
+		volumeLevels_bg[0] = CCSprite.sprite("setting/nosound.png");
 		volumeLevels_bg[0].setScaleX(Manager.ratio_width);
 		volumeLevels_bg[0].setScaleY(Manager.ratio_height);
-		volumeLevels_ef[0] = CCSprite.sprite("setting/selected.png");
+		volumeLevels_ef[0] = CCSprite.sprite("setting/nosound.png");
 		volumeLevels_ef[0].setScaleX(Manager.ratio_width);
 		volumeLevels_ef[0].setScaleY(Manager.ratio_height);
 		
