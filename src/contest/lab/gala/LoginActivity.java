@@ -59,24 +59,17 @@ public class LoginActivity extends Activity implements LoginCallback{
 	public void didSuccessLogin(User user) {
 		CurrentUserInformation.userID = user.id;
 		CurrentUserInformation.userChar = user.character;
-		NetworkManager.getInstance().requestFriends(new RequestFriendsCallback() {
-
-			@Override
-			public void didGetFriends(ArrayList<User> friends) {
-				Manager.friendList = (ArrayList<User>) friends.clone();
-				Intent intent = new Intent(LoginActivity.this, BattlerDogActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				startActivity(intent);
-				finish();
-			}
-		});
-		
+				
 		runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
 				Toast.makeText(LoginActivity.this, "로그인 성공!!!!", Toast.LENGTH_LONG).show();
 				waitDlg.dismiss();
+				
+				Intent intent = new Intent(LoginActivity.this, FriendLoadingActivity.class);
+				startActivity(intent);
+				finish();
 			}
 		});
 	}

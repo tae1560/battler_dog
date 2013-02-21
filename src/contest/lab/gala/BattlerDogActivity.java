@@ -97,9 +97,17 @@ public class BattlerDogActivity extends Activity {
 			@Override
 			public void onLogoutSuccess() {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(BattlerDogActivity.this, MainActivity.class);
-//				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
+				runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent(BattlerDogActivity.this, MainActivity.class);
+						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						startActivity(intent);
+						finish();
+					}
+				});
 				SoundEngine.sharedEngine().pauseSound();
 			}
 			

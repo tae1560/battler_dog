@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import contest.lab.gala.util.CommonUtils;
 import contest.lab.gala.util.LayerDestroyManager;
 
 public class MainActivity extends Activity{
@@ -20,6 +21,7 @@ protected CCGLSurfaceView _glSurfaceView;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		CommonUtils.debug("MainActivity onCreate");
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 //		setContentView(R.layout.main);
@@ -40,7 +42,7 @@ protected CCGLSurfaceView _glSurfaceView;
 	}
 	@Override
 	protected void onStart() {
-
+		CommonUtils.debug("MainActivity onStart");
 		super.onStart();
 		
 		
@@ -68,6 +70,7 @@ protected CCGLSurfaceView _glSurfaceView;
 	}
 	
 	protected void onDestroy() {
+		CommonUtils.debug("MainActivity onDestroy");
 		LayerDestroyManager.getInstance().deallocLayers();
 		super.onDestroy();
 	}

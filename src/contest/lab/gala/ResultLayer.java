@@ -121,9 +121,10 @@ public class ResultLayer extends CCLayer implements LifeCycleInterface {
 	{
 		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
 		
-		Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), BattlerDogActivity.class);
+		Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), FriendLoadingActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		CCDirector.sharedDirector().getActivity().startActivity(intent);
+		CCDirector.sharedDirector().getActivity().finish();
 	}
 	@Override
 	public void onDestroy() {

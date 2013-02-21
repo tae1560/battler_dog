@@ -20,7 +20,7 @@ import contest.lab.gala.interfaces.LifeCycleInterface;
 import contest.lab.gala.util.CommonUtils;
 import contest.lab.gala.util.LayerDestroyManager;
 
-public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
+public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface, OnMatchedCallback{
 	int numOfEntryPerOnePage = 4;
 	int numOfTotalEntries;
 	int currentPageNum = 0;   // 0���� ����  currentPageNum * 4, +1, +2, +3 �� ���� ������
@@ -74,23 +74,12 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 
 		
 		CCScene scene = CCScene.node();
-		CCLayer layer = new ReadyToFightLayer();
+		ReadyToFightLayer layer = new ReadyToFightLayer();
 		scene.addChild(layer);
 
 		LayerDestroyManager.getInstance().addLayer((LifeCycleInterface)layer);
 
-		NetworkManager.getInstance().setOnMatchedCallback(new OnMatchedCallback() {
-			@Override
-			public void onMatched(User enemy) {
-				// TODO Auto-generated method stub
-				CurrentUserInformation.opponentchar = enemy.character;
-				CurrentUserInformation.opponentID = enemy.id;
-
-				CommonUtils.debug("onMatched " + enemy.id);
-				CCScene scene = GameLayer.makeScene();
-				CCDirector.sharedDirector().replaceScene(scene);
-			}
-		});
+		NetworkManager.getInstance().setOnMatchedCallback(layer);
 
 		return scene;
 	}
@@ -106,20 +95,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 	}
 	public void clickedYes(Object sender)
 	{
-		NetworkManager.getInstance().requestMatchingWithFriend(Manager.friendList.get(selectedFriend).id, new OnMatchedCallback() {
-
-			@Override
-			public void onMatched(User enemy) {
-				CurrentUserInformation.opponentID = enemy.id;
-				CurrentUserInformation.opponentchar = enemy.character;
-
-				CCDirector.sharedDirector().purgeCachedData();
-
-				Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), GameActivity.class);
-				CCDirector.sharedDirector().getActivity().startActivity(intent);
-			}
-		});
-
+		NetworkManager.getInstance().requestMatchingWithFriend(Manager.friendList.get(selectedFriend).id, this);
 	}
 	public void requestMatchWithFriend(Object sender)
 	{
@@ -157,19 +133,7 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 	{
 		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
 		
-		NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
-			@Override
-			public void onMatched(User enemy) {
-				SoundEngine.sharedEngine().pauseSound();
-				// TODO Auto-generated method stub
-				CurrentUserInformation.opponentchar = enemy.character;
-				CurrentUserInformation.opponentID = enemy.id;
-
-				CommonUtils.debug("onMatched " + enemy.id);
-				Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), GameActivity.class);
-				CCDirector.sharedDirector().getActivity().startActivity(intent);
-			}
-		});
+		NetworkManager.getInstance().requestRandomMatching(this);
 	}
 	public void clickedSettingButton(Object sender)
 	{
@@ -432,6 +396,18 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 		successiveWins = null;
 
 		//		LayerDestroyManager.getInstance().removeLayer(this);
+	}
+	
+	public void onMatched(User enemy) {
+		SoundEngine.sharedEngine().pauseSound();
+		// TODO Auto-generated method stub
+		CurrentUserInformation.opponentchar = enemy.character;
+		CurrentUserInformation.opponentID = enemy.id;
+
+		CommonUtils.debug("onMatched " + enemy.id);
+		Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), GameActivity.class);
+		CCDirector.sharedDirector().getActivity().startActivity(intent);
+//		CCDirector.sharedDirector().getActivity().finish();
 	}
 
 	//	protected void finalize() throws Throwable {

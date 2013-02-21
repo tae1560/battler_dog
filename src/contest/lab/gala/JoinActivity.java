@@ -111,15 +111,14 @@ public class JoinActivity extends Activity implements JoinCallback{
 		CurrentUserInformation.userID = user.id;
 		CurrentUserInformation.userChar = user.character;
 
-		NetworkManager.getInstance().requestFriends(new RequestFriendsCallback() {
+			runOnUiThread(new Runnable() {
 			
 			@Override
-			public void didGetFriends(ArrayList<User> friends) {
+			public void run() {
+				Toast.makeText(JoinActivity.this, "회원가입 성공!!", Toast.LENGTH_LONG).show();
 				waitDlg.dismiss();
-				Manager.isFirstTime = true;
-				Manager.friendList = (ArrayList<User>) friends.clone();
-				Intent intent = new Intent(JoinActivity.this, BattlerDogActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+				
+				Intent intent = new Intent(JoinActivity.this, FriendLoadingActivity.class);
 				startActivity(intent);
 				finish();
 			}
