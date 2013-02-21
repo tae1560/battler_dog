@@ -10,6 +10,7 @@ import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCAnimation;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 
 import contest.lab.gala.interfaces.LifeCycleInterface;
 import contest.lab.gala.util.LayerDestroyManager;
@@ -46,7 +47,8 @@ public class MainAnimationLayer extends CCLayer implements LifeCycleInterface{
 	public MainAnimationLayer()
 	{
 		this.setIsTouchEnabled(true);
-		
+		SoundEngine.sharedEngine().playSound(CCDirector.sharedDirector().getActivity(), R.raw.background_start, false);
+
 		this.onCreate();
 	}
 	public void afterAnimation(Object o)
@@ -61,6 +63,7 @@ public class MainAnimationLayer extends CCLayer implements LifeCycleInterface{
 	
 	public void goLogin(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
 		MainActivity activity = (MainActivity)CCDirector.sharedDirector().getActivity();
 		activity.goLoginPage();
 //		CCScene scene = GameLayer.makeScene();
@@ -69,6 +72,7 @@ public class MainAnimationLayer extends CCLayer implements LifeCycleInterface{
 	
 	public void goJoin(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
 		MainActivity activity = (MainActivity)CCDirector.sharedDirector().getActivity();
 		activity.goJoinPage();
 	}

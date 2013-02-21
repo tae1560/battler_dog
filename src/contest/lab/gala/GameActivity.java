@@ -48,7 +48,9 @@ public class GameActivity extends Activity {
 		SoundEngine.sharedEngine().preloadEffect(ctxt, R.raw.effect_danger);
 		SoundEngine.sharedEngine().preloadEffect(ctxt, R.raw.effect_punch);
 		SoundEngine.sharedEngine().preloadEffect(ctxt, R.raw.effect_item);
-		
+		SoundEngine.sharedEngine().preloadEffect(ctxt, R.raw.effect_bark);
+		SoundEngine.sharedEngine().preloadEffect(ctxt, R.raw.effect_button);
+
 		SoundEngine.sharedEngine().preloadSound(ctxt, Sound.background_game);
 
 		//		CCScene scene = GameLayer.makeScene();
@@ -66,6 +68,7 @@ public class GameActivity extends Activity {
 				Manager.numOfLoses = user.total_loses;
 				Manager.numOfSuccessiveWins = user.number_of_wins;
 				Manager.numOfGames = Manager.numOfLoses + Manager.numOfWins;
+		
 				
 				Intent intent = new Intent(GameActivity.this, ResultActivity.class);
 				startActivity(intent);
@@ -84,7 +87,6 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
-		CCDirector.sharedDirector().pause();
 		super.onStop();
 	}
 	

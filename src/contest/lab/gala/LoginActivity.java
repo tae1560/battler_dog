@@ -2,6 +2,8 @@ package contest.lab.gala;
 
 import java.util.ArrayList;
 
+import org.cocos2d.sound.SoundEngine;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -29,6 +31,7 @@ public class LoginActivity extends Activity implements LoginCallback{
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.login);
+		SoundEngine.sharedEngine().preloadEffect(this, R.raw.effect_button);
 		super.onStart();
 	}
 	@Override
@@ -42,6 +45,8 @@ public class LoginActivity extends Activity implements LoginCallback{
 
 			@Override
 			public void onClick(View v) {
+				SoundEngine.sharedEngine().playEffect(LoginActivity.this, R.raw.effect_button);
+
 				// TODO Auto-generated method stub
 				NetworkManager.getInstance().doLogin(et_id.getText().toString(), et_pw.getText().toString(), LoginActivity.this);
 				waitDlg = ProgressDialog.show(LoginActivity.this, "로드중...", "로드중 입니다. 잠시만 기다려주십시오", true,false);
@@ -62,30 +67,9 @@ public class LoginActivity extends Activity implements LoginCallback{
 				Intent intent = new Intent(LoginActivity.this, BattlerDogActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(intent);
+				finish();
 			}
 		});
-//		NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
-//			@Override
-//			public void onMatched(final User enemy) {
-//				// TODO Auto-generated method stub
-//				
-//				CurrentUserInformation.opponentchar = enemy.character;
-//				CurrentUserInformation.opponentID = enemy.id;
-//				
-//				CCScene scene = GameLayer.makeScene();
-//				CCDirector.sharedDirector().replaceScene(scene);
-//				
-//				CommonUtils.debug("onMatched " + enemy.id);
-//				
-////				runOnUiThread(new Runnable() {
-////
-////					@Override
-////					public void run() {
-////						
-////					}
-////				});
-//			}
-//		});
 		
 		runOnUiThread(new Runnable() {
 
@@ -106,5 +90,10 @@ public class LoginActivity extends Activity implements LoginCallback{
 				waitDlg.dismiss();
 			}
 		});
+	}
+	@Override
+	protected void onDestroy() {
+		
+		super.onDestroy();
 	}
 }

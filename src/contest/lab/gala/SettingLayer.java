@@ -205,6 +205,8 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 	}
 	public void clickedBgBefore(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+		
 		if(levelOfBg != 0)
 		{
 			levelOfBg--;
@@ -216,14 +218,16 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 					volumeLevels_bg[i].setVisible(false);
 			}
 			Sound.backgroundLevel = levelOfBg;
-			GameActivity g = (GameActivity) CCDirector.sharedDirector().getActivity();
-			g.setVolume(Sound.backgroundLevel);
-			System.out.println(SoundEngine.sharedEngine().getEffectsVolume() % 0.25);
+//			GameActivity g = (GameActivity) CCDirector.sharedDirector().getActivity();
+//			g.setVolume(Sound.backgroundLevel);
+////			SoundEngine.sharedEngine().getSoundsVolume() % 0.25);
 			SoundEngine.sharedEngine().setSoundVolume(Sound.backgroundLevel * 0.25f);
 		}
 	}
 	public void clickedBgNext(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+		
 		if(levelOfBg != 4)
 		{
 			levelOfBg++;
@@ -235,13 +239,13 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 					volumeLevels_bg[i].setVisible(false);
 			}
 			Sound.backgroundLevel = levelOfBg;
-			GameActivity g = (GameActivity) CCDirector.sharedDirector().getActivity();
-			g.setVolume(Sound.backgroundLevel);
 			SoundEngine.sharedEngine().setSoundVolume(Sound.backgroundLevel * 0.25f);
 		}
 	}
 	public void clickedEfBefore(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+		
 		if(levelOfEf != 0)
 		{
 			levelOfEf--;
@@ -258,6 +262,8 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 	}
 	public void clickedEfNext(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+		
 		if(levelOfEf != 4)
 		{
 			levelOfEf++;
@@ -274,11 +280,15 @@ public class SettingLayer extends CCLayer implements LifeCycleInterface{
 	}
 	public void clickedCancel(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+		
 		CCScene scene = ReadyToFightLayer.makeScene();
 		CCDirector.sharedDirector().replaceScene(scene);
 	}
 	public void clickedLogout(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+		
 		////// 서버에게 로그아웃 메시지 보내기
 //		Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), MainActivity.class);
 //		CCDirector.sharedDirector().getActivity().startActivity(intent);

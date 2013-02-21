@@ -356,15 +356,6 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		title.setScaleY(Manager.ratio_height);
 		this.addChild(title);
 
-		CCLabel x = CCLabel.makeLabel("400, 1247", "Arial", 30);
-		x.setColor(ccColor3B.ccBLACK);
-		x.setPosition(176, 1243);
-		this.addChild(x);
-		CCLabel l = CCLabel.makeLabel("176, 1243", "Arial", 20);
-		l.setPosition(176, 1243);
-		x.setColor(ccColor3B.ccBLACK);
-		this.addChild(l);
-
 		attack_bark_opponent = CCSprite.sprite(String.format("character/attack_bark%d.png", CurrentUserInformation.opponentchar));
 		attack_bark_opponent.setScaleX(Manager.ratio_width);
 		attack_bark_opponent.setScaleY(Manager.ratio_height);
@@ -433,9 +424,10 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		CCFiniteTimeAction action_incomingFight = CCMoveTo.action(0.3f, CGPoint.ccp(360 * Manager.ratio_width, 826 * Manager.ratio_height));
 		CCFiniteTimeAction action_delayFight = CCMoveTo.action(0.5f, CGPoint.ccp(360 * Manager.ratio_width, 826 * Manager.ratio_height));
 		CCFiniteTimeAction action_outgoingFight = CCMoveTo.action(0.3f, CGPoint.ccp(1080 * Manager.ratio_width, 826 * Manager.ratio_height));
+		CCCallFuncN tellFight = CCCallFuncN.action(this, "tellFight");
 		CCCallFuncN removeFight = CCCallFuncN.action(this, "removeFight");
 		
-		CCSequence sequence_fight = CCSequence.actions(action_waitFight, action_incomingFight, action_delayFight, action_outgoingFight, removeFight);
+		CCSequence sequence_fight = CCSequence.actions(action_waitFight, tellFight, action_incomingFight, action_delayFight, action_outgoingFight, removeFight);
 		fight = CCSprite.sprite("minigame/fight.png");
 		fight.setPosition(-360, 826);
 		fight.setScaleX(Manager.ratio_width);
@@ -443,13 +435,12 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		fight.runAction(sequence_fight);
 		this.addChild(fight);
 
-		SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.fight2);
 		NetworkManager.getInstance().setGetDamagedCallback(this);
 	}
 
 	public void tellFight(Object sender)
 	{
-		SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.fight);
+		SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.fight2);
 	}
 	public void removeFight(Object sender)
 	{
@@ -479,6 +470,8 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 	}
 
 	public void runAttackAnimation_mine(int kindOfAttack) {
+		SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.effect_punch);
+		
 		numOfCurrentActions_mine++;
 
 		CCFiniteTimeAction attackAction = makeAttackAction();
@@ -489,6 +482,8 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		switch(kindOfAttack)
 		{
 		case 1 : 
+			SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.effect_bark);
+			
 			myCharacter_normal.setVisible(false);
 			this.addChild(attack_bark_mine, 1, ACTION_ATTACK_MINE);
 			going_bark.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
@@ -510,13 +505,14 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 			going_punch.setPosition(225 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(going_punch, 500, ACTION_FLYING_MINE);
 			going_punch.runAction(my_attack_sequence);
-			SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.effect_punch);
 			break;
 		}
 	}
 
 	public void runAttackAnimation_opponent(int kindOfAttack)
 	{
+		SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.effect_punch);
+		
 		numOfCurrentActions_opponent++;
 
 		CCFiniteTimeAction damagedAction = makeDamagedAction();
@@ -527,6 +523,8 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 		switch(kindOfAttack)
 		{
 		case 1 : 
+			SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.effect_bark);
+			
 			opponentCharacter_normal.setVisible(false);
 
 			this.addChild(attack_bark_opponent, 1, ACTION_ATTACK_OPPONENT);
@@ -550,7 +548,6 @@ public class BattleLayer extends CCLayer implements GetDamagedCallback, LifeCycl
 			coming_punch.setPosition(495 * Manager.ratio_width,1030 * Manager.ratio_height);
 			this.addChild(coming_punch, 500, ACTION_FLYING_OPPONENT);
 			coming_punch.runAction(opponent_attack_sequence);
-			SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.effect_punch);
 			break;
 		}
 	}

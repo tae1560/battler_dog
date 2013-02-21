@@ -133,13 +133,13 @@ public class GameLayer extends CCLayer implements LifeCycleInterface{
 		rectangle1.runAction(CCRepeatForever.action(rectAnimate));
 		this.addChild(rectangle1);
 		
-		SoundEngine.sharedEngine().playSound(GameActivity.ctxt, Sound.background_game, true);
+		SoundEngine.sharedEngine().playSound(CCDirector.sharedDirector().getActivity(), Sound.background_game, true);
 	}
 	
 	
 	public void clickedBone(Object sender)
 	{
-		SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.effect_item);
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_item);
 		Item i = itemList.get(0);
 		if(i instanceof Bone)
 			clickedCorrectOne();
@@ -148,7 +148,7 @@ public class GameLayer extends CCLayer implements LifeCycleInterface{
 	}
 	public void clickedGum(Object sender)
 	{
-		SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.effect_item);
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_item);
 		Item i = itemList.get(0);
 		if(i instanceof Gum)
 			clickedCorrectOne();
@@ -157,7 +157,7 @@ public class GameLayer extends CCLayer implements LifeCycleInterface{
 	}
 	public void clickedRedbull(Object sender)
 	{
-		SoundEngine.sharedEngine().playEffect(GameActivity.ctxt, R.raw.effect_item);
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_item);
 		Item i = itemList.get(0);
 		if(i instanceof Redbull)
 			clickedCorrectOne();

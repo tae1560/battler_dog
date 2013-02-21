@@ -10,6 +10,7 @@ import org.cocos2d.menus.CCMenu;
 import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 
 public class EpisodeLayer extends CCLayer {
@@ -104,6 +105,8 @@ public class EpisodeLayer extends CCLayer {
 	}
 	public void clickedSkip(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+		
 		if(currentPage == 1)
 		{
 			currentPageNum = 6;
@@ -118,6 +121,8 @@ public class EpisodeLayer extends CCLayer {
 	}
 	public void updatePage(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+		
 		if(currentPageNum == 8)
 		{
 			CCScene scene = ReadyToFightLayer.makeScene();

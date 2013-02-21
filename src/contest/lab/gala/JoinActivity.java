@@ -2,6 +2,9 @@ package contest.lab.gala;
 
 import java.util.ArrayList;
 
+import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.sound.SoundEngine;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -31,7 +34,8 @@ public class JoinActivity extends Activity implements JoinCallback{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 
-		
+		SoundEngine.sharedEngine().preloadEffect(this, R.raw.effect_button);
+
 		et_id = (EditText)findViewById(R.id.userIDEntry);
 		et_pw = (EditText)findViewById(R.id.passwordEntry);
 		
@@ -42,11 +46,41 @@ public class JoinActivity extends Activity implements JoinCallback{
 		final RadioButton rb_char3 = (RadioButton)findViewById(R.id.rb_char3);
 		final RadioButton rb_char4 = (RadioButton)findViewById(R.id.rb_char4);
 
+		rb_char1.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				SoundEngine.sharedEngine().playEffect(JoinActivity.this, R.raw.effect_button);
+			}
+		});
+		rb_char2.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				SoundEngine.sharedEngine().playEffect(JoinActivity.this, R.raw.effect_button);
+			}
+		});
+		rb_char3.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				SoundEngine.sharedEngine().playEffect(JoinActivity.this, R.raw.effect_button);
+			}
+		});
+		rb_char4.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				SoundEngine.sharedEngine().playEffect(JoinActivity.this, R.raw.effect_button);
+			}
+		});
 		
 		ImageButton btn_join = (ImageButton)findViewById(R.id.btn_join);
 		btn_join.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				SoundEngine.sharedEngine().playEffect(JoinActivity.this, R.raw.effect_button);
+
 				if(rb_char1.isChecked())
 				{
 					selected_character = 0;
@@ -87,6 +121,7 @@ public class JoinActivity extends Activity implements JoinCallback{
 				Intent intent = new Intent(JoinActivity.this, BattlerDogActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(intent);
+				finish();
 			}
 		});
 	}
@@ -101,5 +136,10 @@ public class JoinActivity extends Activity implements JoinCallback{
 			}
 		});
 		
+	}
+	@Override
+	protected void onDestroy() {
+		
+		super.onDestroy();
 	}
 }

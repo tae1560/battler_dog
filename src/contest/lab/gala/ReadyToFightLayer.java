@@ -25,9 +25,20 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 	int numOfTotalEntries;
 	int currentPageNum = 0;   // 0���� ����  currentPageNum * 4, +1, +2, +3 �� ���� ������
 
+	int selectedFriend = 0;
+	
 	CCSprite bg_readyLayer = null;
 	CCSprite bg_myEntry = null;
 
+	CCSprite popup = null;
+	CCMenuItemSprite btn_ok = null;
+	CCSprite btn_ok_unclicked = null;
+	CCSprite btn_ok_clicked = null;
+	CCMenuItemSprite btn_no = null;
+	CCSprite btn_no_unclicked = null;
+	CCSprite btn_no_clicked = null;
+	CCMenu menu_popup = null;
+	
 	CCSprite btn_next_clicked = null;
 	CCSprite btn_next_unclicked = null;
 	CCSprite btn_before_clicked = null;
@@ -89,12 +100,13 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 
 		onStart();
 	}
-
-	public void requestMatchWithFriend(Object sender)
+	public void clickedNo(Object sender)
 	{
-		CCMenuItemSprite menu = (CCMenuItemSprite) sender;
-		int tag = menu.getTag();
-		NetworkManager.getInstance().requestMatchingWithFriend(Manager.friendList.get(tag).id, new OnMatchedCallback() {
+		this.removeChild(menu_popup, true);
+	}
+	public void clickedYes(Object sender)
+	{
+		NetworkManager.getInstance().requestMatchingWithFriend(Manager.friendList.get(selectedFriend).id, new OnMatchedCallback() {
 
 			@Override
 			public void onMatched(User enemy) {
@@ -103,15 +115,28 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 
 				CCDirector.sharedDirector().purgeCachedData();
 
-				//				CCScene scene = GameLayer.makeScene();
-				//				CCDirector.sharedDirector().replaceScene(scene);
 				Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), GameActivity.class);
 				CCDirector.sharedDirector().getActivity().startActivity(intent);
 			}
 		});
+
 	}
+	public void requestMatchWithFriend(Object sender)
+	{
+		CCMenuItemSprite menu = (CCMenuItemSprite) sender;
+		selectedFriend = menu.getTag();
+		
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+	
+		this.addChild(popup);
+		this.addChild(menu_popup);
+		
+		
+			}
 	public void clickedBeforeButton(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+		
 		if(currentPageNum > 0)
 		{
 			currentPageNum --;
@@ -120,6 +145,8 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 	}
 	public void clickedNextButton(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+		
 		if(currentPageNum < numOfTotalEntries / 4)
 		{
 			currentPageNum++;
@@ -128,6 +155,8 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 	}
 	public void clickedRandomGameButton(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+		
 		NetworkManager.getInstance().requestRandomMatching(new OnMatchedCallback() {
 			@Override
 			public void onMatched(User enemy) {
@@ -144,6 +173,8 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 	}
 	public void clickedSettingButton(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+		
 		SoundEngine.sharedEngine().pauseSound();
 		CCScene scene = SettingLayer.makeScene();
 		CCDirector.sharedDirector().replaceScene(scene);
@@ -266,6 +297,28 @@ public class ReadyToFightLayer extends CCLayer implements LifeCycleInterface{
 			successiveWins[i].setVisible(false);
 			addChild(successiveWins[i]);	
 
+			popup = CCSprite.sprite("ranking/popup.png");
+			popup.setScaleX(Manager.ratio_width);
+			popup.setScaleY(Manager.ratio_height);
+			popup.setPosition(360 * Manager.ratio_width, 744 * Manager.ratio_height);
+			
+			btn_ok_clicked = CCSprite.sprite("ranking/btn_ok_clicked.png");
+			btn_ok_unclicked = CCSprite.sprite("ranking/btn_ok_unclicked.png");
+			btn_ok = CCMenuItemSprite.item(btn_ok_unclicked, btn_ok_clicked, this, "clickedYes");
+			btn_ok.setScaleX(Manager.ratio_width);
+			btn_ok.setScaleY(Manager.ratio_height);
+			
+			btn_no_unclicked = CCSprite.sprite("ranking/btn_no_unclicked.png");
+			btn_no_clicked = CCSprite.sprite("ranking/btn_no_clicked.png");
+			btn_no = CCMenuItemSprite.item(btn_no_unclicked, btn_no_clicked, this, "clickedNo");
+			btn_no.setScaleX(Manager.ratio_width);
+			btn_no.setScaleY(Manager.ratio_height);
+			
+			menu_popup = CCMenu.menu(btn_ok, btn_no);
+			menu_popup.setAnchorPoint(0f,0f);
+			menu_popup.setPosition(364 * Manager.ratio_width, 582 * Manager.ratio_height);
+			menu_popup.alignItemsHorizontally(100f * Manager.ratio_width);
+			
 		}
 
 		// on, offline ��ư ����

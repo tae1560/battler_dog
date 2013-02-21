@@ -3,6 +3,7 @@ package contest.lab.gala;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
+import org.cocos2d.sound.SoundEngine;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -47,6 +48,8 @@ protected CCGLSurfaceView _glSurfaceView;
 		CCScene scene = MainAnimationLayer.makeScene();
 		CCDirector.sharedDirector().runWithScene(scene);
 //		showFriendList();
+		SoundEngine.sharedEngine().preloadSound(this, R.raw.background_start);
+		SoundEngine.sharedEngine().preloadEffect(this, R.raw.effect_button);
 	}
 
 	public void goLoginPage()
@@ -66,7 +69,6 @@ protected CCGLSurfaceView _glSurfaceView;
 	
 	protected void onDestroy() {
 		LayerDestroyManager.getInstance().deallocLayers();
-		
 		super.onDestroy();
 	}
 }

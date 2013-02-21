@@ -15,17 +15,17 @@ public class Manager {
 
 	public static float thresholdOfHP = 30;
 	
-	public static float acquired_gage_per_bone = 1;
+	public static float acquired_gage_per_bone = 2;
 	public static float acquired_gage_per_gum = 2;
-	public static float acquired_gage_per_redbull = 3;
+	public static float acquired_gage_per_redbull = 2;
 	
 	public static float required_gage_for_skill_bark = 10;
-	public static float required_gage_for_skill_bone = 15;
-	public static float required_gage_for_skill_punch = 20;
+	public static float required_gage_for_skill_bone = 20;
+	public static float required_gage_for_skill_punch = 30;
 	
-	public static float damaged_hp_per_attack_bark = 10;
-	public static float damaged_hp_per_attack_bone = 20;
-	public static float damaged_hp_per_attack_punch = 30;
+	public static float damaged_hp_per_attack_bark = 5;
+	public static float damaged_hp_per_attack_bone = 10;
+	public static float damaged_hp_per_attack_punch = 15;
 	
 	public static float full_gage = 100;
 	public static float full_hp = 100;

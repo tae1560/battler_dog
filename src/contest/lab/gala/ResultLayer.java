@@ -7,6 +7,7 @@ import org.cocos2d.menus.CCMenuItemSprite;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabelAtlas;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 
 import contest.lab.gala.data.CurrentUserInformation;
@@ -16,7 +17,7 @@ import contest.lab.gala.util.LayerDestroyManager;
 import android.content.Intent;
 
 public class ResultLayer extends CCLayer implements LifeCycleInterface {
-
+	
 	CCSprite result;
 	CCSprite bg_result;
 	CCSprite btn_back_unclicked;
@@ -51,9 +52,15 @@ public class ResultLayer extends CCLayer implements LifeCycleInterface {
 		this.addChild(bg_result);
 		
 		if(Manager.resultOfGame)
+		{
 			result = CCSprite.sprite("result/win.png");
+			SoundEngine.sharedEngine().playSound(CCDirector.sharedDirector().getActivity(), R.raw.background_win, true);
+		}
 		else
+		{
+			SoundEngine.sharedEngine().playSound(CCDirector.sharedDirector().getActivity(), R.raw.background_lose, true);
 			result = CCSprite.sprite("result/lose.png");
+		}
 		
 		result.setPosition(360 * Manager.ratio_width, 1036 * Manager.ratio_height);
 		result.setScaleX(Manager.ratio_width);
@@ -65,7 +72,7 @@ public class ResultLayer extends CCLayer implements LifeCycleInterface {
 		btn_back.setScaleX(Manager.ratio_width);
 		btn_back.setScaleY(Manager.ratio_height);
 		CCMenu backMenu = CCMenu.menu(btn_back);
-		backMenu.setPosition(633 * Manager.ratio_width, 81 * Manager.ratio_height);
+		backMenu.setPosition(633 * Manager.ratio_width, 1199 * Manager.ratio_height);
 		backMenu.setAnchorPoint(0f, 0f);
 		this.addChild(backMenu);
 		
@@ -112,6 +119,8 @@ public class ResultLayer extends CCLayer implements LifeCycleInterface {
 	}
 	public void goToFriendList(Object sender)
 	{
+		SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.effect_button);
+		
 		Intent intent = new Intent(CCDirector.sharedDirector().getActivity(), BattlerDogActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		CCDirector.sharedDirector().getActivity().startActivity(intent);
