@@ -20,8 +20,8 @@ public class FriendLoadingActivity extends Activity{
 
 			@Override
 			public void didGetFriends(ArrayList<User> friends) {
-//				Manager.friendList = (ArrayList<User>) friends.clone();
-				Manager.friendList = friends;
+				Manager.friendList = (ArrayList<User>) friends.clone();
+//				Manager.friendList = friends;
 				Intent intent = new Intent(FriendLoadingActivity.this, BattlerDogActivity.class);
 				startActivity(intent);
 				finish();
